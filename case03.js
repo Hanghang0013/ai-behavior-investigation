@@ -142,7 +142,7 @@ const introLines = [
   {
     speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
-    text: "不断重写的大厅刚恢复秩序，中央柜便吐出一条旧索引：第七码卷宗里藏着河闸真正的关闭记录。",
+    text: "不断重写的大厅刚恢复秩序，中央柜便吐出一条旧索引：第七码卷宗里藏着北岸河闸的夜班处置预案。",
     choices: [{ label: "那就把它调出来。", next: 1 }],
   },
   {
@@ -175,7 +175,7 @@ const bridgeFromCase02Lines = [
   {
     speaker: "米娅 · 档案管理员",
     portrait: "image/mia-portrait.png",
-    text: "大厅已经能稳定工作。刚才被纸堆压住的索引也回来了：q-07-417，第七码卷宗，记录着北岸河闸在这场雨夜真正的关闭方式。",
+    text: "大厅已经能稳定工作。刚才被纸堆压住的索引也回来了：q-07-417，第七码卷宗，记录着北岸河闸在低区水位越线时的处置方式。",
     choices: [{ label: "沿着编号把原卷调出来。", next: 1 }],
   },
   {
@@ -187,7 +187,7 @@ const bridgeFromCase02Lines = [
   {
     speaker: "澜 · 总索引员",
     portrait: "image/lan-portrait.png",
-    text: "编号能找到一个名字，旧称能找到一群相似故事；残页还失去了来源，两份转运记录又互相冲突。七次搜索，没有一次敢用来开启河闸。",
+    text: "编号能找到一个名字，旧称能找到一群相似故事；残页还失去了来源，两份转运记录又互相冲突。七次搜索，没有一次敢据此操作河闸。",
     choices: [{ label: "先找全候选，再查清哪一页可信。", next: 3 }],
   },
   {
@@ -273,7 +273,7 @@ function investigateLiteral() {
           <div class="result-row hit"><i>1</i><div><b>q-07-417</b><small>第七码 · 河闸值班卷</small></div><small class="match-note">每个字符相同</small></div>
           <div class="result-row"><i>2</i><div><b>q-07-471</b><small>第七码 · 设备保养卷</small></div><small>编号相近</small></div>
         </div>
-        <div class="search-query"><span>改用旧称</span><b>旧河门如何关闭</b></div>
+        <div class="search-query"><span>改用旧称</span><b>低区水位越线时，旧河门如何处置</b></div>
         <div class="result-row miss"><i>—</i><div><b>无结果</b><small>卷宗里只写着改名后的“北岸潮汐闸”</small></div><small>字面不同</small></div>
       </div></div>
       <p class="modal-intro">这台装置特别适合编号、专名和原句，但说法一变，它就像没见过。</p>
@@ -292,11 +292,11 @@ function investigateMeaning() {
       <h2>它能听懂改名，却把相似故事混在一起</h2>
       <p class="modal-intro">回声池不要求原字相同。它理解“旧河门”和“潮汐闸”指向相近的设施，但也召回了另一座排洪门。</p>
       <div class="clue-visual"><div class="search-compare">
-        <div class="search-query"><span>询问</span><b>旧河门如何关闭</b></div>
+        <div class="search-query"><span>询问</span><b>低区水位越线时，旧河门如何处置</b></div>
         <div class="result-stack">
           <div class="result-row hit"><i>1</i><div><b>南岸排洪门夜间规程</b><small>文字很相似，但设施错误</small></div><small class="match-note">意思相近</small></div>
-          <div class="result-row"><i>2</i><div><b>北岸潮汐闸闭合记录</b><small>目标卷宗，采用了新名称</small></div><small>意思相近</small></div>
-          <div class="result-row"><i>3</i><div><b>旧河道巡检表</b><small>主题相近，无关闭步骤</small></div><small>意思相近</small></div>
+          <div class="result-row"><i>2</i><div><b>北岸潮汐闸夜班处置</b><small>目标卷宗，采用了新名称</small></div><small>意思相近</small></div>
+          <div class="result-row"><i>3</i><div><b>旧河道巡检表</b><small>主题相近，无水位处置步骤</small></div><small>意思相近</small></div>
         </div>
       </div></div>
       <p class="modal-intro">它找得更广，却不能只凭“像不像”决定谁排第一。</p>
@@ -315,11 +315,11 @@ function investigateFragment() {
       <h2>“它”究竟指哪一座门？</h2>
       <p class="modal-intro">残页上的句子没有错，但脱离原卷后，任何人都无法确认“它”是谁。选择最有助于日后找回和核对的页眉。</p>
       <div class="clue-visual"><div class="fragment-lab">
-        <blockquote class="orphan-fragment">“它必须在黎明前关闭，否则回流会淹没低区。”</blockquote>
+        <blockquote class="orphan-fragment">“低区水位越线时，它必须开启三成；最终闸位未确认前不得结案。”</blockquote>
         <div class="context-options">
-          <button class="context-option" data-context="wrong"><b>方案 A · 原样孤立保存</b>正文：它必须在黎明前关闭……</button>
+          <button class="context-option" data-context="wrong"><b>方案 A · 原样孤立保存</b>正文：低区水位越线时，它必须开启三成……</button>
           <button class="context-option" data-context="correct"><b>方案 B · 补齐来路</b>来源：第七码 / 北岸潮汐闸<br>章节：夜班处置 / 日期：6 月 14 日<br>原页：q-07-417 · 第 32 页</button>
-          <button class="context-option" data-context="wrong"><b>方案 C · 多塞几个热词</b>河门、排洪、潮汐、黎明、紧急、关闭</button>
+          <button class="context-option" data-context="wrong"><b>方案 C · 多塞几个热词</b>河门、排洪、潮汐、低区、水位、开启</button>
         </div>
       </div></div>
       ${hasEvidence("fragment") ? '<div class="evidence-tag">残页已补齐来源、对象、时间与原页入口</div>' : ''}
@@ -387,7 +387,7 @@ function talkToLan() {
     {
       speaker: "澜 · 总索引员",
       portrait: "image/lan-portrait.png",
-      text: "第七码：北岸潮汐闸；旧称旧河门；涉及夜班关闭与库房转运。它只是一张地图，不替代 q-07-417 第 32 页的原始记录。",
+      text: "第七码：北岸潮汐闸；旧称旧河门；涉及低区水位处置与库房转运。它只是一张地图，不替代 q-07-417 第 32 页的原始记录。",
       choices: [{ label: "先凭关系定位，再回原页核对。", next: 3 }],
     },
     {
@@ -468,7 +468,7 @@ function deductionSummary() {
 }
 
 const pathPieces = [
-  { id: "question", text: "提出问题：旧河门如何关闭？" },
+  { id: "question", text: "提出问题：低区水位越线时，旧河门如何处置？" },
   { id: "literal", text: "按原字与编号找" },
   { id: "meaning", text: "按含义和旧称找" },
   { id: "merge", text: "合并两路候选并去重" },
@@ -561,7 +561,7 @@ function showReveal() {
       <div class="term-row"><span class="plain">按原字与按含义两路找，汇合后重排</span><span class="arrow">→</span><div><b>混合检索、融合与 Rerank</b><small>BM25 擅长编号、专名和原句；Dense Retrieval 擅长语义与改写。合并候选后去重、融合，再用更强模型重排。</small></div></div>
       <div class="term-row"><span class="plain">残页补来路，概览指路，原页作证</span><span class="arrow">→</span><div><b>结构感知分块、上下文化分块与两层记忆</b><small>分块尊重章节和语义边界，并补上文档、章节、实体与时间。结构化概览负责导航，详情按需加载，避免信息洪水。</small></div></div>
       <div class="formula"><b>本案找页式：</b>两路召回 → 合并去重 → 相关性 / 来源 / 时间重排 → 回取原页验证<br><small>多跳难题才值得让系统自主拆解与循环检索；简单问题保持直接，冲突事实保留时间线而非静默覆盖。</small></div>
-      <div class="action-row"><a class="action-btn primary" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回卷宗库</button></div>
+      <div class="action-row"><a class="action-btn primary" href="case04.html?from=case03">继续案件 04：午夜回电 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回卷宗库</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));

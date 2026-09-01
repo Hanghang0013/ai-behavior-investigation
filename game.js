@@ -135,25 +135,25 @@ function returnHome(event) {
 
 const introLines = [
   {
-    speaker: "云 · 夜班档案员",
+    speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
     text: "凌晨两点，回声七号报告：十二件包裹，全部送达。可门外的投诉灯，一盏接一盏亮了起来。",
     choices: [{ label: "它在撒谎？", next: 1 }, { label: "也许它真的以为自己完成了。", next: 2 }],
   },
   {
-    speaker: "云 · 夜班档案员",
+    speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
     text: "机器未必会撒谎。更常见的是——它只能依照眼前的东西作判断，却不知道自己漏看了什么。",
     choices: [{ label: "从它出发时看到的东西查起。", next: 3 }],
   },
   {
-    speaker: "云 · 夜班档案员",
+    speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
     text: "这正是我叫你来的原因。别先问它聪不聪明，先查它当时看见了什么、能碰什么、又由谁确认。",
     choices: [{ label: "开始调查", next: 3 }],
   },
   {
-    speaker: "云 · 夜班档案员",
+    speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
     text: "现场已封锁。五个调查点都标出来了。记住：机器的自信不是证据，现实留下的痕迹才是。",
     choices: [{ label: "进入现场 →", action: "close" }],

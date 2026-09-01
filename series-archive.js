@@ -93,6 +93,37 @@
         },
       ],
     },
+    {
+      id: "04",
+      title: "午夜回电",
+      storageKey: "echo-archive-case-04",
+      knowledge: [
+        {
+          concept: "TOOL INTERFACE · ACI",
+          title: "按钮必须让行动可预期",
+          body: "工具描述应说清使用时机、禁止场景、参数与示例、返回结构和成本。模型看到、实际传入与最终执行的关键参数必须一致；归一化或注入也要显式留痕。",
+          remember: "先让使用者知道它会做什么、不能做什么、会回什么。",
+        },
+        {
+          concept: "ASYNC TASK · EVENT LOG",
+          title: "开始有编号，完成有终态",
+          body: "耗时动作启动时立即记录工具调用与 Task ID；真实结果只在完成后写入。进度事件只能更新 running 状态，不能冒充最终结果。",
+          remember: "已接收 ≠ 已完成；工具成功 ≠ 业务成功。",
+        },
+        {
+          concept: "EVENT ROUTING · CANCELLATION",
+          title: "不是每条来信都该打断主线",
+          body: "紧急事件可以取消当前动作并写入 pending 或 cancelled 占位；普通事件进入队列或批处理；互不依赖的轻量查询可以并行。",
+          remember: "危险急报中止，普通消息排队，独立轻问并行。",
+        },
+        {
+          concept: "LEAST PRIVILEGE · VERIFY",
+          title: "危险能力必须有边界和退路",
+          body: "可靠安全链覆盖最小权限或沙箱、执行前约束与审批、执行、结构化验证，以及有界重试、换路、回滚或转人工。",
+          remember: "只给所需能力，先确认，后核对，失败能收住。",
+        },
+      ],
+    },
   ];
 
   function readProgress(caseInfo) {

@@ -51,7 +51,7 @@ html { scroll-behavior: smooth; }
 .section-kicker { color: var(--amber); font-size: 10px; letter-spacing: .24em; font-weight: 700; }
 .case-library__head h2 { margin: 10px 0 0; font: 400 clamp(36px, 4vw, 60px)/1.1 "STKaiti", "KaiTi", serif; }
 .case-library__head p { margin: 0; color: var(--paper-2); font-size: 12px; line-height: 1.9; }
-.home-case-grid { max-width: 1480px; margin: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.home-case-grid { max-width: 1480px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
 .home-case-card { min-height: 520px; position: relative; overflow: hidden; border: 1px solid var(--line); color: var(--paper); text-decoration: none; background: #0a1c21; box-shadow: 0 22px 60px rgba(0,0,0,.25); transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
 .home-case-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease, filter .4s ease; }
 .home-case-card__shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(4,14,18,.98) 3%, rgba(4,14,18,.83) 38%, rgba(4,14,18,.08) 72%), linear-gradient(90deg, rgba(4,14,18,.38), transparent); }
@@ -82,9 +82,12 @@ html { scroll-behavior: smooth; }
 .home-footer a:hover { color: var(--amber); }
 .home-page .modal__card { width: min(1040px, 96vw); }
 
+@media (max-width: 1240px) {
+  .home-case-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 1050px) {
   .home-hero__idea { grid-template-columns: repeat(2, auto); bottom: 35px; }
-  .home-case-grid { grid-template-columns: 1fr; }
   .home-case-card { min-height: 400px; }
   .home-case-card > img { object-position: center 42%; }
 }
@@ -106,6 +109,7 @@ html { scroll-behavior: smooth; }
   .directory-hero > img { object-position: 61% center; }
   .case-library { padding: 70px 16px 60px; }
   .case-library__head { grid-template-columns: 1fr; gap: 18px; }
+  .home-case-grid { grid-template-columns: 1fr; }
   .home-case-card { min-height: 430px; }
   .learning-promise { grid-template-columns: 48px 1fr; padding: 24px 20px; gap: 18px; }
   .learning-promise p { grid-column: 1 / -1; }

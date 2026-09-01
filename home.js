@@ -3,6 +3,19 @@ const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
 const modal = $("#modal");
 const modalContent = $("#modal-content");
+const CASE_STORAGE_KEYS = [
+  "echo-archive-case-01",
+  "echo-archive-case-02",
+  "echo-archive-case-03",
+  "echo-archive-case-04",
+];
+
+function clearRequestedProgress() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("reset-progress") !== "all") return;
+  CASE_STORAGE_KEYS.forEach((key) => localStorage.removeItem(key));
+  window.history.replaceState(null, "", window.location.pathname);
+}
 
 function readCaseProgress(storageKey) {
   try {
@@ -18,8 +31,7 @@ function readCaseProgress(storageKey) {
 }
 
 function updateCaseDirectory() {
-  const caseKeys = ["echo-archive-case-01", "echo-archive-case-02", "echo-archive-case-03"];
-  const completed = caseKeys.filter((key) => readCaseProgress(key).finalSolved).length;
+  const completed = CASE_STORAGE_KEYS.filter((key) => readCaseProgress(key).finalSolved).length;
   $$(".home-case-card").forEach((card) => {
     const progress = readCaseProgress(card.dataset.storageKey);
     const status = $(".home-case-status", card);
@@ -37,7 +49,7 @@ function updateCaseDirectory() {
       $("[data-case-enter-label]", card).textContent = "进入案件";
     }
   });
-  if ($("#home-progress")) $("#home-progress").textContent = `${completed} / 3 案件已结`;
+  if ($("#home-progress")) $("#home-progress").textContent = `${completed} / 4 案件已结`;
 }
 
 function openArchive() {
@@ -54,4 +66,5 @@ document.addEventListener("keydown", (event) => {
 });
 window.addEventListener("pageshow", updateCaseDirectory);
 
+clearRequestedProgress();
 updateCaseDirectory();

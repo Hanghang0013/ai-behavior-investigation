@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：午夜回电》——一场关于请求、回音与安全中止的调查。" />
+    <title>AI行为调查局：午夜回电</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="case04.css" />
+  </head>
+  <body class="case04-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 04 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>午夜回电</h1>
+        <p class="cover__lead">调度台宣布河闸已经开启。<br />可那通证明完成的回电，从未响起。</p>
+        <button class="primary-btn" id="start-btn"><span>接入午夜线路</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>04</b></div>
+      <div class="cover__credit">一场关于“发出请求以后发生了什么”的调查</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局">
+          <span class="brand__mark">A</span>
+          <span><b>AI行为调查局</b><small>午夜回电</small></span>
+        </div>
+        <div class="case-status">
+          <span>调查进度</span>
+          <div class="progress-track"><i id="progress-fill"></i></div>
+          <b id="progress-text">0 / 5</b>
+        </div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a>
+          <a class="case-nav-btn" href="cases.html">案件目录</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case04-scene" aria-label="午夜远程调度室">
+          <img src="image/midnight-switchboard.png" alt="雨夜河闸旁的远程调度室，摆放着回条机、回电台、事件灯墙与总控台" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+
+          <button class="hotspot hotspot--receipt" data-hotspot="receipt" aria-label="调查请求回条机"><span class="hotspot__pulse"></span><i>01</i><b>请求回条机</b></button>
+          <button class="hotspot hotspot--callback" data-hotspot="callback" aria-label="调查等待回音的线路"><span class="hotspot__pulse"></span><i>02</i><b>等待回音的线路</b></button>
+          <button class="hotspot hotspot--events" data-hotspot="events" aria-label="调查三色事件灯"><span class="hotspot__pulse"></span><i>03</i><b>三色事件灯</b></button>
+          <button class="hotspot hotspot--approval" data-hotspot="approval" aria-label="调查安全许可柜"><span class="hotspot__pulse"></span><i>04</i><b>安全许可柜</b></button>
+          <button class="hotspot hotspot--qiao" data-hotspot="qiao" aria-label="呼叫夜班调度员乔"><span class="hotspot__pulse"></span><i>05</i><b>呼叫乔</b></button>
+          <button class="hotspot hotspot--console locked" data-hotspot="console" aria-label="重建午夜调度流程"><span class="hotspot__pulse"></span><i>06</i><b>午夜总控台</b></button>
+
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/04</span><b>北岸河闸 · 午夜远程调度室</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>一张“已接收”的回条，为什么变成了“已完成”？</h2>
+          <p id="objective-text">先听听午夜线路发生了什么。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="signals"><span>01</span><div><b>回条与回电是不是一回事？</b><small>请求回条机 + 等待线路</small></div></li>
+            <li data-step="pending"><span>02</span><div><b>给尚未结束的行动留位置</b><small>开始不等于完成</small></div></li>
+            <li data-step="interrupts"><span>03</span><div><b>三种插入消息该怎样处理？</b><small>事件灯 + 许可柜 + 乔</small></div></li>
+            <li data-step="control"><span>04</span><div><b>危险动作不能只有一个总开关</b><small>限制、确认、中止与核对</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重建完整的午夜调度</b><small>让现实决定是否结案</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div>
+      <div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/qiao-portrait.png" alt="" /></div>
+      <div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">乔</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div>
+    </div>
+
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js"></script>
+    <script src="case04.js"></script>
+  </body>
+</html>

@@ -8,6 +8,8 @@ public_dir="${project_dir}/public"
 mkdir -p "${public_dir}/image"
 
 install -m 0644 "${project_dir}/index.html" "${public_dir}/index.html"
+install -m 0644 "${project_dir}/story.html" "${public_dir}/story.html"
+install -m 0644 "${project_dir}/story.css" "${public_dir}/story.css"
 install -m 0644 "${project_dir}/cases.html" "${public_dir}/cases.html"
 install -m 0644 "${project_dir}/home.css" "${public_dir}/home.css"
 install -m 0644 "${project_dir}/home.js" "${public_dir}/home.js"
@@ -21,6 +23,9 @@ install -m 0644 "${project_dir}/case02.js" "${public_dir}/case02.js"
 install -m 0644 "${project_dir}/case03.html" "${public_dir}/case03.html"
 install -m 0644 "${project_dir}/case03.css" "${public_dir}/case03.css"
 install -m 0644 "${project_dir}/case03.js" "${public_dir}/case03.js"
+install -m 0644 "${project_dir}/case04.html" "${public_dir}/case04.html"
+install -m 0644 "${project_dir}/case04.css" "${public_dir}/case04.css"
+install -m 0644 "${project_dir}/case04.js" "${public_dir}/case04.js"
 install -m 0644 "${project_dir}/image/station-control-room.png" "${public_dir}/image/station-control-room.png"
 install -m 0644 "${project_dir}/image/yun-portrait.png" "${public_dir}/image/yun-portrait.png"
 install -m 0644 "${project_dir}/image/echo7-portrait.png" "${public_dir}/image/echo7-portrait.png"
@@ -29,12 +34,14 @@ install -m 0644 "${project_dir}/image/mia-portrait.png" "${public_dir}/image/mia
 install -m 0644 "${project_dir}/image/memory-vault.png" "${public_dir}/image/memory-vault.png"
 install -m 0644 "${project_dir}/image/lan-portrait.png" "${public_dir}/image/lan-portrait.png"
 install -m 0644 "${project_dir}/image/series-cover.png" "${public_dir}/image/series-cover.png"
+install -m 0644 "${project_dir}/image/midnight-switchboard.png" "${public_dir}/image/midnight-switchboard.png"
+install -m 0644 "${project_dir}/image/qiao-portrait.png" "${public_dir}/image/qiao-portrait.png"
 
 # public/ 采用严格白名单；发现额外文件时停止发布，防止误公开 PDF、设计文档或备份素材。
 while IFS= read -r -d '' file; do
   relative_path="${file#"${public_dir}/"}"
   case "${relative_path}" in
-    index.html|cases.html|home.css|home.js|styles.css|game.js|series-archive.js|case01.html|case02.html|case02.css|case02.js|case03.html|case03.css|case03.js|image/station-control-room.png|image/yun-portrait.png|image/echo7-portrait.png|image/archive-hall.png|image/mia-portrait.png|image/memory-vault.png|image/lan-portrait.png|image/series-cover.png)
+    index.html|story.html|story.css|cases.html|home.css|home.js|styles.css|game.js|series-archive.js|case01.html|case02.html|case02.css|case02.js|case03.html|case03.css|case03.js|case04.html|case04.css|case04.js|image/station-control-room.png|image/yun-portrait.png|image/echo7-portrait.png|image/archive-hall.png|image/mia-portrait.png|image/memory-vault.png|image/lan-portrait.png|image/series-cover.png|image/midnight-switchboard.png|image/qiao-portrait.png)
       ;;
     *)
       echo "拒绝构建：public/ 中存在非白名单文件：${relative_path}" >&2
