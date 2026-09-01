@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#07141a" />
-    <meta name="description" content="《AI行为调查局：午夜回电》——一场关于请求、回音与安全中止的调查。" />
+    <meta name="description" content="《AI行为调查局：午夜回电》——一场关于开闸命令、远方回电与紧急停闸的调查。" />
     <title>AI行为调查局：午夜回电</title>
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="case04.css" />
@@ -23,7 +23,7 @@
         <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
       </div>
       <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>04</b></div>
-      <div class="cover__credit">一场关于“发出请求以后发生了什么”的调查</div>
+      <div class="cover__credit">一场关于“开闸命令发出以后发生了什么”的调查</div>
     </section>
 
     <div class="app hidden" id="app">
@@ -50,9 +50,9 @@
           <img src="image/midnight-switchboard.png" alt="雨夜河闸旁的远程调度室，摆放着回条机、回电台、事件灯墙与总控台" />
           <div class="scene-vignette" aria-hidden="true"></div>
 
-          <button class="hotspot hotspot--receipt" data-hotspot="receipt" aria-label="调查请求回条机"><span class="hotspot__pulse"></span><i>01</i><b>请求回条机</b></button>
+          <button class="hotspot hotspot--receipt" data-hotspot="receipt" aria-label="调查接线回条机"><span class="hotspot__pulse"></span><i>01</i><b>接线回条机</b></button>
           <button class="hotspot hotspot--callback" data-hotspot="callback" aria-label="调查等待回音的线路"><span class="hotspot__pulse"></span><i>02</i><b>等待回音的线路</b></button>
-          <button class="hotspot hotspot--events" data-hotspot="events" aria-label="调查三色事件灯"><span class="hotspot__pulse"></span><i>03</i><b>三色事件灯</b></button>
+          <button class="hotspot hotspot--events" data-hotspot="events" aria-label="调查三色来信灯"><span class="hotspot__pulse"></span><i>03</i><b>三色来信灯</b></button>
           <button class="hotspot hotspot--approval" data-hotspot="approval" aria-label="调查安全许可柜"><span class="hotspot__pulse"></span><i>04</i><b>安全许可柜</b></button>
           <button class="hotspot hotspot--qiao" data-hotspot="qiao" aria-label="呼叫夜班调度员乔"><span class="hotspot__pulse"></span><i>05</i><b>呼叫乔</b></button>
           <button class="hotspot hotspot--console locked" data-hotspot="console" aria-label="重建午夜调度流程"><span class="hotspot__pulse"></span><i>06</i><b>午夜总控台</b></button>
@@ -66,10 +66,10 @@
           <p id="objective-text">先听听午夜线路发生了什么。</p>
           <ol class="case-steps" id="case-steps">
             <li data-step="signals"><span>01</span><div><b>回条与回电是不是一回事？</b><small>请求回条机 + 等待线路</small></div></li>
-            <li data-step="pending"><span>02</span><div><b>给尚未结束的行动留位置</b><small>开始不等于完成</small></div></li>
-            <li data-step="interrupts"><span>03</span><div><b>三种插入消息该怎样处理？</b><small>事件灯 + 许可柜 + 乔</small></div></li>
-            <li data-step="control"><span>04</span><div><b>危险动作不能只有一个总开关</b><small>限制、确认、中止与核对</small></div></li>
-            <li data-step="final"><span>05</span><div><b>重建完整的午夜调度</b><small>让现实决定是否结案</small></div></li>
+            <li data-step="pending"><span>02</span><div><b>远处还在开闸，记录该怎么写？</b><small>接到活不等于已经干完</small></div></li>
+            <li data-step="interrupts"><span>03</span><div><b>三封半路来信该先听谁？</b><small>来信灯 + 许可柜 + 乔</small></div></li>
+            <li data-step="control"><span>04</span><div><b>远程开闸不能只有万能总杆</b><small>只动该动的，危险时能停</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重接午夜开闸线路</b><small>最后去现场看闸门</small></div></li>
           </ol>
           <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
           <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：完美嫌疑人》——满分卷宗与三台故障机器之间，究竟哪一边说了真话？" />
+    <title>AI行为调查局：完美嫌疑人</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="case06.css" />
+  </head>
+  <body class="case06-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 06 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>完美嫌疑人</h1>
+        <p class="cover__lead">每一张评分纸都写着满分。<br />可历史回放里的机器，没有一次真正恢复。</p>
+        <button class="primary-btn" id="start-btn"><span>封存满分卷宗</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>06</b></div>
+      <div class="cover__credit">一枚满分章，怎样骗过了整座城</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局">
+          <span class="brand__mark">A</span>
+          <span><b>AI行为调查局</b><small>完美嫌疑人</small></span>
+        </div>
+        <div class="case-status">
+          <span>调查进度</span><div class="progress-track"><i id="progress-fill"></i></div><b id="progress-text">0 / 5</b>
+        </div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a><a class="case-nav-btn" href="cases.html">案件目录</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case06-scene" aria-label="市政评估复验庭">
+          <img src="image/evaluation-tribunal.png" alt="雨夜中的市政评估复验庭，设有满分台、回放幕、旧题柜、评分规尺、独立复核席与封存闸门" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+
+          <button class="hotspot hotspot--score" data-hotspot="score" aria-label="调查满分自评台"><span class="hotspot__pulse"></span><i>01</i><b>满分自评台</b></button>
+          <button class="hotspot hotspot--replay" data-hotspot="replay" aria-label="调查现实回放幕"><span class="hotspot__pulse"></span><i>02</i><b>现实回放幕</b></button>
+          <button class="hotspot hotspot--benchmark" data-hotspot="benchmark" aria-label="调查旧题封存柜"><span class="hotspot__pulse"></span><i>03</i><b>旧题封存柜</b></button>
+          <button class="hotspot hotspot--rubric" data-hotspot="rubric" aria-label="调查评分规尺"><span class="hotspot__pulse"></span><i>04</i><b>评分规尺</b></button>
+          <button class="hotspot hotspot--yun" data-hotspot="yun" aria-label="进入独立复核席"><span class="hotspot__pulse"></span><i>05</i><b>独立复核席</b></button>
+          <button class="hotspot hotspot--gate locked" data-hotspot="gate" aria-label="开启最终复验闸门"><span class="hotspot__pulse"></span><i>06</i><b>复验闸门</b></button>
+
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/06</span><b>市政评估署 · 历史复验庭</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>如果每一项都是满分，失败究竟被藏到了哪里？</h2>
+          <p id="objective-text">先比较评分纸与历史回放。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="claims"><span>01</span><div><b>满分是谁给出的？</b><small>自评台 + 现实回放幕</small></div></li>
+            <li data-step="independent"><span>02</span><div><b>谁不能给自己盖章？</b><small>机器停在哪里，才算真正做到哪里</small></div></li>
+            <li data-step="coverage"><span>03</span><div><b>旧题和规尺漏掉了什么？</b><small>封存柜 + 评分规尺 + 云</small></div></li>
+            <li data-step="decision"><span>04</span><div><b>一次赢过，能不能换机？</b><small>同一批差事，多试几遍再决定</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重铺盖章前的试车路</b><small>先看机器，再决定换不换</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div>
+      <div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/yun-portrait.png" alt="" /></div>
+      <div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">云</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div>
+    </div>
+
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js"></script><script src="case06.js"></script>
+  </body>
+</html>

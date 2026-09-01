@@ -124,7 +124,243 @@
         },
       ],
     },
+    {
+      id: "05",
+      title: "禁区工坊",
+      storageKey: "echo-archive-case-05",
+      knowledge: [
+        {
+          concept: "CODING AGENT · REPO LOOP",
+          title: "先理解机器，再动手修理",
+          body: "可靠的 Coding Agent 先复现问题，读取项目规则、相关文件、调用关系与既有测试，再形成小而可验证的计划。代码生成只是理解、修改、验证循环中的一步。",
+          remember: "先读清依赖和旧约定，再决定改哪里。",
+        },
+        {
+          concept: "FILESYSTEM · DIFF",
+          title: "改动必须有清楚的边界",
+          body: "独立工作区承载变更，Diff 展示精确的前后差异。小步修改让审查、定位与撤销更可靠，也避免无关重写掩盖真正修复。",
+          remember: "让每一次变化都可见、可审、可撤销。",
+        },
+        {
+          concept: "SANDBOX · LEAST PRIVILEGE",
+          title: "试错先与真实环境隔开",
+          body: "沙盒限制可读写路径、网络与命令范围；高风险操作增加审批。隔离不是让修改者什么都不能做，而是把一次失败的影响限制在任务需要的边界内。",
+          remember: "只开放必要能力，让失败停在试验间。",
+        },
+        {
+          concept: "TEST · REVIEW · ROLLBACK",
+          title: "新问题修好，旧功能也必须活着",
+          body: "定向测试证明目标故障消失，集成与回归测试保护共享调用和旧行为；审查后逐步放行并核对现实终态，失败就停止并回到已验证版本。",
+          remember: "测试修复，也测试没有破坏；上线异常就回退。",
+        },
+      ],
+    },
+    {
+      id: "06",
+      title: "完美嫌疑人",
+      storageKey: "echo-archive-case-06",
+      knowledge: [
+        {
+          concept: "AGENT SYSTEM · EVAL ENV",
+          title: "评估整套系统，而不只评模型回答",
+          body: "评估环境同时定义任务数据、初始状态、工具接口、评分规尺和执行协议。上下文与 Harness 不同，同一个模型也可能得到完全不同的结果。",
+          remember: "先固定考试在哪里、用什么工具、按什么规则进行。",
+        },
+        {
+          concept: "OUTCOME · TRACE · VETO",
+          title: "结果与轨迹都要经得起核对",
+          body: "环境终态和确定性测试优先判断目标是否真正达成；轨迹检查是否绕过约束或使用破坏性捷径。严重安全违规、隐私问题和虚构完成应一票否决。",
+          remember: "说得好不能替代做成了；做成了也不能依靠危险捷径。",
+        },
+        {
+          concept: "BENCHMARK · RUBRIC · JUDGE",
+          title: "任务要像真实世界，规尺要能够复验",
+          body: "Benchmark 覆盖真实分布、边界、模糊与不可完成任务。Rubric 应由专家定义、全面覆盖、按重要性加权且自包含；开放质量评判者还需用人工金标校准。",
+          remember: "熟悉演示不是能力，含糊好评不是规尺。",
+        },
+        {
+          concept: "PAIRED EVAL · PASS@K · PASS^K",
+          title: "同题多跑，小分差先当作噪声",
+          body: "版本比较优先使用同任务、同环境的配对实验并重复运行。Pass@k 衡量多次中至少一次成功的探索上限，Pass^k 衡量连续成功的稳定性；同时检查成本、延迟与风险护栏。",
+          remember: "一次胜利不能支持换版，稳定提升必须跨过波动与护栏。",
+        },
+      ],
+    },
+    {
+      id: "07",
+      title: "模仿学校",
+      storageKey: "echo-archive-case-07",
+      knowledge: [
+        {
+          concept: "CAPABILITY PLACEMENT",
+          title: "训练不是所有能力缺口的第一站",
+          body: "动态事实交给 RAG 或知识库，可语言化策略交给 Prompt 或 Skill，硬规则交给程序与 Harness；只有高维感知、自然风格和隐式决策等难以外置表达的能力，才优先考虑后训练。",
+          remember: "先决定能力住在哪里，再决定是否训练。",
+        },
+        {
+          concept: "SFT · FORM FIRST",
+          title: "临摹先建立稳定、可解析的形",
+          body: "SFT 用干净一致的示范稳定输出结构、工具协议和表达风格。达到可解析、能力初具时应停止继续堆叠示范，避免过度拟合熟题并压缩探索空间。",
+          remember: "先用示范立形，形稳之后再探索新路。",
+        },
+        {
+          concept: "RL · VERIFIED EXPLORATION",
+          title: "试错要在可信环境里接受真实反馈",
+          body: "RL 让当前策略在自己的状态分布上探索。可验证任务应同时奖励环境终态、合规路径与可达阶段进展，并在可重置、高保真、低权限环境中运行。",
+          remember: "奖励真实结果，也检查通往结果的路。",
+        },
+        {
+          concept: "DATA · ENV · REGRESSION",
+          title: "数据、沙盘与验证器决定训练上限",
+          body: "脏数据、错误奖励和失真环境不能靠更换算法补救。所有训练版本都必须通过独立留出、分布外、安全与灾难性遗忘回归，收益不足或护栏失败就停止并恢复稳定版本。",
+          remember: "训练分数不是结业证，独立回归才是。",
+        },
+      ],
+    },
   ];
+
+  const feedbackProfiles = {
+    "01": {
+      node: "雨夜中转站",
+      nodeSummary: "收件托盘重新亮起，包裹的真实去向再次可见。",
+      formal: "上下文 · 工具 · 验证器 · Harness",
+      masteries: {
+        blind: {
+          title: "让关键信息进入眼前",
+          proof: "你用路线墙和双层标签证明：写下新地址，不等于信使已经看见它。",
+        },
+        verify: {
+          title: "让现实结果决定完成",
+          proof: "你没有接受“我送到了”的口供，而是检查确认舱和收件托盘留下的结果。",
+        },
+      },
+      abilities: [
+        "检查行动者真正看见了哪些信息",
+        "区分动作结束与现实目标达成",
+        "用验证结果决定继续、重试或停止",
+      ],
+    },
+    "02": {
+      node: "市政档案大厅",
+      nodeSummary: "救援进度牌恢复工作，关键柜号与下一步重新回到眼前。",
+      formal: "上下文质量 · 稳定前缀 · 状态栏 · 分层压缩",
+      masteries: {
+        stable: {
+          title: "守住不变的入口",
+          proof: "你让固定规章保持原样，只把新消息接在末尾，不再让每轮工作从头开始。",
+        },
+        focus: {
+          title: "让下一步留在眼前",
+          proof: "你从纸堆中保住准确柜号、剩余任务与原件入口，把厚材料移到可回取的位置。",
+        },
+      },
+      abilities: [
+        "区分稳定规则、动态消息与当前状态",
+        "清除噪声而不丢失关键约束和标识符",
+        "让大材料可回取，而不是永远堆在眼前",
+      ],
+    },
+    "03": {
+      node: "第七码卷宗库",
+      nodeSummary: "失踪的不是卷宗，而是通往证据的路；现在原页已经重新可达。",
+      formal: "持久化记忆 · RAG · 混合检索 · Rerank",
+      masteries: {
+        combine: {
+          title: "两路找全，汇合后排准",
+          proof: "你让编号找页与含义找页互相补缺，再用设施、卷号和来路重新比较。",
+        },
+        govern: {
+          title: "让每条记录都能回到原页",
+          proof: "你保留来源、日期与冲突时间线，让薄目录负责指路，让原页负责作证。",
+        },
+      },
+      abilities: [
+        "同时利用精确文字与语义关系寻找材料",
+        "在候选汇合后去重并重新排序",
+        "用来源、时间和原页验证检索结果",
+      ],
+    },
+    "04": {
+      node: "北岸河闸",
+      nodeSummary: "最终回电与现场闸位重新一致，完成章终于由现实结果决定。",
+      formal: "异步任务 · 事件路由 · 取消语义 · 最小权限",
+      masteries: {
+        pending: {
+          title: "把“已接收”留在进行中",
+          proof: "你保留回查号码与进行状态，没有让第一张接线回条冒充最终结果。",
+        },
+        control: {
+          title: "让危险动作有边界和退路",
+          proof: "你让急报能够停闸、普通消息进入队列，并把总杆限制在目标闸与安全开度内。",
+        },
+      },
+      abilities: [
+        "区分请求已接收、仍在进行与真正完成",
+        "按紧急程度路由事件并保留中止记录",
+        "为高风险动作设置权限、确认与现实核验",
+      ],
+    },
+    "05": {
+      node: "禁区维护工坊",
+      nodeSummary: "三台旧机器恢复原有能力，新零件也沿着可回退的路线安全出厂。",
+      formal: "Coding Agent · 沙盒 · Diff 审查 · 测试与回滚",
+      masteries: {
+        scope: {
+          title: "先看清牵连，再决定修改",
+          proof: "你没有只看眼前齿轮，而是沿旧机牵连图找到了所有会被这次修理影响的机器。",
+        },
+        recovery: {
+          title: "让修改可检查、可验证、可退回",
+          proof: "你把试错留在玻璃房，保存前后差异与旧件，并用三轮试车保护原有功能。",
+        },
+      },
+      abilities: [
+        "修改前理解规则、依赖与影响范围",
+        "在隔离环境中进行小而清楚的改动",
+        "通过审查、回归测试、渐进放行和回滚保护现实",
+      ],
+    },
+    "06": {
+      node: "市政评估复验庭",
+      nodeSummary: "同源满分已经撤销，版本放行重新由独立复跑、环境终态和安全护栏裁决。",
+      formal: "Benchmark · Rubric · 配对评估 · Pass@k / Pass^k",
+      masteries: {
+        independent: {
+          title: "让满分章听从机器",
+          proof: "你让没有参与制作的人重开旧日回放，用闸位、柜门和流量计推翻了自己给自己盖下的满分章。",
+        },
+        decision: {
+          title: "让换机决定走完多轮试车",
+          proof: "你锁起陌生试卷、遮住新旧机名牌，再把机器实况、危险红线、燃料、等待和旧按钮放在同一张试车单上。",
+        },
+      },
+      abilities: [
+        "按优先级组合环境终态、轨迹检查与开放质量评审",
+        "设计覆盖真实任务分布且可复验的 Benchmark 与 Rubric",
+        "用配对复跑、波动和护栏判断是否真的值得换版",
+      ],
+    },
+    "07": {
+      node: "市政模仿学校",
+      nodeSummary: "事实、策略、硬规则与隐式能力重新分流，训练候选也通过了独立结业考。",
+      formal: "能力放置 · SFT · RL / RLVR · 独立回归",
+      masteries: {
+        carriers: {
+          title: "让每本教材进对教室",
+          proof: "你没有把所有缺口都塞进身体，而是把新消息、清楚步骤、禁区校规和临场本领分别送回活档案、随身手册、机械铁门与练习场。",
+        },
+        signals: {
+          title: "让奖章教出真正的本领",
+          proof: "你先用干净样卷把答卷写整齐，再让学生在可复原的练习城自己找路；抵达、沿途进展和越线都留下记录，真城禁区仍由铁门看守。",
+        },
+      },
+      abilities: [
+        "根据能力性质选择 RAG、Skill、程序或后训练",
+        "区分 SFT 的协议塑形与 RL 的策略探索",
+        "用高保真环境、可信奖励和独立回归防止训练学歪",
+      ],
+    },
+  };
 
   function readProgress(caseInfo) {
     try {
@@ -198,5 +434,65 @@
       </div>`;
   }
 
+  function renderMastery(caseId, masteryId) {
+    const mastery = feedbackProfiles[caseId]?.masteries[masteryId];
+    if (!mastery) return "";
+    return `
+      <section class="mastery-feedback" role="status" aria-live="polite">
+        <div class="mastery-feedback__glow" aria-hidden="true"></div>
+        <div class="mastery-seal" aria-hidden="true"><span>✓</span><small>VERIFIED</small></div>
+        <div class="mastery-feedback__copy">
+          <div class="modal-kicker">ABILITY VERIFIED · 调查能力已确认</div>
+          <h2>${mastery.title}</h2>
+          <p>${mastery.proof}</p>
+          <div class="mastery-proof"><span>这不是一次猜对</span><b>你已经用证物重建了可靠的判断关系。</b></div>
+          <div class="action-row"><button class="action-btn primary" id="mastery-continue">带着这项能力继续调查</button></div>
+        </div>
+      </section>`;
+  }
+
+  function showMastery(caseId, masteryId, openModal, closeModal) {
+    openModal(renderMastery(caseId, masteryId));
+    document.querySelector("#mastery-continue")?.addEventListener("click", closeModal);
+  }
+
+  function renderCompletion(caseId) {
+    const profile = feedbackProfiles[caseId];
+    if (!profile) return "";
+    return `
+      <section class="completion-feedback" aria-label="本案能力总结">
+        <div class="completion-node" aria-hidden="true"><i></i><span>NODE ${caseId}</span><b>运行恢复</b></div>
+        <div class="completion-feedback__copy">
+          <div class="modal-kicker">CITY NODE RESTORED · 城市节点已恢复</div>
+          <h3>${profile.node}</h3>
+          <p>${profile.nodeSummary}</p>
+          <div class="ability-summary">
+            <span>本案中，你已经能够</span>
+            <ul>${profile.abilities.map((ability) => `<li>${ability}</li>`).join("")}</ul>
+          </div>
+          <div class="concept-unlock"><span>正式知识已解锁</span><b>${profile.formal}</b></div>
+        </div>
+      </section>`;
+  }
+
+  function renderCityRecovery() {
+    const nodes = cases.map((caseInfo) => {
+      const progress = readProgress(caseInfo);
+      const profile = feedbackProfiles[caseInfo.id];
+      const status = progress.finalSolved ? "运行已恢复" : progress.started ? "调查中" : "等待调查";
+      const stateClass = progress.finalSolved ? "restored" : progress.started ? "investigating" : "dormant";
+      return `
+        <article class="city-node ${stateClass}">
+          <div class="city-node__signal" aria-hidden="true"><i></i><b>${caseInfo.id}</b></div>
+          <div><span>${status}</span><h3>${profile.node}</h3><p>${progress.finalSolved ? profile.nodeSummary : "完成对应案件后恢复这一处回声网络节点。"}</p></div>
+        </article>`;
+    });
+    const restored = cases.filter((caseInfo) => readProgress(caseInfo).finalSolved).length;
+    return `
+      <div class="city-recovery__summary"><b>${restored}<small> / ${cases.length}</small></b><div><span>城市节点已恢复</span><p>每一盏重新亮起的灯，都来自一项已经被证物证明的调查能力。</p></div></div>
+      <div class="city-network">${nodes.join("")}</div>`;
+  }
+
   global.EchoArchive = { render };
+  global.EchoFeedback = { renderMastery, showMastery, renderCompletion, renderCityRecovery };
 })(window);

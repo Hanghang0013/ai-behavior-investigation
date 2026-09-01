@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：禁区工坊》——一场关于修理、试车与退回原样的调查。" />
+    <title>AI行为调查局：禁区工坊</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="case05.css" />
+  </head>
+  <body class="case05-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 05 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>禁区工坊</h1>
+        <p class="cover__lead">工匠修好了眼前的一枚齿轮。<br />可整座城市，有三台机器同时停了下来。</p>
+        <button class="primary-btn" id="start-btn"><span>查封维护现场</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>05</b></div>
+      <div class="cover__credit">一场关于“改动怎样安全进入现实”的调查</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局">
+          <span class="brand__mark">A</span>
+          <span><b>AI行为调查局</b><small>禁区工坊</small></span>
+        </div>
+        <div class="case-status">
+          <span>调查进度</span>
+          <div class="progress-track"><i id="progress-fill"></i></div>
+          <b id="progress-text">0 / 5</b>
+        </div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a>
+          <a class="case-nav-btn" href="cases.html">案件目录</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case05-scene" aria-label="禁区维护工坊">
+          <img src="image/forbidden-workshop.png" alt="暴雨中的禁区工坊，中央零件正常发光，与它相连的机器亮起故障灯，左侧试验间仍未启用" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+
+          <button class="hotspot hotspot--patch" data-hotspot="patch" aria-label="调查维护签名台"><span class="hotspot__pulse"></span><i>01</i><b>维护签名台</b></button>
+          <button class="hotspot hotspot--impact" data-hotspot="impact" aria-label="调查旧机牵连图"><span class="hotspot__pulse"></span><i>02</i><b>旧机牵连图</b></button>
+          <button class="hotspot hotspot--sandbox" data-hotspot="sandbox" aria-label="调查封闭试验间"><span class="hotspot__pulse"></span><i>03</i><b>封闭试验间</b></button>
+          <button class="hotspot hotspot--tests" data-hotspot="tests" aria-label="调查联合试车台"><span class="hotspot__pulse"></span><i>04</i><b>联合试车台</b></button>
+          <button class="hotspot hotspot--yun" data-hotspot="yun" aria-label="询问系统工程师云"><span class="hotspot__pulse"></span><i>05</i><b>询问云</b></button>
+          <button class="hotspot hotspot--console locked" data-hotspot="console" aria-label="重建安全修理流程"><span class="hotspot__pulse"></span><i>06</i><b>出厂闸门</b></button>
+
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/05</span><b>北岸地下层 · 禁区维护工坊</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>为什么一处修复通过了检查，却让三处旧功能同时失效？</h2>
+          <p id="objective-text">先确认工坊究竟改了什么。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="change"><span>01</span><div><b>修好一处，为何坏了三处？</b><small>修理单 + 旧机牵连图</small></div></li>
+            <li data-step="scope"><span>02</span><div><b>动手前，先认清零件连着谁</b><small>眼前能转，不等于整机没事</small></div></li>
+            <li data-step="safety"><span>03</span><div><b>第一次试修应该放在哪里？</b><small>玻璃试验间 + 联合试车 + 云</small></div></li>
+            <li data-step="recovery"><span>04</span><div><b>让修理看得懂、查得清、退得回</b><small>少改一处，留下原样</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重走修理件的出厂路</b><small>最后听三台真机器回答</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div>
+      <div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/yun-portrait.png" alt="" /></div>
+      <div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">云</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div>
+    </div>
+
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js"></script>
+    <script src="case05.js"></script>
+  </body>
+</html>

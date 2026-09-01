@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：模仿学校》——当事实、校规和临场判断被塞进同一本课本，会发生什么？" />
+    <title>AI行为调查局：模仿学校</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="case07.css" />
+  </head>
+  <body class="case07-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 07 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>模仿学校</h1>
+        <p class="cover__lead">它把每一页教材都背进了身体。<br />于是事实一更新，校规一变化，它就再也分不清什么必须服从。</p>
+        <button class="primary-btn" id="start-btn"><span>查封混装课表</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>07</b></div>
+      <div class="cover__credit">不是每一页教材，都应该背进身体</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局">
+          <span class="brand__mark">A</span>
+          <span><b>AI行为调查局</b><small>模仿学校</small></span>
+        </div>
+        <div class="case-status">
+          <span>调查进度</span><div class="progress-track"><i id="progress-fill"></i></div><b id="progress-text">0 / 5</b>
+        </div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a><a class="case-nav-btn" href="cases.html">案件目录</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case07-scene" aria-label="回声模仿学校训练大厅">
+          <img src="image/imitation-school.png" alt="雨夜中的回声模仿学校，设有事实档案柜、技能印刷台、校规闸门、临摹课堂、试错沙盘与结业门" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+
+          <button class="hotspot hotspot--syllabus" data-hotspot="syllabus" aria-label="调查混装课表机"><span class="hotspot__pulse"></span><i>01</i><b>混装课表机</b></button>
+          <button class="hotspot hotspot--archive" data-hotspot="archive" aria-label="调查变动档案柜"><span class="hotspot__pulse"></span><i>02</i><b>变动档案柜</b></button>
+          <button class="hotspot hotspot--imitation" data-hotspot="imitation" aria-label="调查临摹课堂"><span class="hotspot__pulse"></span><i>03</i><b>临摹课堂</b></button>
+          <button class="hotspot hotspot--sandbox" data-hotspot="sandbox" aria-label="调查试错沙盘"><span class="hotspot__pulse"></span><i>04</i><b>试错沙盘</b></button>
+          <button class="hotspot hotspot--rules" data-hotspot="rules" aria-label="调查校规闸门"><span class="hotspot__pulse"></span><i>05</i><b>校规闸门</b></button>
+          <button class="hotspot hotspot--graduation locked" data-hotspot="graduation" aria-label="开启最终结业门"><span class="hotspot__pulse"></span><i>06</i><b>结业门</b></button>
+
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/07</span><b>市政模仿学校 · 封存训练大厅</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>把所有问题都教进身体，为什么反而更不可靠？</h2>
+          <p id="objective-text">先检查学校究竟混装了哪些课程。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="placement"><span>01</span><div><b>哪些教材不该进入身体？</b><small>混装课表 + 变动档案</small></div></li>
+            <li data-step="carriers"><span>02</span><div><b>为四类教材重新分班</b><small>活档案、办事手册、铁门校规与临场判断</small></div></li>
+            <li data-step="training"><span>03</span><div><b>照着写与自己找路</b><small>临摹课堂 + 试错沙盘 + 校规闸门</small></div></li>
+            <li data-step="signals"><span>04</span><div><b>结业铃为什么会教坏学生？</b><small>既看有没有抵达，也看走了哪条路</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重排入学到结业的路线</b><small>先分班，再临摹、试走和复考</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div>
+      <div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/echo7-portrait.png" alt="" /></div>
+      <div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">回声七号</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div>
+    </div>
+
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js"></script><script src="case07.js"></script>
+  </body>
+</html>

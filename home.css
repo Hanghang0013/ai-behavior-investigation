@@ -46,12 +46,42 @@ html { scroll-behavior: smooth; }
 .directory-hero p { max-width: 650px; margin: 0; color: var(--paper-2); font-size: 13px; line-height: 1.8; }
 .directory-page .case-library { padding-top: 72px; }
 
+.city-recovery-section { position: relative; z-index: 2; padding: 72px clamp(20px, 6vw, 100px); background: radial-gradient(circle at 18% 0, rgba(79,183,178,.16), transparent 32%), #08181d; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.city-recovery-section__head { max-width: 1480px; margin: 0 auto 28px; display: grid; grid-template-columns: 1fr minmax(280px, 470px); align-items: end; gap: 40px; }
+.city-recovery-section__head h2 { margin: 10px 0 0; font: 400 clamp(32px, 4vw, 52px)/1.12 "STKaiti", "KaiTi", serif; }
+.city-recovery-section__head p { margin: 0; color: var(--paper-2); font-size: 11px; line-height: 1.85; }
+.city-recovery-map { max-width: 1480px; margin: auto; border: 1px solid var(--line); background: rgba(5,15,19,.72); }
+.city-recovery__summary { min-height: 108px; display: grid; grid-template-columns: 126px minmax(0, 1fr); align-items: center; border-bottom: 1px solid var(--line); background: linear-gradient(90deg, rgba(242,172,76,.08), rgba(79,183,178,.06), transparent); }
+.city-recovery__summary > b { height: 100%; display: grid; place-items: center; align-content: center; border-right: 1px solid var(--line); color: var(--amber); font: 48px/1 "STKaiti", "KaiTi", serif; }
+.city-recovery__summary > b small { color: var(--paper-2); font-size: 15px; }
+.city-recovery__summary > div { padding: 20px 26px; }
+.city-recovery__summary span { color: var(--teal-soft); font-size: 10px; letter-spacing: .18em; }
+.city-recovery__summary p { margin: 7px 0 0; color: var(--paper-2); font-size: 11px; line-height: 1.7; }
+.city-network { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; padding: 24px; overflow: hidden; }
+.city-node { min-width: 0; min-height: 188px; position: relative; display: grid; grid-template-columns: 54px minmax(0, 1fr); align-items: start; gap: 13px; padding: 20px 16px; border: 1px solid var(--line); background: rgba(255,255,255,.018); }
+.city-node:not(:last-child)::after { content: ""; position: absolute; width: 19px; height: 1px; right: -19px; top: 47px; background: var(--line); }
+.city-node__signal { width: 50px; height: 50px; display: grid; place-items: center; align-content: center; gap: 4px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper-2); }
+.city-node__signal i { width: 8px; height: 8px; border-radius: 50%; background: rgba(200,189,165,.3); }
+.city-node__signal b { font-size: 8px; letter-spacing: .12em; }
+.city-node span { color: var(--paper-2); font-size: 8px; letter-spacing: .14em; }
+.city-node h3 { margin: 6px 0 7px; font: 400 20px/1.2 "STKaiti", "KaiTi", serif; }
+.city-node p { margin: 0; color: var(--paper-2); font-size: 9px; line-height: 1.65; }
+.city-node.dormant { opacity: .5; filter: grayscale(.65); }
+.city-node.investigating { border-color: rgba(242,172,76,.32); }
+.city-node.investigating .city-node__signal { border-color: var(--amber); color: var(--amber); }
+.city-node.investigating .city-node__signal i { background: var(--amber); box-shadow: 0 0 12px rgba(242,172,76,.7); animation: city-signal-pulse 1.8s infinite; }
+@keyframes city-signal-pulse { 50% { opacity: .45; transform: scale(.72); } }
+.city-node.restored { border-color: rgba(116,193,128,.42); background: linear-gradient(140deg, rgba(116,193,128,.09), rgba(79,183,178,.045)); box-shadow: inset 0 0 30px rgba(116,193,128,.035); }
+.city-node.restored span { color: #9ed7a8; }
+.city-node.restored .city-node__signal { border-color: #74c180; color: #b4e4bd; box-shadow: 0 0 24px rgba(116,193,128,.13); }
+.city-node.restored .city-node__signal i { background: #83d79a; box-shadow: 0 0 14px #83d79a; }
+
 .case-library { position: relative; z-index: 2; padding: 100px clamp(20px, 6vw, 100px) 84px; background: radial-gradient(circle at 80% 8%, rgba(43,109,109,.18), transparent 30%), #07151a; }
 .case-library__head { max-width: 1480px; margin: 0 auto 38px; display: grid; grid-template-columns: 1fr minmax(280px, 480px); align-items: end; gap: 40px; }
 .section-kicker { color: var(--amber); font-size: 10px; letter-spacing: .24em; font-weight: 700; }
 .case-library__head h2 { margin: 10px 0 0; font: 400 clamp(36px, 4vw, 60px)/1.1 "STKaiti", "KaiTi", serif; }
 .case-library__head p { margin: 0; color: var(--paper-2); font-size: 12px; line-height: 1.9; }
-.home-case-grid { max-width: 1480px; margin: auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.home-case-grid { max-width: 1480px; margin: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .home-case-card { min-height: 520px; position: relative; overflow: hidden; border: 1px solid var(--line); color: var(--paper); text-decoration: none; background: #0a1c21; box-shadow: 0 22px 60px rgba(0,0,0,.25); transition: transform .3s ease, border-color .3s ease, box-shadow .3s ease; }
 .home-case-card > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease, filter .4s ease; }
 .home-case-card__shade { position: absolute; inset: 0; background: linear-gradient(0deg, rgba(4,14,18,.98) 3%, rgba(4,14,18,.83) 38%, rgba(4,14,18,.08) 72%), linear-gradient(90deg, rgba(4,14,18,.38), transparent); }
@@ -82,8 +112,14 @@ html { scroll-behavior: smooth; }
 .home-footer a:hover { color: var(--amber); }
 .home-page .modal__card { width: min(1040px, 96vw); }
 
+@media (max-width: 1440px) {
+  .home-case-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
 @media (max-width: 1240px) {
   .home-case-grid { grid-template-columns: repeat(2, 1fr); }
+  .city-network { grid-template-columns: repeat(2, 1fr); }
+  .city-node:not(:last-child)::after { display: none; }
 }
 
 @media (max-width: 1050px) {
@@ -107,6 +143,13 @@ html { scroll-behavior: smooth; }
   .home-scroll { display: none; }
   .directory-hero { min-height: 390px; padding: 115px 22px 48px; }
   .directory-hero > img { object-position: 61% center; }
+  .city-recovery-section { padding: 56px 16px; }
+  .city-recovery-section__head { grid-template-columns: 1fr; gap: 18px; }
+  .city-recovery__summary { grid-template-columns: 86px minmax(0, 1fr); }
+  .city-recovery__summary > b { font-size: 38px; }
+  .city-recovery__summary > div { padding: 18px; }
+  .city-network { grid-template-columns: 1fr; padding: 14px; gap: 10px; }
+  .city-node { min-height: 142px; }
   .case-library { padding: 70px 16px 60px; }
   .case-library__head { grid-template-columns: 1fr; gap: 18px; }
   .home-case-grid { grid-template-columns: 1fr; }
@@ -114,4 +157,8 @@ html { scroll-behavior: smooth; }
   .learning-promise { grid-template-columns: 48px 1fr; padding: 24px 20px; gap: 18px; }
   .learning-promise p { grid-column: 1 / -1; }
   .home-footer { flex-direction: column; justify-content: center; gap: 9px; text-align: center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .city-node.investigating .city-node__signal i { animation: none; }
 }

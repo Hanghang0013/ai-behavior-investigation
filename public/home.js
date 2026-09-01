@@ -8,6 +8,9 @@ const CASE_STORAGE_KEYS = [
   "echo-archive-case-02",
   "echo-archive-case-03",
   "echo-archive-case-04",
+  "echo-archive-case-05",
+  "echo-archive-case-06",
+  "echo-archive-case-07",
 ];
 
 function clearRequestedProgress() {
@@ -49,7 +52,10 @@ function updateCaseDirectory() {
       $("[data-case-enter-label]", card).textContent = "进入案件";
     }
   });
-  if ($("#home-progress")) $("#home-progress").textContent = `${completed} / 4 案件已结`;
+  if ($("#home-progress")) $("#home-progress").textContent = `${completed} / ${CASE_STORAGE_KEYS.length} 案件已结`;
+  if ($("#city-recovery-map") && window.EchoFeedback) {
+    $("#city-recovery-map").innerHTML = window.EchoFeedback.renderCityRecovery();
+  }
 }
 
 function openArchive() {

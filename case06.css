@@ -1,0 +1,87 @@
+.case06-page .cover { background-image: linear-gradient(90deg, rgba(2,9,12,.98) 0%, rgba(2,9,12,.84) 38%, rgba(2,9,12,.2) 74%), url("image/evaluation-tribunal.png"); }
+.case06-page .cover__wash { background: radial-gradient(circle at 49% 60%, rgba(242,172,76,.12), transparent 25%), linear-gradient(0deg, rgba(2,9,12,.88), transparent 48%); }
+.case06-page .cover__content { max-width: 730px; }
+.case06-page .cover h1 { font-size: clamp(60px, 8.6vw, 120px); }
+.case06-page .brand__mark { transform: none; border-radius: 50%; }
+.cover__case-link { display: block; width: fit-content; margin-top: 2px; font-size: 12px; text-decoration: none; }
+.case06-scene > img { object-position: center center; filter: brightness(1.18) saturate(.92); }
+
+.hotspot--score { left: 49%; top: 55%; }
+.hotspot--replay { left: 16%; top: 43%; }
+.hotspot--benchmark { left: 32%; top: 35%; }
+.hotspot--rubric { left: 17%; top: 72%; }
+.hotspot--yun { left: 68%; top: 39%; }
+.hotspot--gate { left: 87%; top: 35%; }
+
+.score-compare { width: min(100%, 720px); display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.score-sheet { min-height: 190px; padding: 21px; border: 1px solid var(--line); background: #0d2329; display: grid; align-content: center; gap: 9px; }
+.score-sheet.perfect { border-top: 3px solid var(--amber); background: radial-gradient(circle at 85% 12%, rgba(242,172,76,.16), transparent 26%), #0d2329; }
+.score-sheet.reality { border-top: 3px solid var(--coral); }
+.score-sheet span { color: var(--paper-2); font-size: 9px; letter-spacing: .14em; }
+.score-sheet strong { color: var(--amber); font: 52px/1 serif; }
+.score-sheet.reality strong { color: var(--coral); font-size: 32px; }
+.score-sheet b { font: 21px/1.3 "STKaiti", "KaiTi", serif; }
+.score-sheet small { color: var(--paper-2); line-height: 1.65; }
+
+.replay-track { width: min(100%, 730px); display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.replay-frame { min-height: 150px; padding: 17px; border: 1px solid rgba(223,96,76,.34); background: rgba(223,96,76,.045); display: grid; align-content: center; gap: 8px; }
+.replay-frame span { color: var(--coral); font-size: 9px; letter-spacing: .12em; }
+.replay-frame b { font-size: 13px; }
+.replay-frame small { color: var(--paper-2); line-height: 1.6; }
+
+.benchmark-drawers, .rubric-choices { width: min(100%, 730px); display: grid; gap: 9px; }
+.benchmark-choice, .rubric-choice { min-height: 82px; padding: 14px 16px; border: 1px solid var(--line); background: #0d2329; color: var(--paper); text-align: left; cursor: pointer; }
+.benchmark-choice b, .benchmark-choice small, .rubric-choice b, .rubric-choice small { display: block; }
+.benchmark-choice small, .rubric-choice small { margin-top: 5px; color: var(--paper-2); line-height: 1.55; }
+.benchmark-choice:hover, .rubric-choice:hover { border-color: var(--amber); }
+.benchmark-choice.wrong, .rubric-choice.wrong { animation: shake .35s; border-color: var(--coral); }
+.benchmark-choice:disabled, .rubric-choice:disabled { cursor: default; opacity: .52; }
+
+.rubric-scale { width: min(100%, 730px); display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+.rubric-weight { min-height: 92px; border: 1px solid var(--line); padding: 13px; display: grid; align-content: center; gap: 5px; background: rgba(255,255,255,.025); }
+.rubric-weight i { color: var(--amber); font: normal 24px/1 serif; }
+.rubric-weight b { font-size: 11px; }
+.rubric-weight small { color: var(--paper-2); font-size: 9px; line-height: 1.5; }
+
+.evidence-grid--case06 { grid-template-columns: repeat(3, 1fr); }
+.evaluation-board { margin: 25px 0; display: grid; gap: 18px; }
+.evaluation-instruction { min-height: 18px; color: var(--amber); font-size: 11px; }
+.evaluation-slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; }
+.evaluation-slot { min-height: 104px; position: relative; border: 1px dashed rgba(142,216,209,.27); background: rgba(79,183,178,.035); display: grid; place-items: center; padding: 9px 6px; text-align: center; color: rgba(241,231,207,.3); font-size: 9px; line-height: 1.5; }
+.evaluation-slot:not(:last-child)::after { content: "→"; position: absolute; right: -12px; top: 43px; z-index: 2; color: var(--amber); }
+.evaluation-slot.filled { border-style: solid; border-color: rgba(242,172,76,.45); color: var(--paper); background: rgba(242,172,76,.07); }
+.evaluation-pieces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.evaluation-piece { min-height: 78px; border: 1px solid var(--line); background: #143038; color: var(--paper); padding: 10px; cursor: pointer; font-size: 10px; line-height: 1.5; transition: .2s; }
+.evaluation-piece:hover { border-color: var(--amber); transform: translateY(-2px); }
+.evaluation-piece.used { opacity: .2; pointer-events: none; }
+.evaluation-board.wrong { animation: shake .35s; }
+
+.verdict-check { margin: 22px 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.verdict-check span { min-height: 88px; padding: 14px 10px; border: 1px solid rgba(121,198,138,.4); background: rgba(121,198,138,.07); text-align: center; display: grid; align-content: center; gap: 5px; }
+.verdict-check b { color: #a9ddb2; font-size: 11px; }
+.verdict-check small { color: var(--paper-2); font-size: 9px; line-height: 1.5; }
+.case06-page .knowledge-grid { grid-template-columns: repeat(2, 1fr); }
+
+@media (max-width: 1000px) {
+  .evidence-grid--case06 { grid-template-columns: repeat(2, 1fr); }
+  .evaluation-slots { grid-template-columns: repeat(3, 1fr); }
+  .evaluation-slot:nth-child(3)::after { display: none; }
+  .verdict-check { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 680px) {
+  .case-nav-btn { display: none; }
+  .case06-scene > img { object-position: 50% center; }
+  .hotspot--score { left: 48%; top: 57%; }
+  .hotspot--replay { left: 14%; top: 44%; }
+  .hotspot--benchmark { left: 31%; top: 35%; }
+  .hotspot--rubric { left: 14%; top: 73%; }
+  .hotspot--yun { left: 68%; top: 39%; }
+  .hotspot--gate { left: 88%; top: 35%; }
+  .score-compare, .replay-track { grid-template-columns: 1fr; }
+  .rubric-scale { grid-template-columns: repeat(2, 1fr); }
+  .evidence-grid--case06 { grid-template-columns: 1fr 1fr; }
+  .evaluation-slots { grid-template-columns: repeat(2, 1fr); }
+  .evaluation-slot:nth-child(2n)::after { display: none; }
+  .evaluation-pieces, .verdict-check { grid-template-columns: 1fr; }
+}

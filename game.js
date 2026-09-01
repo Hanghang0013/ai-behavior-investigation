@@ -102,10 +102,10 @@ function updateUI() {
     hint.textContent = "不要只看信使做完了什么，要看收件端最终得到了什么。";
   } else if (!hasDeduction("verify")) {
     objective.textContent = "信使证词与收件侧记录相互冲突。回到证物台判断谁更可信。";
-    hint.textContent = "不要问谁说得更自信，要问谁真正接触过现实。";
+    hint.textContent = "不要问谁说得更肯定，要问谁真正碰得到收件托盘。";
   } else if (!state.finalSolved) {
     objective.textContent = "两个断点已经找到。红色机柜现在可以打开了。";
-    hint.textContent = "一次可靠行动，应从看见开始，并在记录后决定是否继续。";
+    hint.textContent = "一次正确投递，要先读对门牌；写进值班簿前，还要看收件托盘是不是有重量。";
   } else {
     objective.textContent = "案件已结。所有知识卡已收入回声档案。";
     hint.textContent = "打开回声档案，可以按“现象—原因—工程概念”回顾本案。";
@@ -155,7 +155,7 @@ const introLines = [
   {
     speaker: "云 · 系统工程师",
     portrait: "image/yun-portrait.png",
-    text: "现场已封锁。五个调查点都标出来了。记住：机器的自信不是证据，现实留下的痕迹才是。",
+    text: "现场已封锁。五个调查点都标出来了。记住：信使说得再肯定，也不如路线灯、地址标签和收件托盘留下的痕迹。",
     choices: [{ label: "进入现场 →", action: "close" }],
   },
 ];
@@ -279,17 +279,17 @@ function investigateGate() {
     <div class="modal-body">
       <div class="modal-kicker">调查点 03 · 交付确认舱</div>
       <h2>收件端仍是空的</h2>
-      <p class="modal-intro">这里不是普通出口。包裹必须穿过中间的交付边界，落到另一侧托盘，系统才会生成一张独立的收件回执。信使可以推动包裹，却不能改写收件端的重量与回执。</p>
+      <p class="modal-intro">这里不是普通出口。包裹必须穿过中间的小门，真正落到另一侧托盘，收件机才会吐出回执。信使可以推动包裹，却碰不到托盘的称重针，也改不了收件机里的纸条。</p>
       <div class="clue-visual handoff-visual">
         <div class="handoff-path">
           <div class="handoff-zone handoff-zone--courier">
             <span class="handoff-zone__label">信使侧</span>
             <div class="parcel-symbol" aria-hidden="true"></div>
-            <small>包裹停在边界前</small>
+            <small>包裹停在小门前</small>
           </div>
           <div class="transfer-node">
             <div class="mini-gate" aria-hidden="true"></div>
-            <small>交付边界</small>
+            <small>收件小门</small>
           </div>
           <div class="handoff-zone handoff-zone--receiver">
             <span class="handoff-zone__label">收件侧</span>
@@ -327,7 +327,7 @@ function talkToEcho() {
       speaker: "回声七号 · 自动信使",
       portrait: "image/echo7-portrait.png",
       text: "我没有读取收件侧的重量和回执。我的最后一步是推动包裹；手臂停止后，我就写下“完成”。",
-      choices: [{ label: "所以你没有检查现实结果。", next: 3 }],
+      choices: [{ label: "所以你根本没看收件托盘。", next: 3 }],
     },
     {
       speaker: "回声七号 · 自动信使",
@@ -386,7 +386,7 @@ function openEvidenceBoard() {
 function blindDeductionHTML() {
   return `<div class="deduction"><h3>连接 01 + 02：新地址存在，为什么仍然送错？</h3><div class="deduction-options">
     <button class="deduction-option" data-deduction="blind" data-correct="false">信使不够聪明，所以没有猜出门牌颠倒了。</button>
-    <button class="deduction-option" data-deduction="blind" data-correct="true">新地址没进入信使当时能看见的材料；再会判断也用不上它。</button>
+    <button class="deduction-option" data-deduction="blind" data-correct="true">新地址一直留在扫描台，没有送到信使眼前；它再认真也只能照旧标签走。</button>
     <button class="deduction-option" data-deduction="blind" data-correct="false">扫描台和路线墙都坏了，所以没有任何地址。</button>
   </div></div>`;
 }
@@ -403,8 +403,7 @@ function handleDeduction(event) {
   const button = event.currentTarget;
   if (button.dataset.correct === "true") {
     unlockDeduction(button.dataset.deduction);
-    closeModal();
-    toast(button.dataset.deduction === "blind" ? "已找到断点一：看不见的消息" : "已找到断点二：未经现实确认");
+    window.EchoFeedback.showMastery("01", button.dataset.deduction, openModal, closeModal);
   } else {
     button.classList.remove("wrong");
     void button.offsetWidth;
@@ -415,7 +414,7 @@ function handleDeduction(event) {
 
 function deductionSummary() {
   const items = [];
-  if (hasDeduction("blind")) items.push("断点一：重要消息存在，却没有进入行动者当时能看见的范围。");
+  if (hasDeduction("blind")) items.push("断点一：新地址明明已经写下，却没有送到信使眼前。");
   if (hasDeduction("verify")) items.push("断点二：动作停下后没有查看现实结果，错误被当成了成功。");
   return items.length ? items.join("<br>") : "至少找到成对证物后，才能建立可靠联系。";
 }
@@ -425,11 +424,28 @@ const wirePieces = [
   { id: "decide", icon: "◇", label: "确认包裹的新门牌（作出判断）" },
   { id: "act", icon: "↗", label: "把包裹送入交付确认舱（动手改变）" },
   { id: "verify", icon: "✓", label: "确认收件侧得到包裹（查看结果）" },
-  { id: "record", icon: "▤", label: "写下真实投递状态（记下变化）" },
+  { id: "record", icon: "▤", label: "把真正的投递结果写进值班簿" },
 ];
+
+function isValidWireOrder(order) {
+  return order.join("|") === "see|decide|act|verify|record";
+}
+
+function shuffledWirePieces() {
+  const pieces = [...wirePieces];
+  for (let index = pieces.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [pieces[index], pieces[swapIndex]] = [pieces[swapIndex], pieces[index]];
+  }
+  if (isValidWireOrder(pieces.map((piece) => piece.id))) {
+    [pieces[0], pieces[pieces.length - 1]] = [pieces[pieces.length - 1], pieces[0]];
+  }
+  return pieces;
+}
 
 function showWirePuzzle() {
   wireAnswer = [];
+  const displayPieces = shuffledWirePieces();
   openModal(`
     <div class="modal-body">
       <div class="modal-kicker">FINAL LOCK · 红色机柜</div>
@@ -437,8 +453,8 @@ function showWirePuzzle() {
       <p class="modal-intro">按照本案中一次正确投递应有的顺序，依次点选五块铜片。想一想：若最后发现事情没有成功，下一轮应该从哪里重新开始？</p>
       <div class="wire-board">
         <div class="wire-slots" id="wire-slots">${wirePieces.map((_, i) => `<div class="wire-slot" data-index="${i}"><span class="wire-icon">${i + 1}</span><span class="wire-label">待接入</span></div>`).join('<span class="wire-arrow">→</span>')}</div>
-        <div class="wire-pieces">${[wirePieces[2], wirePieces[0], wirePieces[4], wirePieces[1], wirePieces[3]].map((p) => `<button class="wire-piece" data-wire="${p.id}"><span class="wire-icon">${p.icon}</span><span class="wire-label">${p.label}</span></button>`).join("")}</div>
-        <p class="board-note">接错可以清空重来；机柜只接受能自我纠正的顺序。</p>
+        <div class="wire-pieces">${displayPieces.map((p) => `<button class="wire-piece" data-wire="${p.id}"><span class="wire-icon">${p.icon}</span><span class="wire-label">${p.label}</span></button>`).join("")}</div>
+        <p class="board-note">接错可以清空重来；这条线路必须在发现没送到时知道回头再查。</p>
       </div>
       <div class="action-row"><button class="action-btn" id="wire-reset">清空</button><button class="action-btn primary" id="wire-submit">启动机柜</button></div>
     </div>`);
@@ -468,16 +484,15 @@ function resetWires() {
 }
 
 function submitWires() {
-  const correct = ["see", "decide", "act", "verify", "record"];
   if (wireAnswer.length < 5) {
     toast("还有铜片没有接入。请接满五块铜片后再启动机柜。", 7000, true);
     return;
   }
-  if (wireAnswer.join("|") !== correct.join("|")) {
+  if (!isValidWireOrder(wireAnswer)) {
     $(".wire-board").classList.remove("wrong");
     void $(".wire-board").offsetWidth;
     $(".wire-board").classList.add("wrong");
-    toast("机柜没有启动。可靠行动必须先看见，并在行动后核验。", 7000, true);
+    toast("机柜没有启动：信使必须先读对门牌，推动包裹以后还要看收件托盘，才能把结果写进值班簿。", 7200, true);
     resetWires();
     return;
   }
@@ -491,8 +506,9 @@ function showReveal() {
     <div class="reveal-hero">
       <div class="modal-kicker">CASE CLOSED · 真相已解锁</div>
       <h2>真正失控的不是信使</h2>
-      <p>是包围它的整套安排：消息没有送到眼前，动作之后无人检查，失败也没有回到下一轮。包裹里装着市政档案馆急需的状态模块——信使恢复行动后，真正的收件地点发来了新的求援。</p>
+      <p>是中转站漏了两道工序：新门牌没有送到信使眼前，推杆停下以后也没人去看收件托盘。包裹里装着市政档案馆进度牌急需的新机芯——信使完成真正的交付后，馆内立刻亮起了求援灯。</p>
     </div>
+    ${window.EchoFeedback.renderCompletion("01")}
     <div class="term-map">
       <div class="term-row"><span class="plain">眼前能看见的材料</span><span class="arrow">→</span><div><b>上下文 / 观察空间</b><small>没进入观察空间的事实，对行动者来说就等于不存在。</small></div></div>
       <div class="term-row"><span class="plain">能够动用的机关</span><span class="arrow">→</span><div><b>工具 / 动作空间</b><small>再会推理，也无法执行一个没有被提供的动作。</small></div></div>
