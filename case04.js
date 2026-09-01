@@ -531,18 +531,50 @@ function submitDispatch() {
 function showReveal() {
   openModal(`
     <div class="reveal-hero"><div class="modal-kicker">CASE CLOSED · 真相已解锁</div><h2>提前落下的是完成章，不是河闸</h2>
-      <p>总控台把“远处接到了活”听成“河闸已经到位”，半路来信又全挤在同一根管子里。你留下回查号码，让闯入闸室的急报马上停闸，把普通提醒放进待办夹，并给万能总杆加上四道门闩。最后，完成章由现场闸位决定，而不是由一句“成功”决定。</p>
+      <p>你没有把另一句“成功”写回记录，而是分清了命令、接收、进行、取消和完成。现在沿着回条、回电和三色来信重建整条调度链。</p>
       <p class="next-case-hook"><b>新增待查线索：</b>最终回电纸带末尾留着一枚没人复查过的维护签名——“禁区工坊 · patch-b7”。它没有改变本案最后的闸位，却说明河闸内部曾被工坊动过。</p></div>
     ${window.EchoFeedback.renderCompletion("04")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>接线回条只证明接到命令，最终回电才报告闸位</b><p>m-204 在回条出现时仍处于进行中；没有回电和现场读数，不能盖完成章。</p></article>
+          <article class="replay-card"><span>证物 03 + 04 + 05</span><b>三封来信性质不同，万能总杆却没有边界</b><p>闯入闸室需要立即停闸，补签名可以排队，南岸水尺可以另行处理；高风险总杆还需要限闸、限幅、复述、双人确认和中途停止。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>启动、进展、完成和取消必须分别记录；新事件不能一律打断或一律忽略，高风险动作也不能只靠操作者自觉。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>错误完成章是怎样落下的</h3></div>
+        <div class="causal-chain"><div class="causal-node">回条被误读成最终结果</div><i class="causal-arrow">→</i><div class="causal-node">running 被提前写成 completed</div><i class="causal-arrow">→</i><div class="causal-node">不同来信挤进同一处理管道</div><i class="causal-arrow">→</i><div class="causal-node">万能总杆缺少权限和停止边界</div><i class="causal-arrow">→</i><div class="causal-node">记录与真实闸位分离</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你重接的午夜线路</h3></div>
+        <div class="repair-chain"><div class="causal-node">发出限定命令</div><i class="causal-arrow">→</i><div class="causal-node">保存 Task ID 与 running</div><i class="causal-arrow">→</i><div class="causal-node">急报取消、普通排队、独立分流</div><i class="causal-arrow">→</i><div class="causal-node">接收最终回电</div><i class="causal-arrow">→</i><div class="causal-node">现场核对后完成或恢复</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">按钮要说清何时用、怎么传、会回什么</span><span class="arrow">→</span><div><b>工具接口与 ACI 设计</b><small>工具描述应覆盖使用时机、禁止场景、参数与示例、返回结构和成本。模型看到的参数、实际传入和最终执行必须一致；任何归一化或注入都要可见。</small></div></div>
-      <div class="term-row"><span class="plain">请求有编号，开始不等于完成</span><span class="arrow">→</span><div><b>异步任务、Task ID 与事件日志</b><small>启动时立即记录工具调用和任务 ID；真实结果只在完成后写入。进度事件更新状态，但不能冒充最终结果。</small></div></div>
-      <div class="term-row"><span class="plain">危险急报中止，普通消息排队，独立询问另行处理</span><span class="arrow">→</span><div><b>事件路由、取消语义与并行执行</b><small>紧急事件可取消当前动作并写入 pending / cancelled 占位；普通事件进入队列或批处理；互不依赖的轻量查询可以并行，避免每条消息都打断主线。</small></div></div>
-      <div class="term-row"><span class="plain">只给必要能力，先确认，后核对，失败有退路</span><span class="arrow">→</span><div><b>最小权限、审批、结构化验证与有界恢复</b><small>安全链应覆盖权限或沙箱、执行前约束与审批、执行、结构化验证，以及重试、换路、回滚或转人工。工具成功不等于业务成功。</small></div></div>
-      <div class="formula"><b>本案调度式：</b>限定动作 → 记录 Task ID / running → 路由事件 → 接收最终结果 → 验证环境终态 → 完成 / 有界恢复<br><small>复杂工具按能力边界分组，而不是机械地一个接口一个工具；高风险动作还可采用提出者—审查者分工。</small></div>
+      <h3 class="term-map__title">现在，给你重接的线路命名</h3>
+      <p class="term-map__intro">每个状态和安全边界，都来自你在总控台实际保留的一步。</p>
+      <div class="term-row"><span class="plain">限定北岸目标闸、三成开度并复述</span><span class="arrow">→</span><div><b>工具接口与 ACI 设计</b><small>你让动作的使用时机、目标、参数边界和返回状态都变得明确，并让实际执行与操作者看到的命令一致。</small></div></div>
+      <div class="term-row"><span class="plain">回条保存 m-204，记录“仍在进行”</span><span class="arrow">→</span><div><b>异步任务、Task ID 与事件日志</b><small>启动只返回可回查编号；进展更新状态，只有最终回电到达后才能写入真实结果。</small></div></div>
+      <div class="term-row"><span class="plain">急报停闸、补签排队、水尺分流</span><span class="arrow">→</span><div><b>事件路由、取消语义与并行执行</b><small>你按紧急度与独立性分别选择取消、排队和另行处理，而不是让每封来信都破坏主线。</small></div></div>
+      <div class="term-row"><span class="plain">限闸限幅、双人确认、中途能停、现场核对</span><span class="arrow">→</span><div><b>最小权限、审批、结构化验证与有界恢复</b><small>这些门闩共同构成执行前约束、执行中控制、执行后验证和失败恢复；任何一层都不能由一句“请小心”替代。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>限定动作 → 记录 Task ID / running → 路由事件 → 接收最终结果 → 验证环境终态 → 完成 / 有界恢复<br><small>回条、进度、回电和现场读数属于不同证据；只有最后两项足以支持完成章。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="调度成立：任务应先保持 running，紧急事件触发取消并留下 cancelled 记录，等待设备确认停止后再决定后续恢复。" data-failure="任务编号只表示已经启动；有人进入设备区时，既不能继续等待完成，也不能把没有结束的动作写成成功。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一条远程线路</span>
+        <h3>水泵启动途中出现人员闯入，记录该怎么变？</h3>
+        <p>远程水泵返回任务编号 pump-31，状态仍是 running。此时现场报告有人进入泵房。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>任务编号已经返回，先登记 completed，再处理现场消息。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">立即发出取消，记录 cancelled／待确认停止，并用现场状态验证水泵已经停下。</button>
+          <button class="transfer-option" data-transfer-option>删除 pump-31，让记录看起来从未启动过。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否真正分清异步状态、紧急事件和现实验证。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case05.html?from=case04">追查维护签名：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回调度室</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

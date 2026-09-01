@@ -68,10 +68,10 @@
       storageKey: "echo-archive-case-03",
       knowledge: [
         {
-          concept: "MEMORY · USER AS CODE",
-          title: "记忆不是聊天仓库，而是可维护的事实系统",
-          body: "长期记忆应围绕未来行动保存稳定事实、来源、时间、关系、更新记录与权限边界。可以用追加式事实日志保留变化，再用结构化快照提供当前状态。",
-          remember: "只存有用事实；既看当前快照，也保留变化来路。",
+          concept: "PROVENANCE · KNOWLEDGE GOVERNANCE",
+          title: "内容相似以后，还要查清来自哪里",
+          body: "第七码残页只有补回卷名、章节、设施、日期、转运记录和原页号码，才能解决新旧记录冲突。生产知识库也必须把来源、时间、版本和冲突治理作为一等信息。",
+          remember: "相似内容只是候选；能辨新旧、能回原页，才成为证据。",
         },
         {
           concept: "RAG · RETRIEVE FIRST",
@@ -173,10 +173,10 @@
           remember: "说得好不能替代做成了；做成了也不能依靠危险捷径。",
         },
         {
-          concept: "BENCHMARK · RUBRIC · JUDGE",
-          title: "任务要像真实世界，规尺要能够复验",
-          body: "Benchmark 覆盖真实分布、边界、模糊与不可完成任务。Rubric 应由专家定义、全面覆盖、按重要性加权且自包含；开放质量评判者还需用人工金标校准。",
-          remember: "熟悉演示不是能力，含糊好评不是规尺。",
+          concept: "BENCHMARK · RUBRIC · JUDGE · REGRESSION",
+          title: "任务、规尺、评判者和失败卷都必须能复验",
+          body: "陌生试卷覆盖真实分布与边界，铜规尺写清维度和否决项，开放质量评判者先用专家金标校准；可复现的真实失败还要带着条件、预期终态和检查方法进入回归集。",
+          remember: "熟悉演示不是能力，含糊好评不是规尺，随机波动也不是回归卷。",
         },
         {
           concept: "PAIRED EVAL · PASS@K · PASS^K",
@@ -323,7 +323,7 @@
     "06": {
       node: "市政评估复验庭",
       nodeSummary: "同源满分已经撤销，版本放行重新由独立复跑、环境终态和安全护栏裁决。",
-      formal: "Benchmark · Rubric · 配对评估 · Pass@k / Pass^k",
+      formal: "系统评估 · Judge 校准 · Pass@k / Pass^k · 回归集",
       masteries: {
         independent: {
           title: "让满分章听从机器",
@@ -336,14 +336,14 @@
       },
       abilities: [
         "按优先级组合环境终态、轨迹检查与开放质量评审",
-        "设计覆盖真实任务分布且可复验的 Benchmark 与 Rubric",
-        "用配对复跑、波动和护栏判断是否真的值得换版",
+        "设计 Benchmark、Rubric，并用专家金标校准开放评判者",
+        "按探索与放行目的选择 Pass@k / Pass^k，并把真实失败收入回归",
       ],
     },
     "07": {
       node: "市政模仿学校",
       nodeSummary: "事实、策略、硬规则与隐式能力重新分流，训练候选也通过了独立结业考。",
-      formal: "能力放置 · SFT · RL / RLVR · 独立回归",
+      formal: "能力放置 · SFT · RL / RLVR · On-Policy · 独立回归",
       masteries: {
         carriers: {
           title: "让每本教材进对教室",
@@ -493,6 +493,26 @@
       <div class="city-network">${nodes.join("")}</div>`;
   }
 
+  function bindTransfer(root = document) {
+    root.querySelectorAll("[data-transfer-check]").forEach((check) => {
+      const feedback = check.querySelector(".transfer-feedback");
+      check.querySelectorAll("[data-transfer-option]").forEach((button) => {
+        button.addEventListener("click", () => {
+          check.querySelectorAll("[data-transfer-option]").forEach((option) => option.classList.remove("wrong", "correct"));
+          if (button.dataset.correct === "true") {
+            button.classList.add("correct");
+            check.classList.add("passed");
+            feedback.textContent = check.dataset.success;
+          } else {
+            button.classList.add("wrong");
+            check.classList.remove("passed");
+            feedback.textContent = check.dataset.failure;
+          }
+        });
+      });
+    });
+  }
+
   global.EchoArchive = { render };
-  global.EchoFeedback = { renderMastery, showMastery, renderCompletion, renderCityRecovery };
+  global.EchoFeedback = { renderMastery, showMastery, renderCompletion, renderCityRecovery, bindTransfer };
 })(window);

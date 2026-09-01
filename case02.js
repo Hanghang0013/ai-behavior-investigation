@@ -582,18 +582,50 @@ function showReveal() {
     <div class="reveal-hero">
       <div class="modal-kicker">CASE CLOSED · 真相已解锁</div>
       <h2>大厅不是记得不够，而是摆放失序</h2>
-      <p>你没有再往桌上塞纸，而是让不变的规章钉在门口，让新消息接在队尾，让下一步挂在进度牌上，再把厚原件收进有取件条的柜子。大厅恢复后，中央柜吐出一张被埋住的旧取卷条：q-07-417，第七码卷宗。</p>
+      <p>你没有再往桌上塞纸。现在沿着自己整理过的证物，重建“全部保存”为什么仍会让大厅失去行动能力。</p>
     </div>
     ${window.EchoFeedback.renderCompletion("02")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>入口规章不断重印，新消息从纸带前端插入</b><p>不变的材料每轮都被改写，米娅只能一次次重新熟悉入口和顺序。</p></article>
+          <article class="replay-card"><span>证物 03 + 04 + 05</span><b>厚原件堆满桌面，关键柜号却从摘要里消失</b><p>进度牌只有时间，没有未决事项和下一步；缩短记录时又改写了精确编号。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>问题不在于窗口是否还能放纸，而在于眼前材料是否稳定、相关、可行动，并且仍能回到原件核对。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>失败是怎样一步步发生的</h3></div>
+        <div class="causal-chain"><div class="causal-node">固定规章被反复改写</div><i class="causal-arrow">→</i><div class="causal-node">每条新消息都破坏原有顺序</div><i class="causal-arrow">→</i><div class="causal-node">大量原件挤占眼前位置</div><i class="causal-arrow">→</i><div class="causal-node">柜号和未决事项在缩写中丢失</div><i class="causal-arrow">→</i><div class="causal-node">大厅忘记下一步并重新开始</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你建立的新摆放秩序</h3></div>
+        <div class="repair-chain"><div class="causal-node">规章固定在入口</div><i class="causal-arrow">→</i><div class="causal-node">新消息只接在队尾</div><i class="causal-arrow">→</i><div class="causal-node">目标与下一步挂上进度牌</div><i class="causal-arrow">→</i><div class="causal-node">厚原件外置保存</div><i class="causal-arrow">→</i><div class="causal-node">取件条原样保留</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">只把当前有用的放在眼前</span><span class="arrow">→</span><div><b>上下文质量与上下文腐化</b><small>窗口没有装满，也可能因噪声、重复和位置失序而降低判断质量。</small></div></div>
-      <div class="term-row"><span class="plain">入口固定，消息只往后接</span><span class="arrow">→</span><div><b>稳定前缀与 KV Cache</b><small>系统规则和工具定义保持稳定；动态对话与工具结果追加在后，才能复用熟悉的前缀。</small></div></div>
-      <div class="term-row"><span class="plain">读数旁边写清下一步</span><span class="arrow">→</span><div><b>Agent 状态栏与侧信道</b><small>由代码维护目标、环境、计数器和能力清单，并同时提供达到阈值后的行动策略。</small></div></div>
-      <div class="term-row"><span class="plain">大原件外置，关键项无损</span><span class="arrow">→</span><div><b>分层上下文压缩</b><small>先删噪声、外置大结果，再摘要；必须保留决策、约束、TODO、精确标识符、验证状态和原始路径。</small></div></div>
-      <div class="formula"><b>本案整理式：</b>稳定前缀 + 追加轨迹 + 末端状态栏 + 可回取证据<br><small>若探索材料巨大，优先放到隔离空间处理，只带回高密度结论与证据位置。</small></div>
+      <h3 class="term-map__title">现在，给你刚才整理的区域命名</h3>
+      <p class="term-map__intro">每个术语都对应一组你亲手归位的材料。</p>
+      <div class="term-row"><span class="plain">清走重复纸，只留当前有用材料</span><span class="arrow">→</span><div><b>上下文质量与上下文腐化</b><small>你证明了“放得下”不等于“用得上”；噪声、重复和错位会在窗口未满时先破坏判断。</small></div></div>
+      <div class="term-row"><span class="plain">规章钉在入口，消息接在队尾</span><span class="arrow">→</span><div><b>稳定前缀与 KV Cache</b><small>不变的系统规则和工具定义保持稳定，动态轨迹向后追加，系统无需每轮重新熟悉入口。</small></div></div>
+      <div class="term-row"><span class="plain">把目标、进度和下一步挂上牌</span><span class="arrow">→</span><div><b>Agent 状态栏与侧信道</b><small>你补上的不只是时间读数，而是未决事项、环境状态和看到读数后应该采取的行动。</small></div></div>
+      <div class="term-row"><span class="plain">原件入柜，q-07-417 原样留在取件条</span><span class="arrow">→</span><div><b>分层上下文压缩</b><small>大材料可以外置或摘要，但决定、约束、TODO、精确标识符、验证状态和原件位置必须无损保留。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>稳定前缀 + 追加轨迹 + 末端状态栏 + 可回取证据<br><small>大厅恢复后吐出的 q-07-417，正是“压缩后仍能回到原件”的现实证明。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="整理成立：摘要保留了决定、未决事项、精确编号和原件位置，既减轻拥挤又没有切断后续行动。" data-failure="这种做法会让系统继续拥挤，或在缩短材料时失去可执行信息。检查哪些内容一旦改写就无法继续调查。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一摞材料</span>
+        <h3>哪份摘要还能支持下一步行动？</h3>
+        <p>救援记录即将超过大厅容量，其中包含大量重复回报、决定“转移北区居民”、未完成的避难所核验、编号 shelter-17，以及原件柜位。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>“情况复杂，大家继续努力。”删除编号和原件，尽可能短。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">保留转移决定、未决核验、shelter-17 和原件柜位；删除重复回报。</button>
+          <button class="transfer-option" data-transfer-option>把全部原件继续摊在桌面，避免任何信息损失。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否掌握了“少看但仍能行动与回溯”。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case03.html?from=case02">追查旧索引：进入下一案 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回大厅</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

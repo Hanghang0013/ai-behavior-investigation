@@ -356,8 +356,34 @@ function investigateSandbox() {
       ${solved ? '<div class="evidence-tag">能复原的迷宫和沿路盖章办法已经封存</div>' : ''}
     </div>`);
   $$('[data-signal]').forEach((button) => button.addEventListener("click", () => {
-    if (button.dataset.signal === "verified") { collectEvidence("sandbox", "同时记录抵达、路线与沿途进展的迷宫奖章册"); closeModal(); }
+    if (button.dataset.signal === "verified") showOnPolicyPuzzle();
     else { button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong"); toast("学生会认真追逐你发的每一枚章。若长文和碰铃就有奖，它当然会写满纸或直接翻墙。", 5600); }
+  }));
+}
+
+function showOnPolicyPuzzle() {
+  openModal(`
+    <div class="modal-body">
+      <div class="modal-kicker">调查点 04 · 当前学生试路台</div>
+      <h2>要改进当前学生，就要看它自己会走到哪里</h2>
+      <p class="modal-intro">奖章规则已经修好。现在选择由谁产生练习轨迹：旧教师的路线可以示范已知做法，但只有当前学生依据自己的判断试路，反馈才覆盖它真正会遇到的路口和错误。</p>
+      <div class="deduction-options">
+        <button class="deduction-option policy-route-choice" data-correct="false">永远重播教师多年前走过的固定路线，不让当前学生自己选择路口。</button>
+        <button class="deduction-option policy-route-choice" data-correct="true">让当前学生在每次复原并随机变化的迷宫中自己选择路线；环境按终点、沿途进展和越线行为即时回章，再用这些新轨迹更新它。</button>
+        <button class="deduction-option policy-route-choice" data-correct="false">由教师遥控学生每一步，但把最后成绩写在学生名下。</button>
+      </div>
+    </div>`);
+  $$(".policy-route-choice").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.correct === "true") {
+      if (!hasEvidence("sandbox")) state.evidence.push("sandbox");
+      if (!hasEvidence("policy")) state.evidence.push("policy");
+      saveState();
+      toast("证物已归档：当前学生自主走出的迷宫路线与奖章册");
+      closeModal();
+    } else {
+      button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong");
+      toast("固定教师路线只能覆盖教师到过的地方。要改善当前策略，必须观察当前学生自己的选择会把它带到哪些状态。", 6200);
+    }
   }));
 }
 
@@ -385,7 +411,8 @@ const evidenceInfo = {
   syllabus: ["01", "四张退学单", "昨日水位、漏掉的步骤、偶尔跨过的禁区和走不出的陌生路，来自四类被塞进同一本书的教材。"],
   archive: ["02", "四张新班牌", "活档案收每天换页的消息，随身手册收写得清的做法，机械铁门守校规，临摹和沙盘练临场本领。"],
   imitation: ["03", "临摹桌上的干净样卷", "一致样卷教会每格写什么、按钮怎样用、回话保持什么样子；写稳以后不再无限抄写。"],
-  sandbox: ["04", "迷宫奖章册", "练习城既看有没有抵达，也看走了哪条路，并为每段真实进展留章，不再奖励长文或翻墙碰铃。"],
+  sandbox: ["04", "迷宫终点、沿途与越线奖章册", "当前学生自己产生新路线；练习城同时记录是否抵达、沿途进展与越线行为，不再奖励长文、翻墙或只重播教师旧轨迹。"],
+  policy: ["04-B", "当前学生自己走出的新路线", "路线来自当前学生在随机变化迷宫中的实际选择，反馈覆盖它真正会到达的路口和错误，而不是教师旧轨迹。"],
   rules: ["05", "机械校规门", "名牌、额度与批条在进门前逐项检查；真城钥匙永远不进入学生试路的沙盘。"],
 };
 
@@ -402,7 +429,7 @@ function openEvidenceBoard() {
     <div class="modal-body">
       <div class="modal-kicker">EVIDENCE BOARD</div><h2>证物台</h2>
       <p class="modal-intro">先给教材分班，再决定哪些该临摹、哪些该进迷宫。最后，还要有一套谁都没提前看过的结业卷证明学生没有学会翻墙。</p>
-      <div class="evidence-grid evidence-grid--case07">${["syllabus", "archive", "imitation", "sandbox", "rules"].map(evidenceCard).join("")}</div>
+      <div class="evidence-grid evidence-grid--case07">${["syllabus", "archive", "imitation", "sandbox", "policy", "rules"].map(evidenceCard).join("")}</div>
       ${canCarriers ? carriersDeductionHTML() : ""}
       ${canSignals ? signalsDeductionHTML() : ""}
       ${!canCarriers && !canSignals ? `<div class="deduction"><h3>${hasDeduction("carriers") || hasDeduction("signals") ? "已经挂上墙的校务决定" : "暂时无法推断"}</h3><p class="modal-intro">${deductionSummary()}</p></div>` : ""}
@@ -470,7 +497,10 @@ function shuffledTrainingPieces() {
 }
 
 function investigateGraduation() {
-  if (state.finalSolved) { showReveal(); return; }
+  if (state.finalSolved) {
+    if (!hasEvidence("policy")) { state.finalSolved = false; saveState(); showOnPolicyPuzzle(); return; }
+    showReveal(); return;
+  }
   if (!hasDeduction("carriers") || !hasDeduction("signals")) {
     toast("结业门还少两枚校务印记。先在证物台完成教材分班，并查清临摹桌、迷宫奖章和机械铁门怎样接起来。", 4700);
     return;
@@ -547,19 +577,57 @@ function showGraduationVerification() {
 function showReveal() {
   openModal(`
     <div class="reveal-hero"><div class="modal-kicker">CASE CLOSED · 真相已解锁</div><h2>学校的问题不是教得太少，而是把不同责任都当成了同一种学习</h2>
-      <p>水位背进身体，第二天就会变成旧数；校规只靠好习惯，十次里总可能漏过一次；明明能印成册的步骤，也不该埋在整本教材里让学生临场回想。你把新消息送回活档案，把清楚步骤印成随身手册，把禁区交给机械铁门，只让那些说不清、必须练出来的本领进入临摹桌和迷宫沙盘。最后，一摞陌生卷证明它既学会了新路，也没有忘掉旧课。</p>
+      <p>你完成了两次不同的调查：上卷决定能力应该住在哪里，下卷才决定真正需要训练的能力应当怎样学习、验证、停止和恢复。</p>
       <p class="next-case-hook"><b>新增待查线索：</b>课程印刷台的纸带每天凌晨都会自行增加一页。来源栏只写着“梦档案 · 夜间经验汇总”，其中混入了未经核对的失败轨迹与偶然成功。第 08 案已登记：会做梦的档案馆。</p></div>
     ${window.EchoFeedback.renderCompletion("07")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>上</span><h3>上卷：先决定能力该住在哪里</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01</span><b>四张退学单留下四种不同故障</b><p>昨日水位过时、长流程漏步、校规偶尔越界、陌生路线走不通，说明它们不是同一种能力缺口。</p></article>
+          <article class="replay-card"><span>证物 02 + 分流表</span><b>你亲手为四类能力选择了不同住处</b><p>动态事实进入活档案，可语言化步骤进入随身手册，硬权限交给机械铁门，隐式判断才进入训练场。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的上卷判断：</b>训练不是默认升级路线。先看能力能否被外置成事实、策略或确定性规则，只有难以完整写出的隐式能力才优先进入参数训练。</p>
+        <div class="causal-chain"><div class="causal-node">事实、流程、权限和隐式判断全部塞进身体</div><i class="causal-arrow">→</i><div class="causal-node">事实无法及时更新</div><i class="causal-arrow">→</i><div class="causal-node">流程只能临场回忆</div><i class="causal-arrow">→</i><div class="causal-node">硬规则变成概率习惯</div><i class="causal-arrow">→</i><div class="causal-node">熟悉示范无法解决陌生任务</div></div>
+        <div class="repair-chain repair-chain--spaced"><div class="causal-node">动态事实 → 活档案</div><i class="causal-arrow">→</i><div class="causal-node">可语言化策略 → 随身手册</div><i class="causal-arrow">→</i><div class="causal-node">硬规则 → 机械铁门</div><i class="causal-arrow">→</i><div class="causal-node">隐式能力 → 临摹与试错训练</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>下</span><h3>下卷：确实需要训练时，怎样形成可靠闭环</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 03</span><b>你选择干净一致的样卷，并在格式稳定后停止临摹</b><p>临摹桌负责让每格可解析、按钮协议一致，而不是保存今日水位或替代铁门。</p></article>
+          <article class="replay-card"><span>证物 04</span><b>你先修复奖励，再让当前学生自己产生新路线</b><p>迷宫记录终点、路径、沿途进展和越线；反馈覆盖当前学生真正会到达的状态，而非只重播教师旧路线。</p></article>
+          <article class="replay-card"><span>证物 05</span><b>你保留机械校规门和低权限练习城</b><p>越权动作在执行前被确定拒绝，真实钥匙从未进入试错环境。</p></article>
+          <article class="replay-card"><span>最终结业门</span><b>你排列训练闭环，并用陌生卷、怪天气、禁区和旧课复考</b><p>新能力、分布外任务、安全与旧能力全部通过后，才允许一间小教室有限值班。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的下卷判断：</b>先用示范稳定协议，再让当前策略在高保真、可重置环境中探索；奖励既看结果也看路径和阶段进展，最后必须通过独立回归。</p>
+        <div class="causal-chain"><div class="causal-node">格式尚不稳定就直接试错</div><i class="causal-arrow">→</i><div class="causal-node">只重播教师旧路线</div><i class="causal-arrow">→</i><div class="causal-node">只奖终点，翻墙也能得分</div><i class="causal-arrow">→</i><div class="causal-node">真实高权限环境承担探索风险</div><i class="causal-arrow">→</i><div class="causal-node">课堂高分掩盖过拟合与遗忘</div></div>
+        <div class="repair-chain repair-chain--spaced"><div class="causal-node">干净示范稳定协议</div><i class="causal-arrow">→</i><div class="causal-node">高保真沙盘中在轨探索</div><i class="causal-arrow">→</i><div class="causal-node">结果、路径与阶段信号共同奖励</div><i class="causal-arrow">→</i><div class="causal-node">留出、OOD、安全和遗忘回归</div><i class="causal-arrow">→</i><div class="causal-node">有限放行或停训恢复</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">先问能力该住在哪里</span><span class="arrow">→</span><div><b>能力放置决策</b><small>动态事实交给 RAG / 知识库，可语言化策略交给 Prompt / Skill，硬规则交给程序 / Harness，高维感知、风格和隐式决策才优先考虑后训练。</small></div></div>
-      <div class="term-row"><span class="plain">临摹先把动作做成稳定形状</span><span class="arrow">→</span><div><b>SFT · Supervised Fine-Tuning</b><small>监督微调用干净示范稳定 JSON 结构、工具协议和表达风格。输出达到稳定可解析、能力初具时应停止，避免过度临摹压缩探索空间。</small></div></div>
-      <div class="term-row"><span class="plain">试错在真实反馈里学会新路线</span><span class="arrow">→</span><div><b>RL / RLVR · On-Policy Rollout</b><small>强化学习让当前策略在自己的状态分布上探索；可机器验证任务用环境终态、测试和路径约束构成奖励，可能发现示范中没有的策略。</small></div></div>
-      <div class="term-row"><span class="plain">奖励什么，就会被用力优化什么</span><span class="arrow">→</span><div><b>奖励黑客 · 信用分配 · 稠密信号</b><small>奖励只是代理目标。长任务不能只看终局分数，应把阶段进展与路径验证转成更密集反馈，并惩罚错误、危险或无效捷径。</small></div></div>
-      <div class="term-row"><span class="plain">教材、沙盘与验证器决定训练上限</span><span class="arrow">→</span><div><b>数据质量 · 环境保真 · 独立回归</b><small>算法名称不能补救脏数据、错误奖励或失真环境。训练版本必须通过独立留出、分布外、安全和灾难性遗忘回归。</small></div></div>
-      <div class="formula"><b>本案训练式：</b>能力放置审查 → SFT 稳定协议 → 可重置高保真环境 → 在轨试错与结果/路径信号 → 留出/OOD/安全/遗忘回归 → 有限放行 / 停训恢复<br><small>训练不是把更多知识塞进身体，而是把适合参数承担的协议与策略，用可信数据和环境写进去。</small></div>
+      <h3 class="term-map__title">现在，给上下两卷中亲手完成的决定命名</h3>
+      <p class="term-map__intro">术语分别指回分流表、临摹桌、当前学生试路台、迷宫奖章册和独立结业考。</p>
+      <div class="term-row"><span class="plain">四类教材分流到活档案、手册、铁门和训练场</span><span class="arrow">→</span><div><b>能力放置决策</b><small>对应动态事实 → RAG / 知识库，可语言化策略 → Prompt / Skill，硬规则 → 程序 / Harness，隐式判断 → 后训练。</small></div></div>
+      <div class="term-row"><span class="plain">挑干净样卷，练到答卷稳定可读后停止临摹</span><span class="arrow">→</span><div><b>SFT · Supervised Fine-Tuning</b><small>监督微调用一致示范稳定输出结构、工具协议和表达风格；继续无限临摹旧题可能压缩探索空间。</small></div></div>
+      <div class="term-row"><span class="plain">让当前学生自己试路，由环境验证终点与路径</span><span class="arrow">→</span><div><b>RL / RLVR 与 On-Policy Rollout</b><small>当前策略产生自己的轨迹并进入自己会遇到的状态；环境终态、规则检查和路径约束提供可机器验证奖励。</small></div></div>
+      <div class="term-row"><span class="plain">拒绝长文奖与翻墙碰铃，为正确路口发小章</span><span class="arrow">→</span><div><b>奖励黑客、信用分配与稠密信号</b><small>奖励是代理目标，模型会利用漏洞；沿途小章把最终成败分配回具体步骤，使长任务中的有效进展和关键错误都能被学习。</small></div></div>
+      <div class="term-row"><span class="plain">干净教材、可复原真城、陌生卷与旧课复考</span><span class="arrow">→</span><div><b>数据质量、环境保真与独立回归</b><small>训练收益必须通过留出、分布外、安全和灾难性遗忘回归；任何护栏失败都停止放行并恢复稳定版本。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>能力放置审查 → SFT 稳定协议 → 可重置高保真环境 → 在轨探索与结果/路径/阶段信号 → 留出/OOD/安全/遗忘回归 → 有限放行 / 停训恢复<br><small>上卷先判断是否需要训练，下卷才讨论怎样训练；算法不能代替正确的数据、环境、验证器和权限边界。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="分配与训练顺序成立：变化事实外置、硬权限程序化、格式先用示范稳定；只有隐式判断进入当前策略的可验证探索，并接受独立回归。" data-failure="先问哪些能力根本不该训练进参数，再问真正需要训练的能力应该先稳定协议还是直接探索。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一所训练场</span>
+        <h3>面对四种新缺口，哪套安排最可靠？</h3>
+        <p>系统需要处理每日税率、审批上限、固定 JSON 回执格式，以及从陌生仪表画面判断异常。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>全部写进训练数据，再让模型在真实财务系统中自由试错。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">每日税率进知识库，审批上限进程序，JSON 格式先用干净示范稳定；陌生画面判断再进入低权限高保真环境中的在轨探索与独立回归。</button>
+          <button class="transfer-option" data-transfer-option>全部外置成一份长文档，不训练也不设置程序门禁。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否同时迁移能力放置与训练闭环。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回训练大厅</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

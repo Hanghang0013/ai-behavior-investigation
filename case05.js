@@ -542,18 +542,50 @@ function showRealityVerification() {
 function showReveal() {
   openModal(`
     <div class="reveal-hero"><div class="modal-kicker">CASE CLOSED · 真相已解锁</div><h2>真正闯祸的不是修理，而是只盯着眼前这一处</h2>
-      <p>patch-b7 的确修好了那枚齿轮，可工匠没有先看清它还连着三台旧机器，也没有进玻璃房、留下前后样子、做完试车或保存旧件。你让这次修理重新走过一条人人看得懂、步步查得清、出事退得回的路，最后由三台真机器证明它们没有为了一个新毛病丢掉原来的本事。</p>
+      <p>patch-b7 的局部自检没有撒谎，但它只回答了“眼前齿轮能不能转”。现在用牵连图、玻璃房、联合试车和三台真机器重建完整维修责任。</p>
       <p class="next-case-hook"><b>新增待查线索：</b>旧验收簿写着，patch-b7 明明少做了两轮试车，却仍盖着“100 / 100 · 完美通过”。更怪的是，打分的人只看了工匠自己留下的那段演示。第 06 案已登记：完美嫌疑人。</p></div>
     ${window.EchoFeedback.renderCompletion("05")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>修理单只测一枚齿轮，牵连图却连着三台机器</b><p>共享换算器同时服务河闸、档案升降台和应急水泵；局部通过无法代表所有调用者安全。</p></article>
+          <article class="replay-card"><span>证物 03 + 04 + 05</span><b>玻璃试验间未启用，联合试车和恢复锚点被跳过</b><p>修改直接碰真实机器，没有清晰前后对照，也没有从局部到整体的检查和可验证旧件。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>事故根因不是“代码一定不能改”，而是修改前没有理解影响范围，修改时没有隔离，修改后没有回归，失败时也没有可靠退路。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>局部成功为什么变成整体事故</h3></div>
+        <div class="causal-chain"><div class="causal-node">只看眼前故障</div><i class="causal-arrow">→</i><div class="causal-node">漏掉共享换算器的调用者</div><i class="causal-arrow">→</i><div class="causal-node">直接在真实机器上试修</div><i class="causal-arrow">→</i><div class="causal-node">局部自检替代联合回归</div><i class="causal-arrow">→</i><div class="causal-node">三台旧机器同时失效且难以撤回</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你重走的安全出厂路</h3></div>
+        <div class="repair-chain"><div class="causal-node">看懂结构与牵连</div><i class="causal-arrow">→</i><div class="causal-node">限定最小修改计划</div><i class="causal-arrow">→</i><div class="causal-node">玻璃房隔离试修</div><i class="causal-arrow">→</i><div class="causal-node">审查前后差异并分层测试</div><i class="causal-arrow">→</i><div class="causal-node">有限放行，异常换回旧件</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">先看懂旧机器，再决定动哪里</span><span class="arrow">→</span><div><b>Coding Agent 的仓库理解与计划循环</b><small>正式开发中，这相当于先重现问题，读项目规矩、相关文件、牵连关系和已有检查，再写下一个范围很小、结果能验证的计划。写代码只是其中一步。</small></div></div>
-      <div class="term-row"><span class="plain">把改前、改后的样子并排留下</span><span class="arrow">→</span><div><b>文件系统、工作区与 Diff</b><small>独立工作区像工坊副机，Diff 就是修理前后的对照单。一次少改一点，别人更容易复查，出错也更容易找到并撤回。</small></div></div>
-      <div class="term-row"><span class="plain">试错先关在玻璃房里</span><span class="arrow">→</span><div><b>Sandbox 与最小权限</b><small>沙盒把试错与真实环境隔开，并只开放这次任务确实需要的文件、网络和命令。这样即使试坏，影响也不会越过玻璃房。</small></div></div>
-      <div class="term-row"><span class="plain">新毛病修好，旧本事也得保住</span><span class="arrow">→</span><div><b>测试金字塔、回归验证与回滚</b><small>先查修理点，再查相连部分，最后重跑旧用法；上线时先给少量真实任务使用。任何异常都要停止扩大，并退回上一个确认能工作的版本。</small></div></div>
-      <div class="formula"><b>本案维护式：</b>看懂旧机器 → 写清只修哪里 → 在玻璃房试修 → 对照前后变化 → 从零件到整机试车 → 先接一条真线路 → 完成 / 换回旧件<br><small>换成工程语言，就是用文件边界、工具权限、测试、审查和恢复办法，共同约束一个 Coding Agent。</small></div>
+      <h3 class="term-map__title">现在，给你重走的维修步骤命名</h3>
+      <p class="term-map__intro">这里的工程概念分别锚定牵连图、玻璃房、对照单、试车台和恢复旧件。</p>
+      <div class="term-row"><span class="plain">先读牵连图，再写最小修理计划</span><span class="arrow">→</span><div><b>Coding Agent 的仓库理解与计划循环</b><small>对应先重现问题，读取项目规则、相关文件、依赖关系和已有检查，再提出范围小且结果可验证的修改。</small></div></div>
+      <div class="term-row"><span class="plain">副机保存旧样，新旧刻度并排审查</span><span class="arrow">→</span><div><b>文件系统、独立工作区与 Diff</b><small>文件保存可审计状态，独立工作区隔离改动，Diff 让审查者看清究竟改了哪里，也提供精确撤回依据。</small></div></div>
+      <div class="term-row"><span class="plain">第一次试修只在玻璃房接必要线路</span><span class="arrow">→</span><div><b>Sandbox 与最小权限</b><small>沙盒限制修改对真实环境的影响范围；只开放任务所需文件、网络和命令，让试错不能越过隔离边界。</small></div></div>
+      <div class="term-row"><span class="plain">零件、三台旧机、真实线路逐层试车</span><span class="arrow">→</span><div><b>测试金字塔、回归验证、灰度与回滚</b><small>先验证修改点，再验证关联调用者和旧行为；有限放行后观察真实终态，任一异常就停止扩大并恢复旧件。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>理解结构 → 限定计划 → 隔离修改 → Diff 审查 → 分层测试 → 有限放行 → 完成 / 回滚<br><small>三台真机器同时正常，才证明新故障消失且旧能力没有退化。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="维修成立：共享组件必须先查调用者，在隔离工作区做最小修改，再运行局部与关联回归，有限放行且保留回滚点。" data-failure="局部检查或直接上线都会重现 patch-b7 的事故。共享组件的真实风险来自它影响的所有调用者。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个共享零件</span>
+        <h3>修复日期解析器前，哪条路线最可靠？</h3>
+        <p>一个日期解析器让新报表显示错误，但它也被账单和告警系统共同调用。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>只运行新报表的局部测试，通过后立即替换生产文件。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">先查三个调用者，在隔离工作区做最小修改，审查 Diff，跑局部与关联回归，再有限放行并保留回滚点。</button>
+          <button class="transfer-option" data-transfer-option>为了绝对安全，永远不再修改这个共享组件。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把工坊的安全链迁移到真实代码维护。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case06.html?from=case05">复验满分记录：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回工坊</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

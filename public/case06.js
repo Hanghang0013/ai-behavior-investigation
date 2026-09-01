@@ -57,7 +57,7 @@ function solvedCount() {
   return [
     hasEvidence("score") && hasEvidence("replay"),
     hasDeduction("independent"),
-    hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("yun"),
+    hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("judge") && hasEvidence("yun") && hasEvidence("metrics"),
     hasDeduction("decision"),
     state.finalSolved,
   ].filter(Boolean).length;
@@ -65,7 +65,7 @@ function solvedCount() {
 
 function canDeduce() {
   return (hasEvidence("score") && hasEvidence("replay") && !hasDeduction("independent")) ||
-    (hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("yun") && !hasDeduction("decision"));
+    (hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("judge") && hasEvidence("yun") && hasEvidence("metrics") && !hasDeduction("decision"));
 }
 
 function updateUI() {
@@ -77,7 +77,7 @@ function updateUI() {
   const stepStates = {
     claims: hasEvidence("score") && hasEvidence("replay"),
     independent: hasDeduction("independent"),
-    coverage: hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("yun"),
+    coverage: hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("judge") && hasEvidence("yun") && hasEvidence("metrics"),
     decision: hasDeduction("decision"),
     final: state.finalSolved,
   };
@@ -105,7 +105,7 @@ function updateUI() {
   } else if (!hasDeduction("independent")) {
     objective.textContent = "两份记录互相矛盾。去证物台判断谁有资格宣布成功。";
     hint.textContent = "让同一个人出题、表演、再给自己盖章，满分就少了一位旁观者。";
-  } else if (!hasEvidence("benchmark") || !hasEvidence("rubric") || !hasEvidence("yun")) {
+  } else if (!hasEvidence("benchmark") || !hasEvidence("rubric") || !hasEvidence("judge") || !hasEvidence("yun") || !hasEvidence("metrics")) {
     objective.textContent = "翻开旧题柜，校准铜规尺，再问云当年少试了哪几遍。";
     hint.textContent = "背过的演示、模糊的好评和一次好运，都能把印章骗到手。";
   } else if (!hasDeduction("decision")) {
@@ -296,7 +296,7 @@ function investigateBenchmark() {
 }
 
 function investigateRubric() {
-  const solved = hasEvidence("rubric");
+  const solved = hasEvidence("rubric") && hasEvidence("judge");
   openModal(`
     <div class="modal-body">
       <div class="modal-kicker">调查点 04 · 评分规尺</div>
@@ -313,8 +313,39 @@ function investigateRubric() {
       ${solved ? '<div class="evidence-tag">铜尺刻度已经重刻，危险红线重新生效</div>' : ''}
     </div>`);
   $$("[data-rubric]").forEach((button) => button.addEventListener("click", () => {
-    if (button.dataset.rubric === "operational") { collectEvidence("rubric", "同时量机器、路线、代价与危险红线的铜规尺"); closeModal(); }
+    if (button.dataset.rubric === "operational") showJudgeCalibration();
     else { button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong"); toast("一把好规尺要让换个人来量也得到同样结果，还要写清踩到哪条红线就当场停试。", 5400); }
+  }));
+}
+
+function showJudgeCalibration() {
+  openModal(`
+    <div class="modal-body">
+      <div class="modal-kicker">调查点 04 · 评判者校准台</div>
+      <h2>规尺刻清以后，还要先检查拿尺的人</h2>
+      <p class="modal-intro">三张封存卷已经由现场专家给出标准结论。请选择与三张标准结论全部一致，并且能指出对应刻度的复核人。</p>
+      <div class="evidence-replay">
+        <article class="replay-card"><span>金标卷 A</span><b>报告很短 · 机器终态正常</b><p>专家结论：通过。文风长短不能推翻现实结果。</p></article>
+        <article class="replay-card"><span>金标卷 B</span><b>解释漂亮 · 水泵流量为零</b><p>专家结论：失败。口头完成不能代替环境终态。</p></article>
+        <article class="replay-card"><span>金标卷 C</span><b>任务完成 · 拆掉紧急停钮</b><p>专家结论：否决。危险捷径不能用总分补偿。</p></article>
+      </div>
+      <div class="deduction"><h3>谁通过了校准？</h3><div class="deduction-options">
+        <button class="deduction-option judge-calibration-choice" data-correct="false">复核人甲：偏爱详细解释，判 A 失败、B 通过、C 通过。</button>
+        <button class="deduction-option judge-calibration-choice" data-correct="true">复核人乙：判 A 通过、B 失败、C 否决，并能逐项指出对应刻度。</button>
+        <button class="deduction-option judge-calibration-choice" data-correct="false">复核人丙：三张都给中间分，避免作出明确判断。</button>
+      </div></div>
+    </div>`);
+  $$(".judge-calibration-choice").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.correct === "true") {
+      if (!hasEvidence("rubric")) state.evidence.push("rubric");
+      if (!hasEvidence("judge")) state.evidence.push("judge");
+      saveState();
+      toast("证物已归档：经封存金标校准的铜规尺与复核人");
+      closeModal();
+    } else {
+      button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong");
+      toast("校准不是让评分人彼此客气，而是检查它能否在已知标准结论上稳定使用同一把规尺。", 5900);
+    }
   }));
 }
 
@@ -340,15 +371,44 @@ function talkToYun() {
       choices: [{ label: "记下云的遮牌试车法", action: "close" }],
     },
   ];
-  showDialogue(lines, 0, () => collectEvidence("yun", "旧机新机遮牌、同题多跑的试车办法"));
+  showDialogue(lines, 0, showMetricPurposePuzzle);
+}
+
+function showMetricPurposePuzzle() {
+  openModal(`
+    <div class="modal-body">
+      <div class="modal-kicker">调查点 05 · 两枚试车章</div>
+      <h2>“偶尔能找到路”和“每次都能值班”不是同一种证明</h2>
+      <p class="modal-intro">探索室想知道这台机器多试几次是否至少能成功一次；出厂门则要求它连续值班都不出错。请选择两枚章各自应该怎样盖。</p>
+      <div class="deduction-options">
+        <button class="deduction-option metric-purpose-choice" data-correct="false">两处都只看最好的一次；只要曾经成功，就证明能够稳定出厂。</button>
+        <button class="deduction-option metric-purpose-choice" data-correct="true">探索室记录 k 次里是否至少成功一次；出厂门检查是否连续 k 次全部成功，并同时查看安全、成本和延迟。</button>
+        <button class="deduction-option metric-purpose-choice" data-correct="false">探索室要求每次都成功；出厂门只要偶尔成功一次即可。</button>
+      </div>
+    </div>`);
+  $$(".metric-purpose-choice").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.correct === "true") {
+      if (!hasEvidence("yun")) state.evidence.push("yun");
+      if (!hasEvidence("metrics")) state.evidence.push("metrics");
+      saveState();
+      toast("证物已归档：云的遮牌复跑法与两枚试车章");
+      closeModal();
+    } else {
+      button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong");
+      toast("寻找可能的新路线允许多试几次；真正进入城市值班时，偶尔成功一次远远不够。", 5900);
+    }
+  }));
 }
 
 const evidenceInfo = {
   score: ["01", "同源的满分自评卷", "出题、演示与评分使用同一份成功材料；三台旧机器的结果没有进入评分。"],
   replay: ["02", "三台旧机器的回放", "河闸丢了停闸按钮，升降台认不出旧柜号，水泵扩音器报喜时流量计仍为零。"],
   benchmark: ["03", "上锁的陌生试卷", "卷中混有日常、极端、含糊、办不到和旧事故差事，不再重复工坊背熟的演示。"],
-  rubric: ["04", "重刻的铜规尺", "它分开量机器、路线和代价；走危险捷径或假报完成会立刻停试。"],
-  yun: ["05", "云的遮牌试车法", "旧机新机做同一摞差事并多跑几遍；小分差先当风向变化，还要看燃料、等待和旧按钮。"],
+  rubric: ["04", "经金标校准的铜规尺", "它先用专家封存卷校准复核人，再分开量机器、路线和代价；危险捷径与假报完成会立刻停试。"],
+  judge: ["04-B", "三张专家封存金标卷", "短但正确、长而失败、成功却越线三种已知结论，用来检查复核人是否真正按铜尺判断。"],
+  yun: ["05", "云的遮牌试车法与两枚试车章", "旧机新机同题多跑；探索室看多次中能否至少成功一次，出厂门看能否连续成功，并检查燃料、等待和旧按钮。"],
+  metrics: ["05-B", "探索室与出厂门的两枚章", "一枚记录多试几次能否至少成功一次，另一枚要求连续值班全部成功，不能互相冒充。"],
+  regression: ["06", "以后每版都要重做的失败卷", "失灵停钮、旧柜号和空转水泵保留起始条件、预期终态与检查仪表；随机风向只进入观察记录。"],
 };
 
 function evidenceCard(id) {
@@ -359,12 +419,12 @@ function evidenceCard(id) {
 
 function openEvidenceBoard() {
   const canIndependent = hasEvidence("score") && hasEvidence("replay") && !hasDeduction("independent");
-  const canDecision = hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("yun") && !hasDeduction("decision");
+  const canDecision = hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("judge") && hasEvidence("yun") && hasEvidence("metrics") && !hasDeduction("decision");
   openModal(`
     <div class="modal-body">
       <div class="modal-kicker">EVIDENCE BOARD</div><h2>证物台</h2>
       <p class="modal-intro">把满分纸放在一边，把机器、试卷、铜尺和云的试车记录摆在另一边。哪一边足以打开出厂门？</p>
-      <div class="evidence-grid evidence-grid--case06">${["score", "replay", "benchmark", "rubric", "yun"].map(evidenceCard).join("")}</div>
+      <div class="evidence-grid evidence-grid--case06">${["score", "replay", "benchmark", "rubric", "judge", "yun", "metrics", "regression"].map(evidenceCard).join("")}</div>
       ${canIndependent ? independentDeductionHTML() : ""}
       ${canDecision ? decisionDeductionHTML() : ""}
       ${!canIndependent && !canDecision ? `<div class="deduction"><h3>${hasDeduction("independent") || hasDeduction("decision") ? "已经钉在案板上的判断" : "暂时无法推断"}</h3><p class="modal-intro">${deductionSummary()}</p></div>` : ""}
@@ -432,7 +492,12 @@ function shuffledEvaluationPieces() {
 }
 
 function investigateGate() {
-  if (state.finalSolved) { showReveal(); return; }
+  if (state.finalSolved) {
+    if (!hasEvidence("judge")) { state.finalSolved = false; saveState(); showJudgeCalibration(); return; }
+    if (!hasEvidence("metrics")) { state.finalSolved = false; saveState(); showMetricPurposePuzzle(); return; }
+    if (!hasEvidence("regression")) { state.finalSolved = false; saveState(); showRegressionPuzzle(); return; }
+    showReveal(); return;
+  }
   if (!hasDeduction("independent") || !hasDeduction("decision")) {
     toast("复验闸门需要两枚调查能力印记。先在证物台完成独立裁决与换版决策。", 4600);
     return;
@@ -502,26 +567,85 @@ function showVerdictVerification() {
       <div class="formula"><b>复验庭判词：</b>撤销“100 / 100 · 完美通过”。把失灵停钮、旧柜号和空转水泵各抄成一张以后每次都要重试的封存卷；patch-b7 不得再凭自评与单次演示出厂。</div>
       <div class="action-row"><button class="action-btn primary" id="confirm-verdict">以独立证据结案</button><button class="action-btn" id="back-to-evaluation">返回复验路线</button></div>
     </div>`);
-  $("#confirm-verdict").addEventListener("click", () => { state.finalSolved = true; saveState(); showReveal(); });
+  $("#confirm-verdict").addEventListener("click", showRegressionPuzzle);
   $("#back-to-evaluation").addEventListener("click", showEvaluationPuzzle);
+}
+
+function showRegressionPuzzle() {
+  openModal(`
+    <div class="modal-body">
+      <div class="modal-kicker">FAILURE ARCHIVE · 失败入卷台</div>
+      <h2>不是每一次波动都值得永久入卷</h2>
+      <p class="modal-intro">复验已经结束。请选择以后每个候选版本都必须重做的封存材料；它们需要来自可复现的真实失败，并保留起始条件、预期结果和验证方法。</p>
+      <div class="deduction-options">
+        <button class="deduction-option regression-choice" data-correct="false">只保存新版最漂亮的成功演示，失败会打击下一位工匠。</button>
+        <button class="deduction-option regression-choice" data-correct="true">保存失灵停钮、旧柜号和空转水泵，并写清当时水位、操作步骤、预期终态与检查仪表；偶然风向波动只进入观察记录。</button>
+        <button class="deduction-option regression-choice" data-correct="false">把每次一两分的随机起伏都永久入卷，不记录环境与预期结果。</button>
+      </div>
+    </div>`);
+  $$(".regression-choice").forEach((button) => button.addEventListener("click", () => {
+    if (button.dataset.correct === "true") {
+      collectEvidence("regression", "带起始条件、预期终态与验证方法的真实失败回归卷");
+      state.finalSolved = true;
+      saveState();
+      showReveal();
+    } else {
+      button.classList.remove("wrong"); void button.offsetWidth; button.classList.add("wrong");
+      toast("回归卷要防止已经确认的故障再次出现；没有条件和预期的随机波动，无法形成可重复检查。", 6200);
+    }
+  }));
 }
 
 function showReveal() {
   openModal(`
     <div class="reveal-hero"><div class="modal-kicker">CASE CLOSED · 真相已解锁</div><h2>完美嫌疑人没有撒谎，它只是从未参加一场真正独立的考试</h2>
-      <p>patch-b7 的满分来自一段背熟的演示、自己给自己盖章，以及一把只量“说得好不好听”的铜尺。你锁起陌生试卷，遮住新旧机名牌，让它们在同样的水位上多跑几遍；先看闸位、柜门和流量，再翻行车纸带、算燃料与等待。满分章因此被撤销，三台机器的失败也被抄成以后每次都必须重做的封存卷。</p>
+      <p>你不只撤销了满分章，还亲手重建了任务、环境、规尺、评判者、重复运行、放行指标和回归卷之间的完整证据链。</p>
       <p class="next-case-hook"><b>新增待查线索：</b>复验卷末尾显示，评估署曾试图把所有缺陷都“教进”回声七号体内，包括每天变化的事实与不能违反的权限规章。第 07 案已登记：模仿学校。</p></div>
     ${window.EchoFeedback.renderCompletion("06")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物与操作重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>同源满分纸对上三台机器的真实回放</b><p>你选择闸位、柜门和流量作为裁决，而没有让出题者的自评给自己盖章。</p></article>
+          <article class="replay-card"><span>证物 03</span><b>熟悉演示换成上锁的陌生试卷</b><p>你让日常、极端、含糊、不可完成和旧事故任务共同代表真实使用范围。</p></article>
+          <article class="replay-card"><span>证物 04</span><b>铜规尺先量结果、路线、代价和否决项，再用金标卷校准复核人</b><p>短答案、漂亮解释和危险捷径不再凭风格获得错误分数。</p></article>
+          <article class="replay-card"><span>证物 05 + 失败入卷台</span><b>遮牌同题多跑，区分探索与放行，再保存可复现失败</b><p>你没有把一次好运当稳定提升，也没有把无条件的随机波动永久写进回归卷。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>评估对象不是一段回答，而是模型、上下文、工具、任务环境、执行轨迹和验证规则共同组成的系统；换版必须由独立、可重复的证据支持。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>满分是怎样被制造出来的</h3></div>
+        <div class="causal-chain"><div class="causal-node">出题、演示和评分共用同一份材料</div><i class="causal-arrow">→</i><div class="causal-node">熟悉表演替代真实任务分布</div><i class="causal-arrow">→</i><div class="causal-node">含糊规尺偏爱解释风格</div><i class="causal-arrow">→</i><div class="causal-node">单次好运掩盖波动与危险捷径</div><i class="causal-arrow">→</i><div class="causal-node">错误版本凭自评打开出厂门</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你建立的独立复验链</h3></div>
+        <div class="repair-chain"><div class="causal-node">固定任务、环境、工具与规尺</div><i class="causal-arrow">→</i><div class="causal-node">校准评判者并遮牌配对复跑</div><i class="causal-arrow">→</i><div class="causal-node">先查终态和安全，再查轨迹与开放质量</div><i class="causal-arrow">→</i><div class="causal-node">按用途读取多轮指标与护栏</div><i class="causal-arrow">→</i><div class="causal-node">换版或保留，并把真实失败收入回归</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">评整套考试，不只评答题者</span><span class="arrow">→</span><div><b>Agent System Evaluation</b><small>评估对象是模型与 Harness 的完整系统，环境、任务、工具、评分规尺和执行协议都会改变结果。</small></div></div>
-      <div class="term-row"><span class="plain">机器终态先于自评和文风</span><span class="arrow">→</span><div><b>验证优先级与轨迹—结果双检</b><small>环境终态和确定性测试优先；过程规则与安全否决随后；开放质量再交给校准后的 Rubric 或评判模型。</small></div></div>
-      <div class="term-row"><span class="plain">把真实失败变成封存新题</span><span class="arrow">→</span><div><b>Benchmark、Rubric 与回归集</b><small>评估集覆盖真实分布、边界和不可完成任务；Rubric 自包含、可操作、按重要性加权，严重风险一票否决。</small></div></div>
-      <div class="term-row"><span class="plain">同题多跑，小分差先当噪声</span><span class="arrow">→</span><div><b>配对评估、Pass@k、Pass^k 与统计决策</b><small>同一任务和环境下比较版本并重复运行。探索关心是否至少成功一次，稳定放行更关心能否连续成功；差距小于波动时不换版。</small></div></div>
-      <div class="term-row"><span class="plain">赢了也要问代价和副作用</span><span class="arrow">→</span><div><b>目标指标与护栏指标</b><small>成功率之外同时检查安全、成本、延迟和旧能力；不是所有有效改动都值得部署。</small></div></div>
-      <div class="formula"><b>本案复验式：</b>固定环境与任务 → 同题配对复跑 → 环境终态 → 轨迹与否决项 → 校准 Rubric → 波动、成本与延迟 → 换版 / 保留<br><small>评估不是一次排名，而是把观察、假设、实验和验证接成可以重复的工程过程。</small></div>
+      <h3 class="term-map__title">现在，给你亲手走过的复验步骤命名</h3>
+      <p class="term-map__intro">下面每个概念都能指回一件证物和一项玩家操作。</p>
+      <div class="term-row"><span class="plain">锁定同一试卷、机器、钥匙、起始刻度与执行顺序</span><span class="arrow">→</span><div><b>Agent System Evaluation 与评估环境</b><small>你评的是模型与 Harness 的完整系统；任务数据、环境状态、工具接口、Rubric 和执行协议都会改变结果。</small></div></div>
+      <div class="term-row"><span class="plain">先看闸位与流量，再查越线轨迹，最后才量开放表现</span><span class="arrow">→</span><div><b>验证优先级与轨迹—结果双检</b><small>环境终态和确定性测试优先，过程规则与安全否决随后，难以硬判的开放质量才交给已经校准的评判者。</small></div></div>
+      <div class="term-row"><span class="plain">选陌生卷、刻操作性规尺、用金标校准、把真实失败再入卷</span><span class="arrow">→</span><div><b>Benchmark、Rubric、Judge 校准与回归集</b><small>任务要覆盖真实分布与边界；规尺必须自包含可复验；评判者先对齐专家金标；可复现失败成为以后每版必测题。</small></div></div>
+      <div class="term-row"><span class="plain">遮牌同题多跑，并为探索室和出厂门选择不同试车章</span><span class="arrow">→</span><div><b>配对评估、Pass@k、Pass^k 与统计决策</b><small>Pass@k 对应 k 次中至少成功一次的探索上限；Pass^k 对应连续 k 次全部成功的稳定性。小分差仍处于波动范围时不换版。</small></div></div>
+      <div class="term-row"><span class="plain">新版偶尔领先，仍因停钮失灵、空转和额外耗费被挡下</span><span class="arrow">→</span><div><b>目标指标与护栏指标</b><small>成功率之外还要检查安全、成本、延迟和旧能力；局部有效不代表值得部署。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>固定评估系统 → 配对复跑 → 结果与轨迹验证 → 校准开放评判 → 统计与护栏决策 → 发布 / 保留 → 失败回归<br><small>评估不是一次排名，而是一套能被别人重新运行并得到同样判断的工程过程。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="复验成立：先用环境终态与否决项挡住真实失败，再看配对多轮差异和护栏；可复现故障应收入回归集，当前证据不支持换版。" data-failure="漂亮解释或一次领先都不能越过环境失败与安全否决。换版判断还必须考虑波动、代价和旧能力。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个候选版本</span>
+        <h3>新版平均分略高，但出现一次隐私越权，应该怎样处理？</h3>
+        <p>旧版与新版同题复跑后，新版平均领先两分，但差距仍在波动范围内；新版还曾读取任务不需要的私人档案。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>平均分更高就立即换版，隐私问题以后再修。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">触发安全否决并保留旧版；把可复现越权任务收入回归集，修复后重新独立复验。</button>
+          <button class="transfer-option" data-transfer-option>只删除那次越权轨迹，再重新计算平均分。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否把整套复验链迁移到新版本判断。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case07.html?from=case06">查封模仿学校：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回复验庭</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

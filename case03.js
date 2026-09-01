@@ -571,18 +571,50 @@ function showReveal() {
     <div class="reveal-hero">
       <div class="modal-kicker">CASE CLOSED · 真相已解锁</div>
       <h2>第七码从未失踪，失踪的是它与问题之间的路</h2>
-      <p>你让编号台和回声池一起找，把重复页叠掉，再按设施、卷号、签章和日期重排，最后沿取卷号拿到了原页。码头送来的进度牌机芯、失序的救援大厅和这份旧卷宗终于连成一线：眼前的事要亲自核对，多年前的记录也必须找得到来路。</p>
+      <p>你没有从七个相似答案中猜一个，而是修复了问题通往原始证据的整条路线。现在让两台找页装置、残页和转运记录重新作证。</p>
     </div>
     ${window.EchoFeedback.renderCompletion("03")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>编号台认准原字，回声池认得改名后的含义</b><p>前者能锁定 q-07-417，却会漏掉新名称；后者能找到同义说法，却把相似设施排在前面。</p></article>
+          <article class="replay-card"><span>证物 03 + 04 + 05</span><b>无名残页内容相似，只有来路能解决冲突</b><p>来源、章节、日期、转运记录和原页号码共同证明哪一页属于当前北岸预案。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>两种找法必须先互补召回，再重新排序；找到相似文字以后，还必须沿来源和时间回到原页验证。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>错误答案为什么总排在前面</h3></div>
+        <div class="causal-chain"><div class="causal-node">只按旧名字会漏掉改名卷宗</div><i class="causal-arrow">→</i><div class="causal-node">只按含义会召回相似设施</div><i class="causal-arrow">→</i><div class="causal-node">残页缺少来源与日期</div><i class="causal-arrow">→</i><div class="causal-node">冲突记录无法判断新旧</div><i class="causal-arrow">→</i><div class="causal-node">相似答案冒充正确证据</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你重建的找页路线</h3></div>
+        <div class="repair-chain"><div class="causal-node">问清目标</div><i class="causal-arrow">→</i><div class="causal-node">编号与含义两路召回</div><i class="causal-arrow">→</i><div class="causal-node">合并去重</div><i class="causal-arrow">→</i><div class="causal-node">按相关性、来源和时间重排</div><i class="causal-arrow">→</i><div class="causal-node">回取原页验证</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">把旧事实留到下一次调查</span><span class="arrow">→</span><div><b>持久化记忆与 User as Code</b><small>长期记忆不是保存全部聊天，而是维护可更新、可审计的事实日志与结构化快照；关键事实应带来源、时间、关系与权限边界。</small></div></div>
-      <div class="term-row"><span class="plain">先找证据，再带着证据回答</span><span class="arrow">→</span><div><b>RAG：检索 → 增强 → 生成</b><small>先从外部知识库召回候选，把相关证据放入当前上下文，再生成答案。检索质量决定了系统能达到的上限。</small></div></div>
-      <div class="term-row"><span class="plain">按原字与按含义两路找，汇合后重排</span><span class="arrow">→</span><div><b>混合检索、融合与 Rerank</b><small>BM25 擅长编号、专名和原句；Dense Retrieval 擅长语义与改写。合并候选后去重、融合，再用更强模型重排。</small></div></div>
-      <div class="term-row"><span class="plain">残页补来路，概览指路，原页作证</span><span class="arrow">→</span><div><b>结构感知分块、上下文化分块与两层记忆</b><small>分块尊重章节和语义边界，并补上文档、章节、实体与时间。结构化概览负责导航，详情按需加载，避免信息洪水。</small></div></div>
-      <div class="formula"><b>本案找页式：</b>两路召回 → 合并去重 → 相关性 / 来源 / 时间重排 → 回取原页验证<br><small>多跳难题才值得让系统自主拆解与循环检索；简单问题保持直接，冲突事实保留时间线而非静默覆盖。</small></div>
+      <h3 class="term-map__title">现在，给你修复的找页步骤命名</h3>
+      <p class="term-map__intro">本案没有直接操作“把用户状态编译成代码”，因此不再把 User as Code 列作主线答案。</p>
+      <div class="term-row"><span class="plain">先从外部卷宗找证据，再回答</span><span class="arrow">→</span><div><b>RAG：检索 → 增强 → 生成</b><small>你先召回原始材料，把相关证据带回当前调查，再形成结论；找错页会直接限制后续回答的上限。</small></div></div>
+      <div class="term-row"><span class="plain">编号台 + 回声池 → 汇合重排</span><span class="arrow">→</span><div><b>混合检索、融合与 Rerank</b><small>编号台对应精确词项检索，回声池对应语义检索；你把两路候选合并去重后重新排序。</small></div></div>
+      <div class="term-row"><span class="plain">给残页补卷名、章节、设施和日期</span><span class="arrow">→</span><div><b>结构感知分块与上下文化分块</b><small>脱离原卷的片段需要补回文档背景，才能被正确检索、消歧并与其他记录比较。</small></div></div>
+      <div class="term-row"><span class="plain">概览指路，转运记录辨新旧，原页作证</span><span class="arrow">→</span><div><b>双层记忆与知识治理</b><small>结构化概览负责导航，原始细节按需回取；来源、时间、版本和冲突记录决定证据是否可信。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>两路召回 → 合并去重 → 相关性 / 来源 / 时间重排 → 回取原页验证<br><small>“找到内容”只是候选；“知道来自哪里、何时有效并能回到原页”才形成证据。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="找页成立：精确编号防止漏掉目标，语义召回找到改名后的内容，来源与日期再决定哪份原页可信。" data-failure="单独相信一种找法或第一条相似结果，会重现本案的盲区。还需要来源、时间和原页完成验证。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一份卷宗</span>
+        <h3>旧编号、改名标题和冲突副本同时出现时怎么办？</h3>
+        <p>一份防洪预案保留编号 flood-19，却改名为“北岸潮汐响应”；库中另有一份标题相似但日期更旧的副本。</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>只搜索新标题，并直接采用排在第一位的相似结果。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">同时按 flood-19 和标题含义召回，合并后核对来源、日期并回取原页。</button>
+          <button class="transfer-option" data-transfer-option>只相信编号，忽略标题和适用日期是否已经变化。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把“找全、排准、验真”用于新档案。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case04.html?from=case03">继续案件 04：午夜回电 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回卷宗库</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

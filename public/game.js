@@ -506,18 +506,50 @@ function showReveal() {
     <div class="reveal-hero">
       <div class="modal-kicker">CASE CLOSED · 真相已解锁</div>
       <h2>真正失控的不是信使</h2>
-      <p>是中转站漏了两道工序：新门牌没有送到信使眼前，推杆停下以后也没人去看收件托盘。包裹里装着市政档案馆进度牌急需的新机芯——信使完成真正的交付后，馆内立刻亮起了求援灯。</p>
+      <p>你已经找到两个断点。现在沿着自己取得的证物和亲手接回的线路，把失败怎样发生、修复为什么有效完整重建一次。</p>
     </div>
     ${window.EchoFeedback.renderCompletion("01")}
+    <div class="case-reconstruction">
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
+        <div class="evidence-replay">
+          <article class="replay-card"><span>证物 01 + 02</span><b>路线墙已经换新，包裹仍贴旧址</b><p>新门牌在信使出发前已经生效，但扫描台证明它拿到的仍是旧标签。</p></article>
+          <article class="replay-card"><span>证物 03 + 04</span><b>推杆已经停下，收件托盘仍为空</b><p>信使只能证明自己执行过动作；接收端没有重量、签收或包裹痕迹。</p></article>
+        </div>
+        <p class="player-proof"><b>你作出的判断：</b>第一次连接证明它不是“想错了”，而是没有看见新地址；第二次连接证明“动作结束”不能代替“对方收到”。</p>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>2</span><h3>失败是怎样一步步发生的</h3></div>
+        <div class="causal-chain"><div class="causal-node">新门牌没有进入信使眼前</div><i class="causal-arrow">→</i><div class="causal-node">它只能按旧地址判断</div><i class="causal-arrow">→</i><div class="causal-node">推杆把包裹送到错误位置</div><i class="causal-arrow">→</i><div class="causal-node">中转站没有检查收件端</div><i class="causal-arrow">→</i><div class="causal-node">错误结果被写成“完成”</div></div>
+      </section>
+      <section class="reconstruction-block">
+        <div class="reconstruction-heading"><span>3</span><h3>你接回的可靠行动链</h3></div>
+        <div class="repair-chain"><div class="causal-node">读取新门牌</div><i class="causal-arrow">→</i><div class="causal-node">判断正确地址</div><i class="causal-arrow">→</i><div class="causal-node">推动包裹</div><i class="causal-arrow">→</i><div class="causal-node">检查收件托盘</div><i class="causal-arrow">→</i><div class="causal-node">按现实记录或纠正</div></div>
+      </section>
+    </div>
     <div class="term-map">
-      <div class="term-row"><span class="plain">眼前能看见的材料</span><span class="arrow">→</span><div><b>上下文 / 观察空间</b><small>没进入观察空间的事实，对行动者来说就等于不存在。</small></div></div>
-      <div class="term-row"><span class="plain">能够动用的机关</span><span class="arrow">→</span><div><b>工具 / 动作空间</b><small>再会推理，也无法执行一个没有被提供的动作。</small></div></div>
-      <div class="term-row"><span class="plain">收件端留下的现实结果</span><span class="arrow">→</span><div><b>验证器</b><small>环境终态比行动者的自我声明更可信。</small></div></div>
-      <div class="term-row"><span class="plain">整套保护与纠错安排</span><span class="arrow">→</span><div><b>Harness</b><small>负责装载消息、执行工具、限制边界、验证结果和从错误中恢复。</small></div></div>
-      <div class="formula"><b>可靠循环：</b>观察 → 判断 → 行动 → 验证 → 记录 → 继续 / 停止<br><small>这就是你在机柜中接回的链。没有验证的循环，只是在重复自己的猜测。</small></div>
+      <h3 class="term-map__title">现在，给你刚才修复的节点命名</h3>
+      <p class="term-map__intro">术语不是新的答案，只是工程中对你刚才使用过的证据和动作的正式称呼。</p>
+      <div class="term-row"><span class="plain">路线墙 → 信使眼前</span><span class="arrow">→</span><div><b>上下文 / 观察空间</b><small>你已经证明：没进入决策现场的新门牌，对行动者来说就等于不存在。</small></div></div>
+      <div class="term-row"><span class="plain">扫描、推杆与收件检查</span><span class="arrow">→</span><div><b>工具 / 动作空间</b><small>这些机关限定了信使能观察和改变什么；缺失的动作不能靠语言推理补出来。</small></div></div>
+      <div class="term-row"><span class="plain">选择托盘而非口供结案</span><span class="arrow">→</span><div><b>验证器</b><small>你用接收端的现实状态判断交付，而没有接受行动者自己的“已完成”。</small></div></div>
+      <div class="term-row"><span class="plain">接回五步并允许纠错</span><span class="arrow">→</span><div><b>Harness</b><small>负责装载事实、暴露工具、限制行动、验证结果，并在失败后继续、换路或停止。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>观察 → 判断 → 行动 → 验证 → 记录 → 继续 / 停止<br><small>这正是你在红色机柜中接回的链。没有新的环境观测，循环只是在重复旧猜测。</small></div>
+      <section class="transfer-check" data-transfer-check data-success="判断成立：路线计算只是中间动作，只有医院接收端的真实状态才能证明救援完成。" data-failure="再看一次本案的第二个断点：执行过一个动作，不能直接证明接收方已经得到结果。">
+        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个现场</span>
+        <h3>这次还能认出同一个问题吗？</h3>
+        <p>急救车取得任务编号，导航系统显示“路线计算成功”，但医院还没有患者接收记录。现在应该怎样登记？</p>
+        <div class="transfer-options">
+          <button class="transfer-option" data-transfer-option>登记“救援完成”，因为导航工具已经成功返回。</button>
+          <button class="transfer-option" data-transfer-option data-correct="true">登记“仍在进行”，等待医院接收端留下真实记录。</button>
+          <button class="transfer-option" data-transfer-option>删除任务记录，假装这次调度没有发生。</button>
+        </div>
+        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把这条规则带到新现场。</p>
+      </section>
       <div class="action-row"><a class="action-btn primary" href="case02.html?from=case01">追踪包裹去向：进入下一案 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回现场</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
+  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 
