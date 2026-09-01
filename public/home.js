@@ -23,10 +23,15 @@ function clearRequestedProgress() {
 function readCaseProgress(storageKey) {
   try {
     const value = JSON.parse(localStorage.getItem(storageKey) || "{}");
+    const evidence = Array.isArray(value.evidence) ? value.evidence : [];
+    const hasEvidence = (id) => evidence.includes(id);
+    let finalSolved = Boolean(value.finalSolved);
+    if (storageKey.endsWith("-06") && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
+    if (storageKey.endsWith("-07") && !hasEvidence("policy")) finalSolved = false;
     return {
       started: Boolean(value.started),
-      finalSolved: Boolean(value.finalSolved),
-      evidenceCount: Array.isArray(value.evidence) ? value.evidence.length : 0,
+      finalSolved,
+      evidenceCount: evidence.length,
     };
   } catch {
     return { started: false, finalSolved: false, evidenceCount: 0 };
@@ -61,6 +66,13 @@ function updateCaseDirectory() {
 function openArchive() {
   modalContent.innerHTML = window.EchoArchive.render(null);
   modal.classList.remove("hidden");
+  const card = modal.querySelector(".modal__card");
+  card.scrollTop = 0;
+  modalContent.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => {
+    card.scrollTop = 0;
+    modalContent.focus({ preventScroll: true });
+  });
 }
 
 function closeModal() { modal.classList.add("hidden"); }

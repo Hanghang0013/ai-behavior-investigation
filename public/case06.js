@@ -1,12 +1,15 @@
 const STORAGE_KEY = "echo-archive-case-06";
+const SAVE_VERSION = 2;
 
 const initialState = {
+  saveVersion: SAVE_VERSION,
   started: false,
   introSeen: false,
   bridgeSeen: false,
   evidence: [],
   deductions: [],
   finalSolved: false,
+  legacyCompletionPending: false,
 };
 
 let state = loadState();
@@ -24,9 +27,31 @@ const dialogue = $("#dialogue");
 
 function loadState() {
   try {
-    return { ...initialState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return { ...initialState, evidence: [], deductions: [] };
+    const parsed = JSON.parse(saved);
+    const fromVersion = Number(parsed.saveVersion) || 1;
+    const migrated = {
+      ...initialState,
+      ...parsed,
+      evidence: Array.isArray(parsed.evidence) ? [...new Set(parsed.evidence.filter((id) => typeof id === "string"))] : [],
+      deductions: Array.isArray(parsed.deductions) ? [...new Set(parsed.deductions.filter((id) => typeof id === "string"))] : [],
+      saveVersion: SAVE_VERSION,
+    };
+
+    if (fromVersion < 2) {
+      const missingDecisionEvidence = !migrated.evidence.includes("judge") || !migrated.evidence.includes("metrics");
+      const missingCompletionEvidence = missingDecisionEvidence || !migrated.evidence.includes("regression");
+      if (missingDecisionEvidence) migrated.deductions = migrated.deductions.filter((id) => id !== "decision");
+      if (parsed.finalSolved && missingCompletionEvidence) {
+        migrated.finalSolved = false;
+        migrated.legacyCompletionPending = true;
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+    }
+    return migrated;
   } catch {
-    return { ...initialState };
+    return { ...initialState, evidence: [], deductions: [] };
   }
 }
 
@@ -68,6 +93,64 @@ function canDeduce() {
     (hasEvidence("benchmark") && hasEvidence("rubric") && hasEvidence("judge") && hasEvidence("yun") && hasEvidence("metrics") && !hasDeduction("decision"));
 }
 
+function getNextRequiredAction() {
+  if (!hasEvidence("score") || !hasEvidence("replay")) return {
+    id: "claims",
+    objective: "把满分纸摊在回放幕前，看看三台机器究竟停在什么位置。",
+    hint: "纸上的齿轮已经转了，幕里的水泵却一滴水也没有。",
+  };
+  if (!hasDeduction("independent")) return {
+    id: "independent",
+    objective: "两份记录互相矛盾。去证物台判断谁有资格宣布成功。",
+    hint: "让同一个人出题、表演、再给自己盖章，满分就少了一位旁观者。",
+  };
+  if (!hasEvidence("benchmark")) return {
+    id: "benchmark",
+    objective: "翻开旧题封存柜，选出没有被候选版本提前背过的真实任务。",
+    hint: "点击调查点 03：真正的试卷要覆盖日常、极端、含糊、办不到和旧事故任务。",
+  };
+  if (!hasEvidence("rubric")) return {
+    id: "rubric",
+    objective: "重刻评分规尺，写清结果、路线、代价与安全否决项。",
+    hint: "点击调查点 04：先选择可复验的操作性规尺。",
+  };
+  if (!hasEvidence("judge")) return {
+    id: "judge",
+    objective: "规尺已经刻好，但拿尺的人还没有通过专家金标校准。",
+    hint: "重新打开调查点 04“评分规尺”，完成三张封存金标卷的评判者校准。",
+  };
+  if (!hasEvidence("yun")) return {
+    id: "yun",
+    objective: "去独立复核席询问云，为什么同题还要遮牌多跑。",
+    hint: "点击调查点 05，与云完成关于波动、成本、延迟和旧能力的对话。",
+  };
+  if (!hasEvidence("metrics")) return {
+    id: "metrics",
+    objective: "云的复跑方法已经记录，还要为探索室和出厂门选对两枚试车章。",
+    hint: "重新打开调查点 05“独立复核席”，区分至少一次成功与连续全部成功。",
+  };
+  if (!hasDeduction("decision")) return {
+    id: "decision",
+    objective: "证物已经齐全。去证物台决定换版章需要怎样的多轮证据。",
+    hint: "两台机器做同一批差事；既看最后停在哪，也看路上有没有撞坏东西。",
+  };
+  if (state.legacyCompletionPending && !hasEvidence("regression")) return {
+    id: "regression",
+    objective: "旧结案还差最后一项补充复验：把可复现的真实失败收入回归卷。",
+    hint: "点击最终复验闸门，补做失败入卷；旧进度会保留，不必重走整条试车路线。",
+  };
+  if (!state.finalSolved) return {
+    id: "final",
+    objective: "把六道试车手续重新排好，让 patch-b7 在盖章前走完全程。",
+    hint: "先封好同一摞试卷和同一套机器，再试车、看实况、查路线、量表现。",
+  };
+  return {
+    id: "complete",
+    objective: "满分章已经撤销，复验庭重新听从机器留下的证词。",
+    hint: "正式知识卡已收入回声档案。",
+  };
+}
+
 function updateUI() {
   const count = solvedCount();
   $("#progress-fill").style.width = `${count * 20}%`;
@@ -93,31 +176,15 @@ function updateUI() {
     const id = spot.dataset.hotspot;
     spot.classList.toggle("done", id === "gate" ? state.finalSolved : hasEvidence(id));
   });
-  const gateReady = hasDeduction("independent") && hasDeduction("decision");
+  const nextAction = getNextRequiredAction();
+  const gateReady = ["regression", "final", "complete"].includes(nextAction.id);
   $("[data-hotspot='gate']").classList.toggle("locked", !gateReady && !state.finalSolved);
   $("#evidence-btn").classList.toggle("ready", canDeduce());
 
   const objective = $("#objective-text");
   const hint = $("#soft-hint-text");
-  if (!hasEvidence("score") || !hasEvidence("replay")) {
-    objective.textContent = "把满分纸摊在回放幕前，看看三台机器究竟停在什么位置。";
-    hint.textContent = "纸上的齿轮已经转了，幕里的水泵却一滴水也没有。";
-  } else if (!hasDeduction("independent")) {
-    objective.textContent = "两份记录互相矛盾。去证物台判断谁有资格宣布成功。";
-    hint.textContent = "让同一个人出题、表演、再给自己盖章，满分就少了一位旁观者。";
-  } else if (!hasEvidence("benchmark") || !hasEvidence("rubric") || !hasEvidence("judge") || !hasEvidence("yun") || !hasEvidence("metrics")) {
-    objective.textContent = "翻开旧题柜，校准铜规尺，再问云当年少试了哪几遍。";
-    hint.textContent = "背过的演示、模糊的好评和一次好运，都能把印章骗到手。";
-  } else if (!hasDeduction("decision")) {
-    objective.textContent = "证物已经齐全。去证物台决定一枚换版章至少需要几轮试车。";
-    hint.textContent = "两台机器要做同一批差事；既看最后停在哪，也看路上有没有撞坏东西。";
-  } else if (!state.finalSolved) {
-    objective.textContent = "把六道试车手续重新排好，让 patch-b7 在盖章前走完全程。";
-    hint.textContent = "先封好同一摞试卷和同一套机器，再试车、看实况、查路线、量表现。";
-  } else {
-    objective.textContent = "满分章已经撤销，复验庭重新听从机器留下的证词。";
-    hint.textContent = "正式知识卡已收入回声档案。";
-  }
+  objective.textContent = nextAction.objective;
+  hint.textContent = nextAction.hint;
 }
 
 function startGame() {
@@ -218,7 +285,17 @@ function showDialogue(lines, index = 0, onFinish = () => {}) {
   dialogue.classList.remove("hidden");
 }
 
-function openModal(html) { modalContent.innerHTML = html; modal.classList.remove("hidden"); }
+function openModal(html) {
+  modalContent.innerHTML = html;
+  modal.classList.remove("hidden");
+  const card = modal.querySelector(".modal__card");
+  card.scrollTop = 0;
+  modalContent.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => {
+    card.scrollTop = 0;
+    modalContent.focus({ preventScroll: true });
+  });
+}
 function closeModal() { modal.classList.add("hidden"); }
 
 function toast(message, duration = 2800, lock = false) {
@@ -492,14 +569,14 @@ function shuffledEvaluationPieces() {
 }
 
 function investigateGate() {
-  if (state.finalSolved) {
-    if (!hasEvidence("judge")) { state.finalSolved = false; saveState(); showJudgeCalibration(); return; }
-    if (!hasEvidence("metrics")) { state.finalSolved = false; saveState(); showMetricPurposePuzzle(); return; }
-    if (!hasEvidence("regression")) { state.finalSolved = false; saveState(); showRegressionPuzzle(); return; }
-    showReveal(); return;
-  }
-  if (!hasDeduction("independent") || !hasDeduction("decision")) {
-    toast("复验闸门需要两枚调查能力印记。先在证物台完成独立裁决与换版决策。", 4600);
+  const nextAction = getNextRequiredAction();
+  if (nextAction.id === "complete") { showReveal(); return; }
+  if (state.finalSolved) { state.finalSolved = false; saveState(); }
+  if (nextAction.id === "judge") { showJudgeCalibration(); return; }
+  if (nextAction.id === "metrics") { showMetricPurposePuzzle(); return; }
+  if (nextAction.id === "regression") { showRegressionPuzzle(); return; }
+  if (nextAction.id !== "final") {
+    toast(nextAction.hint, 6200, true);
     return;
   }
   showEvaluationPuzzle();
@@ -586,6 +663,7 @@ function showRegressionPuzzle() {
   $$(".regression-choice").forEach((button) => button.addEventListener("click", () => {
     if (button.dataset.correct === "true") {
       collectEvidence("regression", "带起始条件、预期终态与验证方法的真实失败回归卷");
+      state.legacyCompletionPending = false;
       state.finalSolved = true;
       saveState();
       showReveal();
@@ -655,7 +733,7 @@ function openArchive() {
   $("#reset-case")?.addEventListener("click", () => {
     if (confirm("确定清空案件 06 的进度并重新调查吗？")) {
       localStorage.removeItem(STORAGE_KEY);
-      state = { ...initialState, started: true };
+      state = { ...initialState, evidence: [], deductions: [], started: true };
       closeModal();
       updateUI();
       showIntro();
@@ -664,17 +742,7 @@ function openArchive() {
 }
 
 function showHint() {
-  let hint;
-  if (!hasEvidence("score")) hint = "满分自评台上，出题、演示和评分都来自同一份成功材料。";
-  else if (!hasEvidence("replay")) hint = "现实回放幕记录的是机器真正变成了什么，不是它怎样解释自己。";
-  else if (!hasDeduction("independent")) hint = "打开证物台，把自己盖章的满分纸与三台机器每次停下的位置放在一起。";
-  else if (!hasEvidence("benchmark")) hint = "旧题封存柜需要一摞谁也没提前看过、既有日常活也有难题和办不到差事的试卷。";
-  else if (!hasEvidence("rubric")) hint = "评分规尺既要写清怎样得分，也要写清出现什么风险就直接否决。";
-  else if (!hasEvidence("yun")) hint = "去独立复核席问云：新机只赢一回、只多几分，够不够打开出厂门。";
-  else if (!hasDeduction("decision")) hint = "打开证物台，把陌生试卷、铜规尺和云的遮牌试车法放在一起。";
-  else if (!state.finalSolved) hint = "盖章前要先锁试卷，再遮牌试车、看机器、查路线、量表现，最后才决定换不换。";
-  else hint = "本案已结。三次真实失败已经抄成封存新卷，以后的新机都必须重新答一遍。";
-  toast(hint, 4700);
+  toast(getNextRequiredAction().hint, 5400);
 }
 
 $("#start-btn").addEventListener("click", startGame);

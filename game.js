@@ -24,9 +24,15 @@ const dialogue = $("#dialogue");
 
 function loadState() {
   try {
-    return { ...initialState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    return {
+      ...initialState,
+      ...parsed,
+      evidence: Array.isArray(parsed.evidence) ? parsed.evidence : [],
+      deductions: Array.isArray(parsed.deductions) ? parsed.deductions : [],
+    };
   } catch {
-    return { ...initialState };
+    return { ...initialState, evidence: [], deductions: [] };
   }
 }
 
@@ -196,7 +202,14 @@ function showDialogue(lines, index = 0, onFinish = () => {}) {
 function openModal(html, wide = false) {
   modalContent.innerHTML = html;
   modal.classList.remove("hidden");
-  modal.querySelector(".modal__card").classList.toggle("wide", wide);
+  const card = modal.querySelector(".modal__card");
+  card.classList.toggle("wide", wide);
+  card.scrollTop = 0;
+  modalContent.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => {
+    card.scrollTop = 0;
+    modalContent.focus({ preventScroll: true });
+  });
 }
 
 function closeModal() { modal.classList.add("hidden"); }
@@ -559,7 +572,7 @@ function openArchive() {
   $("#reset-case")?.addEventListener("click", () => {
     if (confirm("确定清空本案进度并重新调查吗？")) {
       localStorage.removeItem(STORAGE_KEY);
-      state = { ...initialState, started: true };
+      state = { ...initialState, evidence: [], deductions: [], started: true };
       closeModal(); updateUI(); showIntro();
     }
   });

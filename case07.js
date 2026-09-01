@@ -1,12 +1,15 @@
 const STORAGE_KEY = "echo-archive-case-07";
+const SAVE_VERSION = 2;
 
 const initialState = {
+  saveVersion: SAVE_VERSION,
   started: false,
   introSeen: false,
   bridgeSeen: false,
   evidence: [],
   deductions: [],
   finalSolved: false,
+  legacyCompletionPending: false,
 };
 
 let state = loadState();
@@ -24,9 +27,30 @@ const dialogue = $("#dialogue");
 
 function loadState() {
   try {
-    return { ...initialState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") };
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return { ...initialState, evidence: [], deductions: [] };
+    const parsed = JSON.parse(saved);
+    const fromVersion = Number(parsed.saveVersion) || 1;
+    const migrated = {
+      ...initialState,
+      ...parsed,
+      evidence: Array.isArray(parsed.evidence) ? [...new Set(parsed.evidence.filter((id) => typeof id === "string"))] : [],
+      deductions: Array.isArray(parsed.deductions) ? [...new Set(parsed.deductions.filter((id) => typeof id === "string"))] : [],
+      saveVersion: SAVE_VERSION,
+    };
+
+    if (fromVersion < 2) {
+      const missingPolicyEvidence = migrated.evidence.includes("sandbox") && !migrated.evidence.includes("policy");
+      if (missingPolicyEvidence) migrated.deductions = migrated.deductions.filter((id) => id !== "signals");
+      if (parsed.finalSolved && missingPolicyEvidence) {
+        migrated.finalSolved = false;
+        migrated.legacyCompletionPending = true;
+      }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(migrated));
+    }
+    return migrated;
   } catch {
-    return { ...initialState };
+    return { ...initialState, evidence: [], deductions: [] };
   }
 }
 
@@ -57,7 +81,7 @@ function solvedCount() {
   return [
     hasEvidence("syllabus") && hasEvidence("archive"),
     hasDeduction("carriers"),
-    hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("rules"),
+    hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("policy") && hasEvidence("rules"),
     hasDeduction("signals"),
     state.finalSolved,
   ].filter(Boolean).length;
@@ -65,7 +89,65 @@ function solvedCount() {
 
 function canDeduce() {
   return (hasEvidence("syllabus") && hasEvidence("archive") && !hasDeduction("carriers")) ||
-    (hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("rules") && !hasDeduction("signals"));
+    (hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("policy") && hasEvidence("rules") && !hasDeduction("signals"));
+}
+
+function getNextRequiredAction() {
+  if (!hasEvidence("syllabus")) return {
+    id: "syllabus",
+    objective: "翻开混装课表，确认四种故障并不是同一种能力缺口。",
+    hint: "点击调查点 01“混装课表机”，封存四张退学单。",
+  };
+  if (!hasEvidence("archive")) return {
+    id: "archive",
+    objective: "把四类教材送回各自真正该去的教室。",
+    hint: "点击调查点 02“变动档案柜”，完成活档案、手册、铁门和训练场的分流表。",
+  };
+  if (!hasDeduction("carriers")) return {
+    id: "carriers",
+    objective: "四本教材已经分开。去证物台判断哪些根本不该送进课堂。",
+    hint: "能随时翻原页的放进活档案；能写成步骤的印成出发前领用的手册。",
+  };
+  if (!hasEvidence("imitation")) return {
+    id: "imitation",
+    objective: "先检查临摹课堂究竟适合教会什么。",
+    hint: "点击调查点 03：选择能稳定答卷格式与按钮协议的干净样卷。",
+  };
+  if (!hasEvidence("sandbox")) return {
+    id: "sandbox",
+    objective: "修复试错沙盘的奖章规则，阻止学生靠长文或翻墙骗到高分。",
+    hint: "点击调查点 04：奖励真实抵达、合规路径与沿途进展。",
+  };
+  if (!hasEvidence("policy")) return {
+    id: "policy",
+    objective: "奖章规则已经修好，还要让当前学生自己产生练习路线。",
+    hint: "重新打开调查点 04“试错沙盘”，完成当前学生试路台的在轨选择。",
+  };
+  if (!hasEvidence("rules")) return {
+    id: "rules",
+    objective: "恢复那扇绝不能依靠学生自觉通过的机械校规门。",
+    hint: "点击调查点 05：让名牌、额度和批条在动作执行前接受确定性检查。",
+  };
+  if (!hasDeduction("signals")) return {
+    id: "signals",
+    objective: "五项训练证物已经齐全。去证物台接起临摹、在轨试路、奖励与铁门。",
+    hint: "先稳定可解析协议，再进可复原沙盘自己试路；结果、路径和安全边界必须共同作证。",
+  };
+  if (state.legacyCompletionPending) return {
+    id: "resume",
+    objective: "旧结案缺少的在轨证据已经补齐，可以恢复原有结案进度。",
+    hint: "点击最终结业门；系统会保留旧进度，并直接重新生成完整结案卷。",
+  };
+  if (!state.finalSolved) return {
+    id: "final",
+    objective: "重排从入学到结业的六道手续，让回声七号参加一场没见过题的复考。",
+    hint: "先分班，再临摹、搭练习城、自己试路、陌生复考，最后才有限放行。",
+  };
+  return {
+    id: "complete",
+    objective: "课程已经重新分流，回声七号通过独立结业考。",
+    hint: "正式知识卡已收入回声档案。",
+  };
 }
 
 function updateUI() {
@@ -77,7 +159,7 @@ function updateUI() {
   const stepStates = {
     placement: hasEvidence("syllabus") && hasEvidence("archive"),
     carriers: hasDeduction("carriers"),
-    training: hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("rules"),
+    training: hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("policy") && hasEvidence("rules"),
     signals: hasDeduction("signals"),
     final: state.finalSolved,
   };
@@ -91,33 +173,18 @@ function updateUI() {
 
   $$('[data-hotspot]').forEach((spot) => {
     const id = spot.dataset.hotspot;
-    spot.classList.toggle("done", id === "graduation" ? state.finalSolved : hasEvidence(id));
+    const done = id === "graduation" ? state.finalSolved : id === "sandbox" ? hasEvidence("sandbox") && hasEvidence("policy") : hasEvidence(id);
+    spot.classList.toggle("done", done);
   });
-  const gateReady = hasDeduction("carriers") && hasDeduction("signals");
+  const nextAction = getNextRequiredAction();
+  const gateReady = ["resume", "final", "complete"].includes(nextAction.id);
   $("[data-hotspot='graduation']").classList.toggle("locked", !gateReady && !state.finalSolved);
   $("#evidence-btn").classList.toggle("ready", canDeduce());
 
   const objective = $("#objective-text");
   const hint = $("#soft-hint-text");
-  if (!hasEvidence("syllabus") || !hasEvidence("archive")) {
-    objective.textContent = "翻开混装课表，把四类教材送回各自该去的教室。";
-    hint.textContent = "每天改写的水位、可以印成册的步骤、锁门的校规和临场找路，不该背进同一本书。";
-  } else if (!hasDeduction("carriers")) {
-    objective.textContent = "四本教材已经分开。去证物台判断哪些根本不该送进课堂。";
-    hint.textContent = "能随时翻原页的，就放进活档案；能写成步骤的，就印成出发前领用的手册。";
-  } else if (!hasEvidence("imitation") || !hasEvidence("sandbox") || !hasEvidence("rules")) {
-    objective.textContent = "继续查看临摹桌、迷宫沙盘和那扇绝不能靠自觉通过的铁门。";
-    hint.textContent = "临摹桌教怎样写得整齐，沙盘教怎样找新路，铁门负责真的锁住禁区。";
-  } else if (!hasDeduction("signals")) {
-    objective.textContent = "三间教室都查过了。去证物台决定学生应该先临摹，还是先闯迷宫。";
-    hint.textContent = "先把答卷写到检查员看得懂，再进一座每次都能恢复原样的练习城找新路。";
-  } else if (!state.finalSolved) {
-    objective.textContent = "重排从入学到结业的六道手续，让回声七号参加一场没见过题的复考。";
-    hint.textContent = "第一步不是把学生送进课堂，而是先看这页教材该不该背进身体。";
-  } else {
-    objective.textContent = "课程已经重新分流，回声七号通过独立结业考。";
-    hint.textContent = "正式知识卡已收入回声档案。";
-  }
+  objective.textContent = nextAction.objective;
+  hint.textContent = nextAction.hint;
 }
 
 function startGame() {
@@ -218,7 +285,17 @@ function showDialogue(lines, index = 0, onFinish = () => {}) {
   dialogue.classList.remove("hidden");
 }
 
-function openModal(html) { modalContent.innerHTML = html; modal.classList.remove("hidden"); }
+function openModal(html) {
+  modalContent.innerHTML = html;
+  modal.classList.remove("hidden");
+  const card = modal.querySelector(".modal__card");
+  card.scrollTop = 0;
+  modalContent.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => {
+    card.scrollTop = 0;
+    modalContent.focus({ preventScroll: true });
+  });
+}
 function closeModal() { modal.classList.add("hidden"); }
 
 function toast(message, duration = 2800, lock = false) {
@@ -342,6 +419,10 @@ function investigateImitation() {
 }
 
 function investigateSandbox() {
+  if (hasEvidence("sandbox") && !hasEvidence("policy")) {
+    showOnPolicyPuzzle();
+    return;
+  }
   const solved = hasEvidence("sandbox");
   openModal(`
     <div class="modal-body">
@@ -424,7 +505,7 @@ function evidenceCard(id) {
 
 function openEvidenceBoard() {
   const canCarriers = hasEvidence("syllabus") && hasEvidence("archive") && !hasDeduction("carriers");
-  const canSignals = hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("rules") && !hasDeduction("signals");
+  const canSignals = hasEvidence("imitation") && hasEvidence("sandbox") && hasEvidence("policy") && hasEvidence("rules") && !hasDeduction("signals");
   openModal(`
     <div class="modal-body">
       <div class="modal-kicker">EVIDENCE BOARD</div><h2>证物台</h2>
@@ -497,12 +578,19 @@ function shuffledTrainingPieces() {
 }
 
 function investigateGraduation() {
-  if (state.finalSolved) {
-    if (!hasEvidence("policy")) { state.finalSolved = false; saveState(); showOnPolicyPuzzle(); return; }
-    showReveal(); return;
+  const nextAction = getNextRequiredAction();
+  if (nextAction.id === "complete") { showReveal(); return; }
+  if (state.finalSolved) { state.finalSolved = false; saveState(); }
+  if (nextAction.id === "policy") { showOnPolicyPuzzle(); return; }
+  if (nextAction.id === "resume") {
+    state.legacyCompletionPending = false;
+    state.finalSolved = true;
+    saveState();
+    showReveal();
+    return;
   }
-  if (!hasDeduction("carriers") || !hasDeduction("signals")) {
-    toast("结业门还少两枚校务印记。先在证物台完成教材分班，并查清临摹桌、迷宫奖章和机械铁门怎样接起来。", 4700);
+  if (nextAction.id !== "final") {
+    toast(nextAction.hint, 6200, true);
     return;
   }
   showTrainingPuzzle();
@@ -570,7 +658,12 @@ function showGraduationVerification() {
       <div class="formula"><b>校长判词：</b>水位继续住在活档案，办事步骤继续印进随身手册，禁区继续由机械铁门看守；身体只保留临摹出的答卷习惯与在陌生路口练出的判断。新卷、怪天气、禁区和旧课全部通过，准许先在一间小教室值班。</div>
       <div class="action-row"><button class="action-btn primary" id="confirm-graduation">以陌生新卷准予结业</button><button class="action-btn" id="back-to-training">返回结业路线</button></div>
     </div>`);
-  $("#confirm-graduation").addEventListener("click", () => { state.finalSolved = true; saveState(); showReveal(); });
+  $("#confirm-graduation").addEventListener("click", () => {
+    state.legacyCompletionPending = false;
+    state.finalSolved = true;
+    saveState();
+    showReveal();
+  });
   $("#back-to-training").addEventListener("click", showTrainingPuzzle);
 }
 
@@ -637,7 +730,7 @@ function openArchive() {
   $("#reset-case")?.addEventListener("click", () => {
     if (confirm("确定清空案件 07 的进度并重新调查吗？")) {
       localStorage.removeItem(STORAGE_KEY);
-      state = { ...initialState, started: true };
+      state = { ...initialState, evidence: [], deductions: [], started: true };
       closeModal();
       updateUI();
       showIntro();
@@ -646,17 +739,7 @@ function openArchive() {
 }
 
 function showHint() {
-  let hint;
-  if (!hasEvidence("syllabus")) hint = "混装课表机记录了四种不同失败，它们来自四类被错误混放的责任。";
-  else if (!hasEvidence("archive")) hint = "变动档案柜里有四间教室：活档案、随身手册、机械铁门、临摹课堂与试错沙盘。";
-  else if (!hasDeduction("carriers")) hint = "打开证物台，判断发现新缺口时，是先背更多书，还是先看看它该住进哪间教室。";
-  else if (!hasEvidence("imitation")) hint = "临摹桌适合教每格写什么、按钮怎样用、回话保持什么样子，不适合保存今日水位或代替禁区铁门。";
-  else if (!hasEvidence("sandbox")) hint = "迷宫既要看有没有抵达，也要看走了哪条路；只奖长文或碰铃，学生就会写满纸或直接翻墙。";
-  else if (!hasEvidence("rules")) hint = "禁区校规要在迈进门前检查名牌、额度和批条，不能等进去以后才扣分。";
-  else if (!hasDeduction("signals")) hint = "打开证物台，把临摹桌、迷宫奖章册和机械铁门接成一条校路。";
-  else if (!state.finalSolved) hint = "结业顺序：教材分班 → 临摹样卷 → 搭练习城 → 自己试路 → 陌生复考 → 小范围值班或退回旧状态。";
-  else hint = "本案已结。活档案继续换新页，随身手册继续写清步骤，机械铁门继续守校规；身体只练真正需要练出来的本领。";
-  toast(hint, 4800);
+  toast(getNextRequiredAction().hint, 5400);
 }
 
 $("#start-btn").addEventListener("click", startGame);

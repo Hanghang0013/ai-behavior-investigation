@@ -23,8 +23,16 @@ const modalContent = $("#modal-content");
 const dialogue = $("#dialogue");
 
 function loadState() {
-  try { return { ...initialState, ...JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") }; }
-  catch { return { ...initialState }; }
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    return {
+      ...initialState,
+      ...parsed,
+      evidence: Array.isArray(parsed.evidence) ? parsed.evidence : [],
+      deductions: Array.isArray(parsed.deductions) ? parsed.deductions : [],
+    };
+  }
+  catch { return { ...initialState, evidence: [], deductions: [] }; }
 }
 
 function saveState() {
@@ -215,7 +223,17 @@ function showDialogue(lines, index = 0, onFinish = () => {}) {
   dialogue.classList.remove("hidden");
 }
 
-function openModal(html) { modalContent.innerHTML = html; modal.classList.remove("hidden"); }
+function openModal(html) {
+  modalContent.innerHTML = html;
+  modal.classList.remove("hidden");
+  const card = modal.querySelector(".modal__card");
+  card.scrollTop = 0;
+  modalContent.setAttribute("tabindex", "-1");
+  requestAnimationFrame(() => {
+    card.scrollTop = 0;
+    modalContent.focus({ preventScroll: true });
+  });
+}
 function closeModal() { modal.classList.add("hidden"); }
 
 function toast(message, duration = 2800, lock = false) {
@@ -595,7 +613,7 @@ function openArchive() {
   $("#reset-case")?.addEventListener("click", () => {
     if (confirm("确定清空案件 05 的进度并重新调查吗？")) {
       localStorage.removeItem(STORAGE_KEY);
-      state = { ...initialState, started: true };
+      state = { ...initialState, evidence: [], deductions: [], started: true };
       closeModal();
       updateUI();
       showIntro();

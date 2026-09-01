@@ -141,6 +141,7 @@ button { color: inherit; }
 .modal__backdrop { position: absolute; inset: 0; background: rgba(1,8,11,.8); backdrop-filter: blur(9px); }
 .modal__card { width: min(880px, 96vw); max-height: 90vh; overflow: auto; position: relative; background: #10272d; border: 1px solid rgba(142,216,209,.3); box-shadow: var(--shadow); }
 .modal__close { position: absolute; z-index: 2; right: 16px; top: 14px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--line); background: var(--ink); cursor: pointer; font-size: 20px; }
+#modal-content:focus { outline: none; }
 .modal-body { padding: 42px; }
 .modal-kicker { color: var(--teal); letter-spacing: .22em; font-size: 10px; font-weight: 700; }
 .modal-body h2 { font-family: "STKaiti", "KaiTi", serif; font-size: clamp(30px, 4vw, 48px); font-weight: 400; margin: 8px 0 12px; }
@@ -362,13 +363,14 @@ button { color: inherit; }
   .topbar { height: 66px; padding: 0 14px; }
   .brand > span:last-child, .archive-btn span { display: none; }
   .top-actions { gap: 6px; }
-  .case-nav-btn { min-height: 38px; padding: 0 8px; font-size: 10px; }
+  .case-nav-btn { display: none; min-height: 44px; padding: 0 9px; font-size: 10px; }
+  .case-nav-btn[href="cases.html"] { display: inline-flex; }
   .archive-btn { padding: 0 10px; font-size: 11px; }
   .game-layout { min-height: calc(100vh - 66px); padding: 8px; gap: 8px; }
   .scene-card { min-height: 68vh; }
   .scene-card > img { object-position: 52% center; }
-  .hotspot { width: 36px; height: 36px; }
-  .hotspot b { display: none; }
+  .hotspot { width: 44px; height: 44px; }
+  .hotspot b { display: block; top: 49px; max-width: 92px; overflow: hidden; text-overflow: ellipsis; opacity: .92; padding: 4px 6px; font-size: 9px; }
   .hotspot--map { left: 38%; }
   .hotspot--scanner { left: 54%; top: 57%; }
   .hotspot--gate { left: 84%; }
@@ -377,11 +379,14 @@ button { color: inherit; }
   .case-panel { display: block; padding: 22px; }
   .case-panel h2 { font-size: 25px; }
   .dialogue__portrait-wrap { width: 64vw; height: 57vh; left: -4vw; bottom: 34vh; opacity: .66; }
-  .dialogue__box { width: calc(100vw - 24px); margin: 0 12px 12px; padding: 24px 20px; min-height: 250px; }
+  .dialogue { overflow-y: auto; overscroll-behavior: contain; }
+  .dialogue__box { width: calc(100vw - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; margin: 0 12px 12px; padding: 24px 20px; min-height: 250px; }
   .dialogue__box p { font-size: 20px; }
   .dialogue__choices { justify-content: stretch; }
   .choice-btn { width: 100%; text-align: left; }
   .modal { padding: 8px; }
+  .modal__close { width: 44px; height: 44px; right: 10px; top: 10px; }
+  .choice-btn, .action-btn, .icon-btn, .archive-btn { min-height: 44px; }
   .modal-body, .reveal-hero, .term-map, .archive-head { padding: 30px 22px; }
   .case-reconstruction { padding: 28px 22px 4px; }
   .mastery-feedback { min-height: 0; grid-template-columns: 1fr; justify-items: center; gap: 28px; padding: 48px 22px 32px; }

@@ -365,10 +365,15 @@
   function readProgress(caseInfo) {
     try {
       const parsed = JSON.parse(localStorage.getItem(caseInfo.storageKey) || "{}");
+      const evidence = Array.isArray(parsed.evidence) ? parsed.evidence : [];
+      const hasEvidence = (id) => evidence.includes(id);
+      let finalSolved = Boolean(parsed.finalSolved);
+      if (caseInfo.id === "06" && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
+      if (caseInfo.id === "07" && !hasEvidence("policy")) finalSolved = false;
       return {
         started: Boolean(parsed.started),
-        finalSolved: Boolean(parsed.finalSolved),
-        evidenceCount: Array.isArray(parsed.evidence) ? parsed.evidence.length : 0,
+        finalSolved,
+        evidenceCount: evidence.length,
       };
     } catch {
       return { started: false, finalSolved: false, evidenceCount: 0 };
