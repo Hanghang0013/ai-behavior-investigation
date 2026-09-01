@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#061318" />
+    <meta name="description" content="《AI行为调查局》——在暗黑调查案件中理解 AI Agent 如何看见、行动、验证与记忆。" />
+    <title>AI行为调查局｜在探案中学习 AI Agent</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body class="home-page">
+    <div class="grain" aria-hidden="true"></div>
+    <header class="home-nav">
+      <a class="home-brand" href="#top" aria-label="回到主页顶部">
+        <span class="home-brand__mark">A</span>
+        <span><b>AI行为调查局</b><small>BEHAVIOR INVESTIGATION</small></span>
+      </a>
+      <div class="home-nav__actions">
+        <span class="home-progress" id="home-progress">0 / 3 案件已结</span>
+        <button class="home-archive-btn" id="home-archive-btn"><span>◇</span> 回声档案</button>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="home-hero" aria-labelledby="series-title">
+        <img class="home-hero__image" src="image/series-cover.png" alt="调查员站在证物关系桌前，面对三道案件入口" />
+        <div class="home-hero__shade" aria-hidden="true"></div>
+        <div class="home-hero__content">
+          <div class="eyebrow"><span></span> AI AGENT · BEHAVIOR INVESTIGATION</div>
+          <h1 id="series-title"><small>在探案中学习</small>AI行为调查局</h1>
+          <p class="home-hero__lead">每一次异常行动，都是一条通往 AI Agent 工作原理的线索。</p>
+          <p class="home-hero__sub">观察现场、询问角色、连接证物并解开机关。你会先亲手找出系统为什么失败，结案时再揭晓其中的工程知识。</p>
+          <a class="primary-btn home-start" href="cases.html"><span>进入案件目录</span><b aria-hidden="true">→</b></a>
+          <button class="text-btn" id="hero-archive-btn">打开回声档案</button>
+        </div>
+        <div class="home-hero__idea" aria-label="游戏知识主线">
+          <span><i>01</i><b>让它看见</b></span><span><i>02</i><b>让它行动</b></span><span><i>03</i><b>让现实作证</b></span><span><i>04</i><b>让经验留下</b></span>
+        </div>
+        <div class="home-scroll" aria-hidden="true"><i></i><span>ENTER THE BUREAU</span></div>
+      </section>
+    </main>
+
+    <footer class="home-footer"><span>AI行为调查局 · 在探案中理解 AI Agent</span><a href="cases.html">进入回声档案 →</a></footer>
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-label="回声档案">
+      <div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <script src="series-archive.js"></script><script src="home.js"></script>
+  </body>
+</html>

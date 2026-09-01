@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：失踪的第七码卷宗》——一场关于如何从海量档案中找回正确证据的调查。" />
+    <title>AI行为调查局：失踪的第七码卷宗</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="case03.css" />
+  </head>
+  <body class="case03-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 03 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>失踪的第七码卷宗</h1>
+        <p class="cover__lead">档案库记得每一页。<br />可它找回的答案，没有一页来自正确的卷宗。</p>
+        <button class="primary-btn" id="start-btn"><span>进入第七码库</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <a class="text-btn cover__case-link" href="index.html">← 返回主页</a>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>03</b></div>
+      <div class="cover__credit">一场关于“怎样找回正确证据”的调查</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局">
+          <span class="brand__mark">E</span>
+          <span><b>AI行为调查局</b><small>失踪的第七码卷宗</small></span>
+        </div>
+        <div class="case-status">
+          <span>调查进度</span>
+          <div class="progress-track"><i id="progress-fill"></i></div>
+          <b id="progress-text">0 / 5</b>
+        </div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case03-scene" aria-label="第七码卷宗库">
+          <img src="image/memory-vault.png" alt="环形书架、发光检索池与中央封存门组成的未来卷宗库" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+
+          <button class="hotspot hotspot--literal" data-hotspot="literal" aria-label="调查编号检索台">
+            <span class="hotspot__pulse"></span><i>01</i><b>编号检索台</b>
+          </button>
+          <button class="hotspot hotspot--meaning" data-hotspot="meaning" aria-label="调查含义回声池">
+            <span class="hotspot__pulse"></span><i>02</i><b>含义回声池</b>
+          </button>
+          <button class="hotspot hotspot--fragment" data-hotspot="fragment" aria-label="调查无名残页">
+            <span class="hotspot__pulse"></span><i>03</i><b>无名残页</b>
+          </button>
+          <button class="hotspot hotspot--conflict" data-hotspot="conflict" aria-label="调查冲突记录柜">
+            <span class="hotspot__pulse"></span><i>04</i><b>冲突记录柜</b>
+          </button>
+          <button class="hotspot hotspot--lan" data-hotspot="lan" aria-label="呼叫总索引员澜">
+            <span class="hotspot__pulse"></span><i>05</i><b>呼叫澜</b>
+          </button>
+          <button class="hotspot hotspot--vault locked" data-hotspot="vault" aria-label="开启第七码封存门">
+            <span class="hotspot__pulse"></span><i>06</i><b>第七码封存门</b>
+          </button>
+
+          <div class="location-label"><span>当前地点</span><b>市政档案馆 · 第七码卷宗库</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>档案没有丢，线索却总带人走错</h2>
+          <p id="objective-text">先听听卷宗库发生了什么。</p>
+
+          <ol class="case-steps" id="case-steps">
+            <li data-step="routes"><span>01</span><div><b>两台找页装置为何各错一半？</b><small>编号检索台 + 含义回声池</small></div></li>
+            <li data-step="combine"><span>02</span><div><b>让两条路互相补缺</b><small>找得全，还要排得准</small></div></li>
+            <li data-step="trust"><span>03</span><div><b>哪一页才值得相信？</b><small>残页 + 冲突记录 + 澜</small></div></li>
+            <li data-step="govern"><span>04</span><div><b>给证据补上来路</b><small>保留时间线与原页入口</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重建正确的找页路线</b><small>开启第七码封存门</small></div></li>
+          </ol>
+
+          <button class="evidence-btn" id="evidence-btn">
+            <span class="evidence-btn__icon">⌁</span>
+            <span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i>
+          </button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div>
+      <div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/lan-portrait.png" alt="" /></div>
+      <div class="dialogue__box">
+        <div class="dialogue__speaker" id="dialogue-speaker">澜</div>
+        <p id="dialogue-text"></p>
+        <div class="dialogue__choices" id="dialogue-choices"></div>
+      </div>
+    </div>
+
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div>
+      <div class="modal__card">
+        <button class="modal__close" data-close-modal aria-label="关闭">×</button>
+        <div id="modal-content"></div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js"></script>
+    <script src="case03.js"></script>
+  </body>
+</html>

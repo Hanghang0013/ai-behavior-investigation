@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#061318" />
+    <meta name="description" content="《AI行为调查局》的回声档案——选择案件并继续调查。" />
+    <title>回声档案｜AI行为调查局案件目录</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="home.css" />
+  </head>
+  <body class="home-page directory-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="home-nav">
+      <a class="home-brand" href="index.html" aria-label="返回 AI行为调查局主页">
+        <span class="home-brand__mark">A</span>
+        <span><b>AI行为调查局</b><small>BEHAVIOR INVESTIGATION</small></span>
+      </a>
+      <div class="home-nav__actions">
+        <span class="home-progress" id="home-progress">0 / 3 案件已结</span>
+        <button class="home-archive-btn" id="home-archive-btn"><span>◇</span> 回声档案</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="directory-hero" aria-labelledby="directory-title">
+        <img src="image/series-cover.png" alt="调查局中央证物桌与三道案件入口" />
+        <div class="directory-hero__shade" aria-hidden="true"></div>
+        <div class="directory-hero__copy">
+          <div class="eyebrow"><span></span> ECHO ARCHIVE · CASE DIRECTORY</div>
+          <h1 id="directory-title"><small>AI行为调查局</small>回声档案</h1>
+          <p>选择一桩异常行为，从现场证据中追查 AI Agent 为什么看错、做错或记错。</p>
+        </div>
+      </section>
+
+      <section class="case-library" aria-labelledby="case-library-title">
+        <header class="case-library__head">
+          <div>
+            <div class="section-kicker">OPEN CASES · 可调查案件</div>
+            <h2 id="case-library-title">从一桩失败开始调查</h2>
+          </div>
+          <p>三个案件可以独立游玩。建议按编号推进，让前案发现的规律成为后案继续追查的工具。</p>
+        </header>
+
+        <div class="home-case-grid">
+          <a class="home-case-card" href="case01.html" data-case-id="01" data-storage-key="echo-archive-case-01">
+            <img src="image/station-control-room.png" alt="雨夜包裹中转站控制室" />
+            <div class="home-case-card__shade"></div><div class="home-case-card__no">CASE <b>01</b></div>
+            <div class="home-case-card__copy"><span class="home-case-status">尚未开始</span><h3>失控信使案</h3><p>它确信包裹已经送达，现实却没有留下任何收件痕迹。</p><small>调查主线：看见 · 行动 · 核验</small></div>
+            <span class="home-case-card__enter"><span data-case-enter-label>进入案件</span><b>→</b></span>
+          </a>
+          <a class="home-case-card" href="case02.html" data-case-id="02" data-storage-key="echo-archive-case-02">
+            <img src="image/archive-hall.png" alt="纸带垂落的未来档案大厅" />
+            <div class="home-case-card__shade"></div><div class="home-case-card__no">CASE <b>02</b></div>
+            <div class="home-case-card__copy"><span class="home-case-status">尚未开始</span><h3>不断重写的大厅</h3><p>她保存了每一条消息，却总在重来，关键编号也消失在纸堆中。</p><small>调查主线：摆放 · 状态 · 取舍</small></div>
+            <span class="home-case-card__enter"><span data-case-enter-label>进入案件</span><b>→</b></span>
+          </a>
+          <a class="home-case-card" href="case03.html" data-case-id="03" data-storage-key="echo-archive-case-03">
+            <img src="image/memory-vault.png" alt="环形书架与中央封存门组成的卷宗库" />
+            <div class="home-case-card__shade"></div><div class="home-case-card__no">CASE <b>03</b></div>
+            <div class="home-case-card__copy"><span class="home-case-status">尚未开始</span><h3>失踪的第七码卷宗</h3><p>库里没有丢过一页，可七次搜索带回了七个错误答案。</p><small>调查主线：找回 · 比较 · 回溯</small></div>
+            <span class="home-case-card__enter"><span data-case-enter-label>进入案件</span><b>→</b></span>
+          </a>
+        </div>
+
+        <div class="learning-promise">
+          <div class="learning-promise__mark">◇</div>
+          <div><span>调查局守则</span><h2>术语不会替你破案，关系才会。</h2></div>
+          <p>案件中只给你现象、人物和证物。只有亲手解开因果，正式概念才会在结案页与回声档案中出现。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="home-footer"><span>AI行为调查局 · 回声档案</span><a href="index.html">返回主页</a></footer>
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-label="回声档案">
+      <div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <script src="series-archive.js"></script><script src="home.js"></script>
+  </body>
+</html>

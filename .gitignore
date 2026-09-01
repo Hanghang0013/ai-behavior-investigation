@@ -1,0 +1,8 @@
+# 原始书籍仅供本地知识整理，不进入公开仓库或部署包。
+AI-Agents-in-Depth-zh-CN.pdf
+
+# 角色原图备份不参与游戏运行。
+image/*-original.png
+
+# 常见本地系统文件。
+.DS_Store
