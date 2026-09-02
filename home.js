@@ -11,6 +11,9 @@ const CASE_STORAGE_KEYS = [
   "echo-archive-case-05",
   "echo-archive-case-06",
   "echo-archive-case-07",
+  "echo-archive-case-08",
+  "echo-archive-case-09",
+  "echo-archive-case-10",
 ];
 
 function clearRequestedProgress() {
@@ -28,6 +31,8 @@ function readCaseProgress(storageKey) {
     let finalSolved = Boolean(value.finalSolved);
     if (storageKey.endsWith("-06") && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
     if (storageKey.endsWith("-07") && !hasEvidence("policy")) finalSolved = false;
+    if (storageKey.endsWith("-09") && ((value.saveVersion || 1) < 2 || !["audio", "visual", "machine", "interrupt", "sync"].every(hasEvidence))) finalSolved = false;
+    if (storageKey.endsWith("-10") && ((value.saveVersion || 1) < 2 || !["yun", "mia", "lan", "qiao", "score"].every(hasEvidence))) finalSolved = false;
     return {
       started: Boolean(value.started),
       finalSolved,

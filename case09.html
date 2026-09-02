@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：延迟的回声》——它听懂了每条消息，为什么总在错误的时刻回应？" />
+    <title>AI行为调查局：延迟的回声</title>
+    <link rel="stylesheet" href="styles.css?v=20260902-6" />
+    <link rel="stylesheet" href="case09.css?v=20260902-6" />
+  </head>
+  <body class="case09-page">
+    <div class="grain" aria-hidden="true"></div>
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div><div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 09 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>延迟的回声</h1>
+        <p class="cover__lead">声音、画面、闸位和人的打断都是真的。<br />可它们到得有早有晚，回声因此在错误的时刻作答。</p>
+        <button class="primary-btn" id="start-btn"><span>校准四路时钟</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div><div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>09</b></div><div class="cover__credit">先按事情发生的时刻排队，再决定该回应什么</div>
+    </section>
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局，第 09 案，延迟的回声"><span class="brand__mark">A</span><span><b>延迟的回声</b><small>AI行为调查局 · CASE 09</small></span></div>
+        <div class="case-status"><span>调查进度</span><div class="progress-track"><i id="progress-fill"></i></div><b id="progress-text">0 / 5</b></div>
+        <div class="top-actions"><a class="case-nav-btn" href="index.html">返回主页</a><a class="case-nav-btn" href="cases.html">案件目录</a><button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button><button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button></div>
+      </header>
+      <main class="game-layout">
+        <section class="scene-card case09-scene" aria-label="北岸回声调度厅事故现场">
+          <img src="image/realtime-cockpit.png" alt="暴雨夜的北岸回声调度厅，声音、画面、闸位和人工打断记录显示不同时间" /><div class="scene-vignette" aria-hidden="true"></div>
+          <button class="hotspot hotspot--stream" data-hotspot="audio" aria-label="调查语音回声钟"><span class="hotspot__pulse"></span><i>01</i><b>语音回声钟</b></button>
+          <button class="hotspot hotspot--latency" data-hotspot="visual" aria-label="调查画面延时屏"><span class="hotspot__pulse"></span><i>02</i><b>画面延时屏</b></button>
+          <button class="hotspot hotspot--bridge" data-hotspot="machine" aria-label="调查闸位回条柱"><span class="hotspot__pulse"></span><i>03</i><b>闸位回条柱</b></button>
+          <button class="hotspot hotspot--grounding" data-hotspot="interrupt" aria-label="调查人工打断线"><span class="hotspot__pulse"></span><i>04</i><b>人工打断线</b></button>
+          <button class="hotspot hotspot--motion" data-hotspot="sync" aria-label="调查快慢状态桥"><span class="hotspot__pulse"></span><i>05</i><b>快慢状态桥</b></button>
+          <button class="hotspot hotspot--confirm locked" data-hotspot="confirm" aria-label="开启北岸终态台"><span class="hotspot__pulse"></span><i>06</i><b>北岸终态台</b></button>
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/09</span><b>北岸回声调度厅 · 四钟封锁区</b></div>
+        </section>
+        <aside class="case-panel"><div class="panel-kicker">CASE BOARD</div><h2>每条消息都是真的，为什么回声仍在错误的时刻回答？</h2><p id="objective-text">先收齐声音、画面、闸位和人工打断的时间记录。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="arrivals"><span>01</span><div><b>四路消息各在何时发生、何时到达？</b><small>声音 + 画面 + 闸位 + 打断</small></div></li>
+            <li data-step="order"><span>02</span><div><b>到达顺序等于真实先后吗？</b><small>发生时刻 + 到达时刻</small></div></li>
+            <li data-step="paths"><span>03</span><div><b>谁可以先回应，谁必须继续查？</b><small>快路接话 + 慢路核对</small></div></li>
+            <li data-step="interrupt"><span>04</span><div><b>打断以后，旧决定怎么办？</b><small>共用状态牌 + 旧决定作废</small></div></li>
+            <li data-step="final"><span>05</span><div><b>用北岸现实结案</b><small>闸位回条 + 水位终读数</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button><div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite"><div class="dialogue__shade"></div><div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/echo7-portrait.png" alt="" /></div><div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">回声七号</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div></div>
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true"><div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div></div><div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js?v=20260902-6"></script><script src="case09.js?v=20260902-6"></script>
+  </body>
+</html>

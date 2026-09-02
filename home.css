@@ -57,9 +57,10 @@ html { scroll-behavior: smooth; }
 .city-recovery__summary > div { padding: 20px 26px; }
 .city-recovery__summary span { color: var(--teal-soft); font-size: 10px; letter-spacing: .18em; }
 .city-recovery__summary p { margin: 7px 0 0; color: var(--paper-2); font-size: 11px; line-height: 1.7; }
-.city-network { display: grid; grid-template-columns: repeat(7, 1fr); gap: 14px; padding: 24px; overflow: hidden; }
+.city-network { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; padding: 24px; overflow: hidden; }
 .city-node { min-width: 0; min-height: 188px; position: relative; display: grid; grid-template-columns: 54px minmax(0, 1fr); align-items: start; gap: 13px; padding: 20px 16px; border: 1px solid var(--line); background: rgba(255,255,255,.018); }
 .city-node:not(:last-child)::after { content: ""; position: absolute; width: 19px; height: 1px; right: -19px; top: 47px; background: var(--line); }
+.city-node:nth-child(5n)::after { display: none; }
 .city-node__signal { width: 50px; height: 50px; display: grid; place-items: center; align-content: center; gap: 4px; border: 1px solid var(--line); border-radius: 50%; color: var(--paper-2); }
 .city-node__signal i { width: 8px; height: 8px; border-radius: 50%; background: rgba(200,189,165,.3); }
 .city-node__signal b { font-size: 8px; letter-spacing: .12em; }

@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07141a" />
+    <meta name="description" content="《AI行为调查局：会做梦的档案馆》——当每次经历都在夜里改写规则，系统为什么越学越差？" />
+    <title>AI行为调查局：会做梦的档案馆</title>
+    <link rel="stylesheet" href="styles.css?v=20260902-6" />
+    <link rel="stylesheet" href="case08.css?v=20260902-6" />
+  </head>
+  <body class="case08-page">
+    <div class="grain" aria-hidden="true"></div>
+
+    <section class="cover" id="cover" aria-labelledby="game-title">
+      <div class="cover__wash"></div>
+      <div class="cover__content">
+        <div class="eyebrow"><span></span> 雨夜调查局 · 第 08 案</div>
+        <h1 id="game-title"><small>AI行为调查局</small>会做梦的档案馆</h1>
+        <p class="cover__lead">它每夜都从经历中写下一条新规。<br />天亮以后，规则更多了，可靠的路却更少了。</p>
+        <button class="primary-btn" id="start-btn"><span>封存夜间改写机</span><b aria-hidden="true">→</b></button>
+        <button class="text-btn cover__archive" id="cover-archive-btn">查看回声档案</button>
+        <div class="cover__nav-links"><a class="text-btn cover__case-link" href="index.html">← 返回主页</a><a class="text-btn cover__case-link" href="cases.html">返回案件目录</a></div>
+      </div>
+      <div class="cover__case-stamp" aria-hidden="true">CASE<br /><b>08</b></div>
+      <div class="cover__credit">经历不是规则，试写页不是正式馆规</div>
+    </section>
+
+    <div class="app hidden" id="app">
+      <header class="topbar">
+        <div class="brand" aria-label="AI行为调查局，第 08 案，会做梦的档案馆">
+          <span class="brand__mark">A</span><span><b>会做梦的档案馆</b><small>AI行为调查局 · CASE 08</small></span>
+        </div>
+        <div class="case-status"><span>调查进度</span><div class="progress-track"><i id="progress-fill"></i></div><b id="progress-text">0 / 5</b></div>
+        <div class="top-actions">
+          <a class="case-nav-btn" href="index.html">返回主页</a><a class="case-nav-btn" href="cases.html">案件目录</a>
+          <button class="icon-btn" id="hint-btn" aria-label="获得提示" title="提示">?</button>
+          <button class="archive-btn" id="archive-btn"><span>◇</span> 回声档案</button>
+        </div>
+      </header>
+
+      <main class="game-layout">
+        <section class="scene-card case08-scene" aria-label="会做梦的档案馆夜间整理大厅">
+          <img src="image/dream-archive.png" alt="雨夜中的梦档案馆，设有经历收件机、成败对照桌、故障验明机、试写玻璃房、三道复验闸与正式馆规库" />
+          <div class="scene-vignette" aria-hidden="true"></div>
+          <button class="hotspot hotspot--traces" data-hotspot="traces" aria-label="调查经历收件机"><span class="hotspot__pulse"></span><i>01</i><b>经历收件机</b></button>
+          <button class="hotspot hotspot--contrast" data-hotspot="contrast" aria-label="调查成败对照桌"><span class="hotspot__pulse"></span><i>02</i><b>成败对照桌</b></button>
+          <button class="hotspot hotspot--diagnosis" data-hotspot="diagnosis" aria-label="调查故障验明机"><span class="hotspot__pulse"></span><i>03</i><b>故障验明机</b></button>
+          <button class="hotspot hotspot--candidate" data-hotspot="candidate" aria-label="调查试写玻璃房"><span class="hotspot__pulse"></span><i>04</i><b>试写玻璃房</b></button>
+          <button class="hotspot hotspot--gates" data-hotspot="gates" aria-label="调查三道复验闸"><span class="hotspot__pulse"></span><i>05</i><b>三道复验闸</b></button>
+          <button class="hotspot hotspot--official locked" data-hotspot="official" aria-label="开启正式馆规库"><span class="hotspot__pulse"></span><i>06</i><b>正式馆规库</b></button>
+          <div class="location-label"><span>回声网络节点 · ABI-ECHO-00/08</span><b>市政梦档案馆 · 夜间整理大厅</b></div>
+        </section>
+
+        <aside class="case-panel">
+          <div class="panel-kicker">CASE BOARD</div>
+          <h2>它保存了每次经历，为什么醒来后反而更不可靠？</h2>
+          <p id="objective-text">先封存夜间改写机收到的原始经历。</p>
+          <ol class="case-steps" id="case-steps">
+            <li data-step="records"><span>01</span><div><b>经历怎样才能成为证据？</b><small>不可改经历卷 + 成败对照</small></div></li>
+            <li data-step="diagnose"><span>02</span><div><b>一次失误足以写成新规吗？</b><small>多夜对照 + 找出真正原因</small></div></li>
+            <li data-step="candidate"><span>03</span><div><b>该改档案、手册、铁门还是身体？</b><small>最小试写 + 放进合适住处</small></div></li>
+            <li data-step="govern"><span>04</span><div><b>谁来守住不能自改的尺？</b><small>新情形、旧本领、安全红线与馆外审查</small></div></li>
+            <li data-step="final"><span>05</span><div><b>重排夜班改规路线</b><small>小范围试行 + 查看结果 + 随时换回</small></div></li>
+          </ol>
+          <button class="evidence-btn" id="evidence-btn"><span class="evidence-btn__icon">⌁</span><span><b>证物台</b><small id="evidence-count">0 件证物</small></span><i>→</i></button>
+          <div class="soft-hint"><span>提示</span><p id="soft-hint-text">先观察带编号的调查点。</p></div>
+        </aside>
+      </main>
+    </div>
+
+    <div class="dialogue hidden" id="dialogue" role="dialog" aria-modal="true" aria-live="polite">
+      <div class="dialogue__shade"></div><div class="dialogue__portrait-wrap"><img id="dialogue-portrait" src="image/echo7-portrait.png" alt="" /></div>
+      <div class="dialogue__box"><div class="dialogue__speaker" id="dialogue-speaker">回声七号</div><p id="dialogue-text"></p><div class="dialogue__choices" id="dialogue-choices"></div></div>
+    </div>
+    <div class="modal hidden" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__backdrop" data-close-modal></div><div class="modal__card"><button class="modal__close" data-close-modal aria-label="关闭">×</button><div id="modal-content"></div></div>
+    </div>
+    <div class="toast" id="toast" aria-live="polite"></div>
+    <script src="series-archive.js?v=20260902-6"></script><script src="case08.js?v=20260902-6"></script>
+  </body>
+</html>

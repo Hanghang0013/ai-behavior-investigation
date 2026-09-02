@@ -717,7 +717,7 @@ function showReveal() {
         </div>
         <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否同时迁移能力放置与训练闭环。</p>
       </section>
-      <div class="action-row"><a class="action-btn primary" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回训练大厅</button></div>
+      <div class="action-row"><a class="action-btn primary" href="case08.html?from=case07">追查第 08 案</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回训练大厅</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
   window.EchoFeedback.bindTransfer(modalContent);

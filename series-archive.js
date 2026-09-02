@@ -217,6 +217,87 @@
         },
       ],
     },
+    {
+      id: "08",
+      title: "会做梦的档案馆",
+      storageKey: "echo-archive-case-08",
+      knowledge: [
+        {
+          concept: "ONLINE LOOP · OFFLINE EVOLUTION",
+          title: "白天只办事留证，夜里才评价改进",
+          body: "在线执行循环负责安全完成任务并追加不可变轨迹，不在生产中直接自改。离线进化循环批量评价成功、失败和反例，定位根因后才生成候选。",
+          remember: "经历先成为证据，不能直接成为规则。",
+        },
+        {
+          concept: "DIAGNOSIS · MINIMAL UPDATE",
+          title: "先找到根因，再选择最小载体",
+          body: "经验应写清适用条件、例外、来源与最近验证时间。根据根因选择知识库、Prompt/Skill、程序/Harness 或参数，并让修改保持可归因、可测试、可回滚。",
+          remember: "局部缺口不必重做整具身体，偶发故障只进观察池。",
+        },
+        {
+          concept: "CANDIDATE · TRUSTED ROOT",
+          title: "候选不能给自己出题、改尺和盖章",
+          body: "候选与正式能力隔离。迁移集、保持集、安全集、发布阈值、审计日志和稳定备份构成不可自改的可信根；任何否决项失败都拒绝发布。",
+          remember: "更新者与验证门禁分离，可信根永远不交给被评价者。",
+        },
+        {
+          concept: "CANARY · ACTIVATE · FOLLOW · ROLLBACK",
+          title: "通过考试以后，也只先走一小段现实",
+          body: "分别观测候选修改是否有效、正确场景是否激活产物、激活后是否遵循，再结合成本、延迟和安全护栏灰度放行。异常自动回滚，过期经验需要修订或淘汰。",
+          remember: "持续进化包括更新、保持、迁移、修剪和恢复。",
+        },
+      ],
+    },
+    {
+      id: "09",
+      title: "延迟的回声",
+      storageKey: "echo-archive-case-09",
+      knowledge: [
+        {
+          concept: "MULTIMODAL REALTIME · EVENT TIME",
+          title: "到达顺序不等于事情发生的顺序",
+          body: "语音、画面、机械回条和人工打断各有发生时刻与到达时刻。实时系统要按事件时间还原事实，同时记录传输等待；迟到材料可以解释过去，不能冒充当前状态。",
+          remember: "先问何时发生，再问何时到达。",
+        },
+        {
+          concept: "FAST/SLOW PATH · STATE SYNCHRONIZATION",
+          title: "快慢可以分工，现在只能有一个",
+          body: "快路径及时确认收到、接住澄清和打断，慢路径负责深入核对。两者必须共享当前任务、状态版本和完成权限；慢结果交付前要重看版本，旧版本输出必须失效。",
+          remember: "快路不抢报完成，慢路不带旧状态交付。",
+        },
+        {
+          concept: "BARGE-IN · INVALIDATION · REALITY VERIFY",
+          title: "新打断要让旧决定真正失效",
+          body: "人工打断不仅停止说话，还要更新共同状态、撤销未完成旧动作并使旧分析作废。接单回条只表示进行中，最终仍由动作后的环境读数决定完成。",
+          remember: "打断改变任务，现实决定结束。",
+        },
+      ],
+    },
+    {
+      id: "10",
+      title: "四位目击者",
+      storageKey: "echo-archive-case-10",
+      knowledge: [
+        {
+          concept: "MULTI-AGENT VALUE BOUNDARY",
+          title: "每位参与者都要补上一块原本缺失的证据",
+          body: "多 Agent 只有带来独立现场、过程状态、历史来源、执行结果、真实并行或不同权限时才增加价值。让多个角色阅读同一摘要投票，只会增加协调成本。",
+          remember: "多一个角色，必须多出新证据或必要边界。",
+        },
+        {
+          concept: "CONTEXT ISOLATION · COORDINATION TOPOLOGY",
+          title: "共享共同目标，隔离原始证据与危险权限",
+          body: "协调者维护任务、当前版本、状态、负责人和验收条件；参与者只接收必要任务包，保留独立证据来源和最小权限。共享全部历史与钥匙会模糊责任并放大错误。",
+          remember: "目标与进度共用，证据与钥匙按职责分开。",
+        },
+        {
+          concept: "STRUCTURED COMMUNICATION · HANDOFF · INDEPENDENT VERIFY",
+          title: "局部结果要能被收束，完成要由独立现实裁决",
+          body: "回报应带任务号、版本、事实、来源、状态和未决问题，冲突回到明确协调者。执行者不能自己验收；所有目标通过环境终态后，才能完成并停止剩余任务。",
+          remember: "带来源交接，让现实而不是彼此附和决定完成。",
+        },
+      ],
+    },
   ];
 
   const feedbackProfiles = {
@@ -360,6 +441,66 @@
         "用高保真环境、可信奖励和独立回归防止训练学歪",
       ],
     },
+    "08": {
+      node: "市政梦档案馆",
+      nodeSummary: "生产中的直接自改已经停止，经历、候选、验证与发布重新回到可追溯、可恢复的双循环。",
+      formal: "在线执行循环 · 离线进化循环 · 根因诊断 · 最小可验证更新 · 隔离候选 · 条件化经验 · 可信根 · 候选有效率 · 激活率 · 遵循率 · 灰度发布 · 回滚",
+      masteries: {
+        cycles: {
+          title: "让经历先成为经得起回查的记录",
+          proof: "你没有让一次成功或外部纸条立即改写馆规，而是保留成功、失败、相反例子与来处，再对照多个夜晚找出真正原因。",
+        },
+        governance: {
+          title: "让试写页经过它无权修改的门",
+          proof: "你把试写页关在玻璃房，让新情形、旧本领和安全红线三道独立门禁作证，并先给少数窗口试用，随时能换回稳定旧页。",
+        },
+      },
+      abilities: [
+        "分离在线执行留证与离线评价进化",
+        "从跨轨迹证据诊断根因并选择最小更新载体",
+        "用可信根、独立门禁、灰度和回滚治理候选发布",
+      ],
+    },
+    "09": {
+      node: "北岸回声调度厅",
+      nodeSummary: "语音、画面、闸位和人工打断重新按真实时刻合流，快慢路径也只承认同一块当前状态牌。",
+      formal: "多模态实时 · 事件时间 · 快慢路径 · 状态同步 · Barge-in · 版本失效 · 现实验证",
+      masteries: {
+        order: {
+          title: "把迟到的材料放回它真正发生的时刻",
+          proof: "你用语音、画面、闸机和打断的双时间记录证明：到达屏幕的先后不等于事情发生的先后。",
+        },
+        sync: {
+          title: "让快慢两路只承认一个现在",
+          proof: "你让快路把人工打断写入 R19，慢路交付前重看编号并丢弃 R18 结果，最终完成仍等待闸位和水位回读。",
+        },
+      },
+      abilities: [
+        "用发生时刻与到达时刻还原多路事件",
+        "让快慢路径共享当前任务和状态版本",
+        "用打断废止旧决定，并由环境终态决定完成",
+      ],
+    },
+    "10": {
+      node: "中央四证联合厅",
+      nodeSummary: "云、米娅、澜和乔的局部证据被可靠收束，三项城市现实第一次共同支持最终结案。",
+      formal: "多 Agent 价值边界 · 上下文隔离 · 协作拓扑 · 结构化通信 · Handoff · 独立验证",
+      masteries: {
+        value: {
+          title: "让每位目击者补上一块真正缺失的证据",
+          proof: "你用现场、进度、历史和执行四份证词证明：这次多人协作的价值来自不同证据和钥匙，不来自多几张赞同票。",
+        },
+        coordination: {
+          title: "让局部真话回到共同任务，也保留各自边界",
+          proof: "你共享 R19 目标和进度，分开原始证据与危险钥匙，让冲突回到调查员，并由独立城市读数裁决完成。",
+        },
+      },
+      abilities: [
+        "判断多 Agent 是否真正增加新证据、并行或权限边界",
+        "设计共同任务牌、最小信息共享与清晰协作关系",
+        "用带来源的交接、冲突收束和独立现实验证完成协作",
+      ],
+    },
   };
 
   function readProgress(caseInfo) {
@@ -370,6 +511,8 @@
       let finalSolved = Boolean(parsed.finalSolved);
       if (caseInfo.id === "06" && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
       if (caseInfo.id === "07" && !hasEvidence("policy")) finalSolved = false;
+      if (caseInfo.id === "09" && ((parsed.saveVersion || 1) < 2 || !["audio", "visual", "machine", "interrupt", "sync"].every(hasEvidence))) finalSolved = false;
+      if (caseInfo.id === "10" && ((parsed.saveVersion || 1) < 2 || !["yun", "mia", "lan", "qiao", "score"].every(hasEvidence))) finalSolved = false;
       return {
         started: Boolean(parsed.started),
         finalSolved,
