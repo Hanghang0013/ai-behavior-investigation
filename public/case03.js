@@ -639,6 +639,7 @@ function retrievalResultHTML() {
 function renderRetrievalWorkbench(message, preserveScroll = false, focusResult = false) {
   const card = modal.querySelector(".modal__card");
   const previousScroll = preserveScroll && card ? card.scrollTop : 0;
+  const previousTrayScroll = preserveScroll ? modal.querySelector(".builder-tray")?.scrollLeft || 0 : 0;
   openModal(`<div class="modal-body retrieval-workbench-wrap">
     <div class="modal-kicker">FINAL BUILD · 双路找页柜</div>
     <h2>不要替柜子找答案，决定它以后怎样找</h2>
@@ -656,7 +657,11 @@ function renderRetrievalWorkbench(message, preserveScroll = false, focusResult =
   if (focusResult) {
     requestAnimationFrame(() => requestAnimationFrame(() => $("#builder-test-result")?.scrollIntoView({ behavior: "smooth", block: "start" })));
   } else if (preserveScroll) {
-    requestAnimationFrame(() => requestAnimationFrame(() => { modal.querySelector(".modal__card").scrollTop = previousScroll; }));
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      modal.querySelector(".modal__card").scrollTop = previousScroll;
+      const tray = modal.querySelector(".builder-tray");
+      if (tray) tray.scrollLeft = Math.min(previousTrayScroll, Math.max(0, tray.scrollWidth - tray.clientWidth));
+    }));
   }
 
   $$('[data-build-part]').forEach((button) => button.addEventListener("click", () => {

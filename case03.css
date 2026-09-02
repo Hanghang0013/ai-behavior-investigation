@@ -158,10 +158,11 @@ button.placed-evidence__slot { cursor: pointer; }
 .builder-slot.filled { border-style: solid; border-color: rgba(142,216,209,.62); background: rgba(79,183,178,.12); }
 .builder-selection { min-height: 49px; padding: 13px 22px; border-bottom: 1px solid rgba(142,216,209,.12); color: var(--paper-2); font-size: 13px; line-height: 1.7; }
 .builder-selection b { color: var(--amber); }
-.builder-tray { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 255px); justify-content: start; gap: 10px; overflow-x: scroll; overscroll-behavior-x: contain; padding: 18px 20px 22px; scrollbar-color: var(--amber) rgba(142,216,209,.12); scrollbar-width: auto; }
+.builder-tray { width: calc(100% - 40px); margin: 0 20px; display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 255px); justify-content: start; gap: 10px; overflow-x: scroll; overscroll-behavior-x: contain; padding: 18px 0 12px; scrollbar-color: var(--amber) rgba(142,216,209,.12); scrollbar-width: auto; }
 .builder-tray::-webkit-scrollbar { height: 14px; }
 .builder-tray::-webkit-scrollbar-track { border: 1px solid rgba(142,216,209,.18); background: rgba(3,15,19,.7); }
 .builder-tray::-webkit-scrollbar-thumb { border: 3px solid #0a2026; border-radius: 8px; background: var(--amber); }
+.builder-tray + .archive-scroll-hint { margin: 8px 20px 18px; }
 .builder-part { min-height: 160px; padding: 15px; display: grid; align-content: start; gap: 9px; border: 1px solid var(--line); background: #102a31; color: var(--paper-2); cursor: pointer; font-family: inherit; text-align: left; transition: .2s; }
 .builder-part:hover { border-color: var(--amber); transform: translateY(-2px); }
 .builder-part.selected { border-color: var(--amber); background: rgba(242,172,76,.12); box-shadow: inset 0 0 0 1px rgba(242,172,76,.13), 0 0 20px rgba(242,172,76,.08); }
@@ -245,7 +246,8 @@ button.placed-evidence__slot { cursor: pointer; }
   .shelf-route > i { transform: rotate(90deg); }
   .builder-layout { padding: 14px; }
   .builder-zone { padding: 13px; }
-  .builder-tray { grid-auto-columns: minmax(210px, 78vw); padding-inline: 14px; }
+  .builder-tray { width: calc(100% - 28px); margin-inline: 14px; grid-auto-columns: minmax(210px, 78vw); }
+  .builder-tray + .archive-scroll-hint { margin-inline: 14px; }
   .builder-queries { grid-template-columns: 1fr; }
   .builder-route-output { grid-template-columns: 1fr; }
   .builder-route-output i { transform: rotate(90deg); }
