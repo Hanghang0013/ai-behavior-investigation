@@ -3,7 +3,7 @@
 .case04-page .cover__content { max-width: 690px; }
 .case04-page .cover h1 { font-size: clamp(62px, 9vw, 124px); }
 .case04-page .brand__mark { transform: none; border-radius: 50%; }
-.cover__case-link { display: block; width: fit-content; margin-top: 2px; font-size: 12px; text-decoration: none; }
+.cover__case-link { display: block; width: fit-content; margin-top: 2px; font-size: 14px; text-decoration: none; }
 .case04-scene > img { object-position: center center; }
 
 .hotspot--receipt { left: 9%; top: 66%; }
@@ -17,7 +17,7 @@
 .receipt-paper, .callback-paper { min-height: 184px; padding: 22px; border: 1px solid var(--line); background: #12292e; display: grid; align-content: center; gap: 12px; }
 .receipt-paper { border-top: 3px solid var(--amber); }
 .callback-paper { border-top: 3px solid rgba(142,216,209,.35); }
-.receipt-paper span, .callback-paper span { color: var(--paper-2); font-size: 9px; letter-spacing: .16em; }
+.receipt-paper span, .callback-paper span { color: var(--paper-2); font-size: 12px; letter-spacing: .16em; }
 .receipt-paper b, .callback-paper b { color: var(--paper); font: 24px/1.25 "STKaiti", "KaiTi", serif; }
 .receipt-paper small, .callback-paper small { color: var(--paper-2); line-height: 1.6; }
 .callback-paper.pending { border-style: dashed; opacity: .72; }
@@ -25,36 +25,36 @@
 
 .task-track { width: min(100%, 700px); display: grid; gap: 17px; }
 .task-stage { display: grid; grid-template-columns: 105px 1fr; align-items: center; gap: 14px; }
-.task-stage > span { color: var(--paper-2); font-size: 10px; }
+.task-stage > span { color: var(--paper-2); font-size: 13px; }
 .task-rail { height: 34px; border: 1px solid var(--line); background: #0d2228; position: relative; overflow: hidden; }
 .task-rail i { position: absolute; inset: 0; background: repeating-linear-gradient(135deg, rgba(79,183,178,.25) 0 9px, rgba(79,183,178,.11) 9px 18px); animation: pending-flow 1.2s linear infinite; }
-.task-rail b { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; color: var(--paper); font-size: 10px; letter-spacing: .12em; }
+.task-rail b { position: relative; z-index: 1; display: grid; place-items: center; height: 100%; color: var(--paper); font-size: 13px; letter-spacing: .12em; }
 @keyframes pending-flow { to { background-position: 18px 0; } }
-.task-note { padding: 14px 16px; border-left: 2px solid var(--amber); background: rgba(242,172,76,.07); color: var(--paper-2); font-size: 11px; line-height: 1.7; }
+.task-note { padding: 14px 16px; border-left: 2px solid var(--amber); background: rgba(242,172,76,.07); color: var(--paper-2); font-size: 14px; line-height: 1.7; }
 
 .event-router { width: min(100%, 720px); display: grid; gap: 12px; }
 .event-row { display: grid; grid-template-columns: 38px minmax(190px, 1fr) minmax(190px, .9fr); gap: 12px; align-items: center; padding: 12px; border: 1px solid var(--line); background: #0d2329; }
 .event-lamp { width: 24px; height: 24px; justify-self: center; border-radius: 50%; background: var(--lamp); box-shadow: 0 0 18px var(--lamp); }
-.event-copy b { display: block; font-size: 12px; color: var(--paper); }
+.event-copy b { display: block; font-size: 14px; color: var(--paper); }
 .event-copy small { display: block; color: var(--paper-2); margin-top: 4px; line-height: 1.45; }
-.event-route { width: 100%; border: 1px solid var(--line); background: #09191e; color: var(--paper); padding: 9px; font-size: 10px; }
+.event-route { width: 100%; border: 1px solid var(--line); background: #09191e; color: var(--paper); padding: 9px; font-size: 13px; }
 .event-router.wrong { animation: shake .35s; }
 
 .safety-board { width: min(100%, 720px); display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
 .safety-stage { min-height: 138px; padding: 14px 10px; border: 1px solid var(--line); background: #0d2329; display: grid; place-items: center; align-content: center; text-align: center; gap: 10px; }
 .safety-stage i { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid var(--teal); border-radius: 50%; color: var(--teal-soft); font-style: normal; font-size: 18px; }
-.safety-stage b { font-size: 11px; }
-.safety-stage small { color: var(--paper-2); font-size: 9px; line-height: 1.5; }
+.safety-stage b { font-size: 14px; }
+.safety-stage small { color: var(--paper-2); font-size: 12px; line-height: 1.5; }
 
 .evidence-grid--case04 { grid-template-columns: repeat(3, 1fr); }
 .dispatch-board { margin: 25px 0; display: grid; gap: 18px; }
-.dispatch-instruction { color: var(--amber); min-height: 18px; font-size: 11px; }
+.dispatch-instruction { color: var(--amber); min-height: 18px; font-size: 14px; }
 .dispatch-slots { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; }
-.dispatch-slot { min-height: 92px; position: relative; border: 1px dashed rgba(142,216,209,.27); background: rgba(79,183,178,.035); display: grid; place-items: center; padding: 9px 6px; text-align: center; color: rgba(241,231,207,.3); font-size: 9px; }
+.dispatch-slot { min-height: 92px; position: relative; border: 1px dashed rgba(142,216,209,.27); background: rgba(79,183,178,.035); display: grid; place-items: center; padding: 9px 6px; text-align: center; color: rgba(241,231,207,.3); font-size: 12px; }
 .dispatch-slot:not(:last-child)::after { content: "→"; position: absolute; right: -12px; top: 38px; z-index: 2; color: var(--amber); }
 .dispatch-slot.filled { border-style: solid; border-color: rgba(242,172,76,.45); color: var(--paper); background: rgba(242,172,76,.07); }
 .dispatch-pieces { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.dispatch-piece { min-height: 72px; border: 1px solid var(--line); background: #143038; color: var(--paper); padding: 10px; cursor: pointer; font-size: 10px; line-height: 1.45; transition: .2s; }
+.dispatch-piece { min-height: 72px; border: 1px solid var(--line); background: #143038; color: var(--paper); padding: 10px; cursor: pointer; font-size: 13px; line-height: 1.45; transition: .2s; }
 .dispatch-piece:hover { border-color: var(--amber); transform: translateY(-2px); }
 .dispatch-piece.used { opacity: .2; pointer-events: none; }
 .dispatch-board.wrong { animation: shake .35s; }

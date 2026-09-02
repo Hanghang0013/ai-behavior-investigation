@@ -548,21 +548,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">选择托盘而非口供结案</span><span class="arrow">→</span><div><b>验证器</b><small>你用接收端的现实状态判断交付，而没有接受行动者自己的“已完成”。</small></div></div>
       <div class="term-row"><span class="plain">接回五步并允许纠错</span><span class="arrow">→</span><div><b>Harness</b><small>负责装载事实、暴露工具、限制行动、验证结果，并在失败后继续、换路或停止。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>观察 → 判断 → 行动 → 验证 → 记录 → 继续 / 停止<br><small>这正是你在红色机柜中接回的链。没有新的环境观测，循环只是在重复旧猜测。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="判断成立：路线计算只是中间动作，只有医院接收端的真实状态才能证明救援完成。" data-failure="再看一次本案的第二个断点：执行过一个动作，不能直接证明接收方已经得到结果。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个现场</span>
-        <h3>这次还能认出同一个问题吗？</h3>
-        <p>急救车取得任务编号，导航系统显示“路线计算成功”，但医院还没有患者接收记录。现在应该怎样登记？</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>登记“救援完成”，因为导航工具已经成功返回。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">登记“仍在进行”，等待医院接收端留下真实记录。</button>
-          <button class="transfer-option" data-transfer-option>删除任务记录，假装这次调度没有发生。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把这条规则带到新现场。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case02.html?from=case01">追踪包裹去向：进入下一案 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回现场</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

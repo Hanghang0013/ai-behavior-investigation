@@ -509,6 +509,7 @@
       const evidence = Array.isArray(parsed.evidence) ? parsed.evidence : [];
       const hasEvidence = (id) => evidence.includes(id);
       let finalSolved = Boolean(parsed.finalSolved);
+      if (caseInfo.id === "03" && parsed.saveVersion !== 3) finalSolved = false;
       if (caseInfo.id === "06" && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
       if (caseInfo.id === "07" && !hasEvidence("policy")) finalSolved = false;
       if (caseInfo.id === "09" && ((parsed.saveVersion || 1) < 2 || !["audio", "visual", "machine", "interrupt", "sync"].every(hasEvidence))) finalSolved = false;
@@ -641,26 +642,6 @@
       <div class="city-network">${nodes.join("")}</div>`;
   }
 
-  function bindTransfer(root = document) {
-    root.querySelectorAll("[data-transfer-check]").forEach((check) => {
-      const feedback = check.querySelector(".transfer-feedback");
-      check.querySelectorAll("[data-transfer-option]").forEach((button) => {
-        button.addEventListener("click", () => {
-          check.querySelectorAll("[data-transfer-option]").forEach((option) => option.classList.remove("wrong", "correct"));
-          if (button.dataset.correct === "true") {
-            button.classList.add("correct");
-            check.classList.add("passed");
-            feedback.textContent = check.dataset.success;
-          } else {
-            button.classList.add("wrong");
-            check.classList.remove("passed");
-            feedback.textContent = check.dataset.failure;
-          }
-        });
-      });
-    });
-  }
-
   global.EchoArchive = { render };
-  global.EchoFeedback = { renderMastery, showMastery, renderCompletion, renderCityRecovery, bindTransfer };
+  global.EchoFeedback = { renderMastery, showMastery, renderCompletion, renderCityRecovery };
 })(window);

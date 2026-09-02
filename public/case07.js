@@ -706,21 +706,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">拒绝长文奖与翻墙碰铃，为正确路口发小章</span><span class="arrow">→</span><div><b>奖励黑客、信用分配与稠密信号</b><small>奖励是代理目标，模型会利用漏洞；沿途小章把最终成败分配回具体步骤，使长任务中的有效进展和关键错误都能被学习。</small></div></div>
       <div class="term-row"><span class="plain">干净教材、可复原真城、陌生卷与旧课复考</span><span class="arrow">→</span><div><b>数据质量、环境保真与独立回归</b><small>训练收益必须通过留出、分布外、安全和灾难性遗忘回归；任何护栏失败都停止放行并恢复稳定版本。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>能力放置审查 → SFT 稳定协议 → 可重置高保真环境 → 在轨探索与结果/路径/阶段信号 → 留出/OOD/安全/遗忘回归 → 有限放行 / 停训恢复<br><small>上卷先判断是否需要训练，下卷才讨论怎样训练；算法不能代替正确的数据、环境、验证器和权限边界。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="分配与训练顺序成立：变化事实外置、硬权限程序化、格式先用示范稳定；只有隐式判断进入当前策略的可验证探索，并接受独立回归。" data-failure="先问哪些能力根本不该训练进参数，再问真正需要训练的能力应该先稳定协议还是直接探索。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一所训练场</span>
-        <h3>面对四种新缺口，哪套安排最可靠？</h3>
-        <p>系统需要处理每日税率、审批上限、固定 JSON 回执格式，以及从陌生仪表画面判断异常。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>全部写进训练数据，再让模型在真实财务系统中自由试错。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">每日税率进知识库，审批上限进程序，JSON 格式先用干净示范稳定；陌生画面判断再进入低权限高保真环境中的在轨探索与独立回归。</button>
-          <button class="transfer-option" data-transfer-option>全部外置成一份长文档，不训练也不设置程序门禁。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否同时迁移能力放置与训练闭环。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case08.html?from=case07">追查第 08 案</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回训练大厅</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

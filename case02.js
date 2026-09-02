@@ -624,21 +624,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">把目标、进度和下一步挂上牌</span><span class="arrow">→</span><div><b>Agent 状态栏与侧信道</b><small>你补上的不只是时间读数，而是未决事项、环境状态和看到读数后应该采取的行动。</small></div></div>
       <div class="term-row"><span class="plain">原件入柜，q-07-417 原样留在取件条</span><span class="arrow">→</span><div><b>分层上下文压缩</b><small>大材料可以外置或摘要，但决定、约束、TODO、精确标识符、验证状态和原件位置必须无损保留。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>稳定前缀 + 追加轨迹 + 末端状态栏 + 可回取证据<br><small>大厅恢复后吐出的 q-07-417，正是“压缩后仍能回到原件”的现实证明。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="整理成立：摘要保留了决定、未决事项、精确编号和原件位置，既减轻拥挤又没有切断后续行动。" data-failure="这种做法会让系统继续拥挤，或在缩短材料时失去可执行信息。检查哪些内容一旦改写就无法继续调查。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一摞材料</span>
-        <h3>哪份摘要还能支持下一步行动？</h3>
-        <p>救援记录即将超过大厅容量，其中包含大量重复回报、决定“转移北区居民”、未完成的避难所核验、编号 shelter-17，以及原件柜位。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>“情况复杂，大家继续努力。”删除编号和原件，尽可能短。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">保留转移决定、未决核验、shelter-17 和原件柜位；删除重复回报。</button>
-          <button class="transfer-option" data-transfer-option>把全部原件继续摊在桌面，避免任何信息损失。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否掌握了“少看但仍能行动与回溯”。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case03.html?from=case02">追查旧索引：进入下一案 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回大厅</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

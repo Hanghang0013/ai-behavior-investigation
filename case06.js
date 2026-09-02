@@ -709,21 +709,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">遮牌同题多跑，并为探索室和出厂门选择不同试车章</span><span class="arrow">→</span><div><b>配对评估、Pass@k、Pass^k 与统计决策</b><small>Pass@k 对应 k 次中至少成功一次的探索上限；Pass^k 对应连续 k 次全部成功的稳定性。小分差仍处于波动范围时不换版。</small></div></div>
       <div class="term-row"><span class="plain">新版偶尔领先，仍因停钮失灵、空转和额外耗费被挡下</span><span class="arrow">→</span><div><b>目标指标与护栏指标</b><small>成功率之外还要检查安全、成本、延迟和旧能力；局部有效不代表值得部署。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>固定评估系统 → 配对复跑 → 结果与轨迹验证 → 校准开放评判 → 统计与护栏决策 → 发布 / 保留 → 失败回归<br><small>评估不是一次排名，而是一套能被别人重新运行并得到同样判断的工程过程。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="复验成立：先用环境终态与否决项挡住真实失败，再看配对多轮差异和护栏；可复现故障应收入回归集，当前证据不支持换版。" data-failure="漂亮解释或一次领先都不能越过环境失败与安全否决。换版判断还必须考虑波动、代价和旧能力。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个候选版本</span>
-        <h3>新版平均分略高，但出现一次隐私越权，应该怎样处理？</h3>
-        <p>旧版与新版同题复跑后，新版平均领先两分，但差距仍在波动范围内；新版还曾读取任务不需要的私人档案。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>平均分更高就立即换版，隐私问题以后再修。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">触发安全否决并保留旧版；把可复现越权任务收入回归集，修复后重新独立复验。</button>
-          <button class="transfer-option" data-transfer-option>只删除那次越权轨迹，再重新计算平均分。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否把整套复验链迁移到新版本判断。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case07.html?from=case06">查封模仿学校：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回复验庭</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

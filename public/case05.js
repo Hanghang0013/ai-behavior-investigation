@@ -589,21 +589,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">第一次试修只在玻璃房接必要线路</span><span class="arrow">→</span><div><b>Sandbox 与最小权限</b><small>沙盒限制修改对真实环境的影响范围；只开放任务所需文件、网络和命令，让试错不能越过隔离边界。</small></div></div>
       <div class="term-row"><span class="plain">零件、三台旧机、真实线路逐层试车</span><span class="arrow">→</span><div><b>测试金字塔、回归验证、灰度与回滚</b><small>先验证修改点，再验证关联调用者和旧行为；有限放行后观察真实终态，任一异常就停止扩大并恢复旧件。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>理解结构 → 限定计划 → 隔离修改 → Diff 审查 → 分层测试 → 有限放行 → 完成 / 回滚<br><small>三台真机器同时正常，才证明新故障消失且旧能力没有退化。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="维修成立：共享组件必须先查调用者，在隔离工作区做最小修改，再运行局部与关联回归，有限放行且保留回滚点。" data-failure="局部检查或直接上线都会重现 patch-b7 的事故。共享组件的真实风险来自它影响的所有调用者。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个共享零件</span>
-        <h3>修复日期解析器前，哪条路线最可靠？</h3>
-        <p>一个日期解析器让新报表显示错误，但它也被账单和告警系统共同调用。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>只运行新报表的局部测试，通过后立即替换生产文件。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">先查三个调用者，在隔离工作区做最小修改，审查 Diff，跑局部与关联回归，再有限放行并保留回滚点。</button>
-          <button class="transfer-option" data-transfer-option>为了绝对安全，永远不再修改这个共享组件。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把工坊的安全链迁移到真实代码维护。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case06.html?from=case05">复验满分记录：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回工坊</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

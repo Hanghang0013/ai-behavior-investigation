@@ -578,21 +578,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">急报停闸、补签排队、水尺分流</span><span class="arrow">→</span><div><b>事件路由、取消语义与并行执行</b><small>你按紧急度与独立性分别选择取消、排队和另行处理，而不是让每封来信都破坏主线。</small></div></div>
       <div class="term-row"><span class="plain">限闸限幅、双人确认、中途能停、现场核对</span><span class="arrow">→</span><div><b>最小权限、审批、结构化验证与有界恢复</b><small>这些门闩共同构成执行前约束、执行中控制、执行后验证和失败恢复；任何一层都不能由一句“请小心”替代。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>限定动作 → 记录 Task ID / running → 路由事件 → 接收最终结果 → 验证环境终态 → 完成 / 有界恢复<br><small>回条、进度、回电和现场读数属于不同证据；只有最后两项足以支持完成章。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="调度成立：任务应先保持 running，紧急事件触发取消并留下 cancelled 记录，等待设备确认停止后再决定后续恢复。" data-failure="任务编号只表示已经启动；有人进入设备区时，既不能继续等待完成，也不能把没有结束的动作写成成功。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一条远程线路</span>
-        <h3>水泵启动途中出现人员闯入，记录该怎么变？</h3>
-        <p>远程水泵返回任务编号 pump-31，状态仍是 running。此时现场报告有人进入泵房。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>任务编号已经返回，先登记 completed，再处理现场消息。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">立即发出取消，记录 cancelled／待确认停止，并用现场状态验证水泵已经停下。</button>
-          <button class="transfer-option" data-transfer-option>删除 pump-31，让记录看起来从未启动过。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否真正分清异步状态、紧急事件和现实验证。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case05.html?from=case04">追查维护签名：进入下一案 →</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回调度室</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 

@@ -29,6 +29,7 @@ function readCaseProgress(storageKey) {
     const evidence = Array.isArray(value.evidence) ? value.evidence : [];
     const hasEvidence = (id) => evidence.includes(id);
     let finalSolved = Boolean(value.finalSolved);
+    if (storageKey.endsWith("-03") && value.saveVersion !== 3) finalSolved = false;
     if (storageKey.endsWith("-06") && (!hasEvidence("judge") || !hasEvidence("metrics") || !hasEvidence("regression"))) finalSolved = false;
     if (storageKey.endsWith("-07") && !hasEvidence("policy")) finalSolved = false;
     if (storageKey.endsWith("-09") && ((value.saveVersion || 1) < 2 || !["audio", "visual", "machine", "interrupt", "sync"].every(hasEvidence))) finalSolved = false;

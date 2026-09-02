@@ -1,6 +1,8 @@
 const STORAGE_KEY = "echo-archive-case-03";
+const SAVE_VERSION = 3;
 
 const initialState = {
+  saveVersion: SAVE_VERSION,
   started: false,
   introSeen: false,
   bridgeSeen: false,
@@ -12,7 +14,7 @@ const initialState = {
 let state = loadState();
 let toastTimer;
 let toastLockUntil = 0;
-let pathSelection = [];
+let archivePuzzle = null;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -26,9 +28,11 @@ const dialogue = $("#dialogue");
 function loadState() {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    if (parsed.saveVersion !== SAVE_VERSION) return { ...initialState, evidence: [], deductions: [] };
     return {
       ...initialState,
       ...parsed,
+      saveVersion: SAVE_VERSION,
       evidence: Array.isArray(parsed.evidence) ? parsed.evidence : [],
       deductions: Array.isArray(parsed.deductions) ? parsed.deductions : [],
     };
@@ -120,8 +124,8 @@ function updateUI() {
     objective.textContent = "两张转运纸互相矛盾。回证物台判断卷宗现在在哪，又该怎样留下旧去处。";
     hint.textContent = "较新的记录可以更新当前判断，但较旧证词不必被抹去。";
   } else if (!state.finalSolved) {
-    objective.textContent = "证据已具备。重建完整找页路线，开启第七码封存门。";
-    hint.textContent = "先提出问题，再走两条找页路线；汇合后比较，最后回到原页。";
+    objective.textContent = "调查材料已经齐全。用它们搭建一套能自己找全、排错并返回原页的找页柜。";
+    hint.textContent = "配置不完整也可以启动；观察它在哪里停下，再只修改出错的区域。";
   } else {
     objective.textContent = "第七码卷宗已找回，正式知识卡已收入回声档案。";
     hint.textContent = "打开回声档案，可回顾三起已结案件的全部知识点。";
@@ -414,17 +418,17 @@ function talkToLan() {
 }
 
 const evidenceInfo = {
-  literal: ["01", "认字不认意的找页台", "照着准确编号，它能直达目标；名称换一种说法，它就找不到。"],
-  meaning: ["02", "懂意思的回声池", "它能跨过改名和同义说法，却会混入主题相似的错误卷宗。"],
-  fragment: ["03", "补齐来路的无名残页", "写上来自哪卷、说的是谁、何时写下和原页号码后，残句才不会被认错。"],
-  conflict: ["04", "两张转运记录", "较晚且有双方签章的总账指向东库；三天前的北库便条仍被保留。"],
-  lan: ["05", "澜的目录与原页", "先翻薄目录找到相关卷；真正需要作证时，再按取卷号拿出原页。"],
+  literal: ["编号台结果", "认字不认意的找页台", "照着准确编号，它能直达目标；名称换一种说法，它就找不到。"],
+  meaning: ["回声池清单", "懂意思的回声池", "它能跨过改名和同义说法，却会混入主题相似的错误卷宗。"],
+  fragment: ["残页页眉", "补齐来路的无名残页", "写上来自哪卷、说的是谁、何时写下和原页号码后，残句才不会被认错。"],
+  conflict: ["转运记录", "两张转运记录", "较晚且有双方签章的总账指向东库；三天前的北库便条仍被保留。"],
+  lan: ["澜的薄目录", "澜的目录与原页", "先翻薄目录找到相关卷；真正需要作证时，再按取卷号拿出原页。"],
 };
 
 function evidenceCard(id) {
   const info = evidenceInfo[id];
   if (!hasEvidence(id)) return '<div class="evidence-card locked-card"><span class="card-no">未发现</span><h3>空证物袋</h3><p>继续调查卷宗库。</p></div>';
-  return `<div class="evidence-card"><span class="card-no">EVIDENCE ${info[0]}</span><h3>${info[1]}</h3><p>${info[2]}</p></div>`;
+  return `<div class="evidence-card"><span class="card-no">${info[0]}</span><h3>${info[1]}</h3><p>${info[2]}</p></div>`;
 }
 
 function openEvidenceBoard() {
@@ -479,104 +483,221 @@ function deductionSummary() {
   return items.length ? items.join("<br>") : "收集成组证物后，才能建立可靠联系。";
 }
 
-const pathPieces = [
-  { id: "question", text: "提出问题：低区水位越线时，旧河门如何处置？" },
-  { id: "literal", text: "按原字与编号找" },
-  { id: "meaning", text: "按含义和旧称找" },
-  { id: "merge", text: "把两边找到的纸叠在一起，拿掉重复页" },
-  { id: "rerank", text: "按设施、卷号、签章和日期重新排" },
-  { id: "detail", text: "按取卷号拿出原页，核对后作答" },
-];
-
-function isValidPathOrder(path) {
-  const first = path[0] === "question";
-  const twoRoutes = [path[1], path[2]].sort().join(",") === ["literal", "meaning"].sort().join(",");
-  const tail = path.slice(3).join(",") === "merge,rerank,detail";
-  return first && twoRoutes && tail;
-}
-
-function shuffledPathPieces() {
-  const pieces = [...pathPieces];
-  for (let index = pieces.length - 1; index > 0; index -= 1) {
-    const swapIndex = Math.floor(Math.random() * (index + 1));
-    [pieces[index], pieces[swapIndex]] = [pieces[swapIndex], pieces[index]];
-  }
-
-  // 即使随机结果恰好是正确路线，也要打乱，避免从左到右点击直接通关。
-  if (isValidPathOrder(pieces.map((piece) => piece.id))) {
-    [pieces[0], pieces[pieces.length - 1]] = [pieces[pieces.length - 1], pieces[0]];
-  }
-  return pieces;
-}
-
 function investigateVault() {
   if (state.finalSolved) { showReveal(); return; }
   if (!hasDeduction("combine") || !hasDeduction("govern")) {
     toast("封存门需要两枚调查印记。先在证物台完成找页与验页推断。", 4300);
     return;
   }
-  showPathPuzzle();
+  showRetrievalWorkbench();
 }
 
-function showPathPuzzle() {
-  pathSelection = [];
-  const displayPieces = shuffledPathPieces();
-  openModal(`
-    <div class="modal-body">
-      <div class="modal-kicker">FINAL LOCK · 第七码封存门</div>
-      <h2>铺出一条说得清的找页路线</h2>
-      <p class="modal-intro">按先后点击六张步骤卡。两种找法必须都在汇合之前，它们彼此的先后不作要求。</p>
-      <div class="path-board" id="path-board">
-        <div class="path-instruction" id="path-instruction">从“提出问题”开始</div>
-        <div class="path-slots" id="path-slots">${pathPieces.map((_, index) => `<div class="path-slot" data-path-slot="${index}">${String(index + 1).padStart(2, "0")}</div>`).join("")}</div>
-        <div class="path-pieces">${displayPieces.map((piece) => `<button class="path-piece" data-path-piece="${piece.id}">${piece.text}</button>`).join("")}</div>
-      </div>
-      <div class="action-row"><button class="action-btn" id="path-reset">重新排列</button><button class="action-btn primary" id="path-submit">开启封存门</button></div>
-    </div>`);
-  $$("[data-path-piece]").forEach((button) => button.addEventListener("click", () => selectPathPiece(button)));
-  $("#path-reset").addEventListener("click", resetPath);
-  $("#path-submit").addEventListener("click", submitPath);
+const retrievalParts = {
+  literal: ["编号台结果", "照准确编号找", "q-07-417 能直接命中；名称换过以后，这一路会漏掉。"],
+  meaning: ["回声池清单", "照旧称与意思找", "能认出旧河门与北岸潮汐闸的关系，也会带回相似设施。"],
+  fragment: ["残页页眉", "核对这段话属于谁", "卷名、设施、日期与页码已经补回残页。"],
+  conflict: ["两张转运记录", "分清旧去处与当前去处", "6 月 11 日北库是旧位，6 月 14 日签章总账指向东库 e-7。"],
+  lan: ["澜的薄目录", "从简短条目返回完整原页", "取卷号把 q-07-417 接回第 32 页。"],
+  southPage: ["回声池第一张", "直接采用排在最前的页面", "南岸排洪门文字最像，但设施与编号不符。"],
+  patrolSheet: ["旧河道巡检表", "只看主题相近就留下", "它谈河道巡查，却没有水位越线后的处置步骤。"],
+  maintenanceVolume: ["q-07-471 保养卷", "只看相近编号就留下", "编号十分接近，内容却是设备保养。"],
+};
+
+const retrievalZones = {
+  find: { title: "找全可能的页面", note: "需要同时接住准确编号和换过的叫法。", slots: 2 },
+  check: { title: "判断哪张值得相信", note: "补回残页身份，并分清记录的新旧去处。", slots: 2 },
+  source: { title: "返回完整原页", note: "用简短入口找到能够作证的原件。", slots: 1 },
+};
+
+function shuffledRetrievalParts() {
+  const ids = Object.keys(retrievalParts);
+  for (let index = ids.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [ids[index], ids[swapIndex]] = [ids[swapIndex], ids[index]];
+  }
+  if (ids.join(",") === Object.keys(retrievalParts).join(",")) [ids[0], ids[ids.length - 1]] = [ids[ids.length - 1], ids[0]];
+  return ids;
 }
 
-function selectPathPiece(button) {
-  if (button.classList.contains("used") || pathSelection.length >= pathPieces.length) return;
-  const id = button.dataset.pathPiece;
-  pathSelection.push(id);
-  button.classList.add("used");
-  const slot = $(`[data-path-slot='${pathSelection.length - 1}']`);
-  slot.textContent = pathPieces.find((piece) => piece.id === id).text;
-  slot.classList.add("filled");
-  const remaining = pathPieces.length - pathSelection.length;
-  $("#path-instruction").textContent = remaining ? `还剩 ${remaining} 个步骤` : "路线已铺好，可以尝试开门";
+function showRetrievalWorkbench(reset = true) {
+  if (reset || !archivePuzzle) {
+    archivePuzzle = {
+      selected: "",
+      trayOrder: shuffledRetrievalParts(),
+      slots: { find: [null, null], check: [null, null], source: [null] },
+      result: null,
+    };
+  }
+  renderRetrievalWorkbench("柜门已经展开成三个区域。先选一件材料，再点一个空插槽；任何配置都可以启动试运行。");
 }
 
-function resetPath() {
-  pathSelection = [];
-  $$("[data-path-piece]").forEach((button) => button.classList.remove("used"));
-  $$("[data-path-slot]").forEach((slot, index) => {
-    slot.textContent = String(index + 1).padStart(2, "0");
-    slot.classList.remove("filled");
+function installedRetrievalParts() {
+  return Object.values(archivePuzzle.slots).flat().filter(Boolean);
+}
+
+function retrievalZoneHTML(zoneId) {
+  const zone = retrievalZones[zoneId];
+  const needsRepair = archivePuzzle.result && !archivePuzzle.result.ok && archivePuzzle.result.failedZone === zoneId;
+  return `<section class="builder-zone ${needsRepair ? "problem" : ""}" data-zone="${zoneId}">
+    <header><span>${zoneId === "find" ? "01" : zoneId === "check" ? "02" : "03"}</span><div><b>${zone.title}</b><small>${zone.note}</small></div>${needsRepair ? "<em>返修这里</em>" : ""}</header>
+    <div class="builder-zone__slots">${archivePuzzle.slots[zoneId].map((id, index) => {
+      if (!id) return `<button class="builder-slot" data-build-slot="${zoneId}:${index}"><span>空插槽</span><small>${archivePuzzle.selected ? "点击安装已选材料" : "先从下方选择材料"}</small></button>`;
+      const part = retrievalParts[id];
+      return `<button class="builder-slot filled" data-build-slot="${zoneId}:${index}"><span>${part[0]} · 点击取回</span><b>${part[1]}</b></button>`;
+    }).join("")}</div>
+  </section>`;
+}
+
+function retrievalTrayHTML() {
+  const installed = installedRetrievalParts();
+  const available = archivePuzzle.trayOrder.filter((id) => !installed.includes(id));
+  return `<div class="builder-tray">${available.map((id) => {
+    const part = retrievalParts[id];
+    return `<button class="builder-part ${archivePuzzle.selected === id ? "selected" : ""}" data-build-part="${id}"><span>${part[0]}</span><b>${part[1]}</b><small>${part[2]}</small></button>`;
+  }).join("")}</div><div class="archive-scroll-hint"><span>←</span> 材料没有按答案排列，可拖动横向滚动条继续翻找 <span>→</span></div>`;
+}
+
+function retrievalTestResult() {
+  const find = archivePuzzle.slots.find;
+  const check = archivePuzzle.slots.check;
+  const source = archivePuzzle.slots.source;
+  const has = (zone, id) => zone.includes(id);
+
+  if (!has(find, "literal") && !has(find, "meaning")) return {
+    ok: false,
+    failedZone: "find",
+    title: "两句询问都没有走进合适的找页入口",
+    numbered: "只剩相似编号与相似主题，q-07-471 被推到前面。",
+    renamed: "旧河门没有被认成北岸潮汐闸，南岸相似页排在前面。",
+    stop: "找页柜没有获得两种互补的找法。",
+  };
+  if (!has(find, "literal")) return {
+    ok: false,
+    failedZone: "find",
+    title: "旧称能够听懂，准确编号却失去了约束",
+    numbered: "q-07-417 与 q-07-471 混在一起，无法认准目标卷号。",
+    renamed: "旧河门找到了北岸候选，也带回南岸排洪门。",
+    stop: "把编号台结果接入第一个区域，才能排除相近编号。",
+  };
+  if (!has(find, "meaning")) return {
+    ok: false,
+    failedZone: "find",
+    title: "编号能够命中，换过名字的问题仍然无路可走",
+    numbered: "q-07-417 已经出现。",
+    renamed: "只照原字寻找“旧河门”，没有找到改名后的北岸潮汐闸。",
+    stop: "把回声池清单接入第一个区域，才能跨过旧称。",
+  };
+  if (!has(check, "fragment")) return {
+    ok: false,
+    failedZone: "check",
+    title: "候选找全了，无名残句却无法证明自己属于谁",
+    numbered: "编号台与回声池共同带回北岸、南岸和巡检表。",
+    renamed: "南岸页面正文最像，仍然冒充正确答案。",
+    stop: "需要残页页眉提供卷名、设施、日期和页码。",
+  };
+  if (!has(check, "conflict")) return {
+    ok: false,
+    failedZone: "check",
+    title: "页面身份已经确认，柜门却停在三天前的北库",
+    numbered: "两种找法都指向 q-07-417 · 北岸潮汐闸。",
+    renamed: "残页也与北岸身份吻合，但旧便条仍指向北库。",
+    stop: "需要两张转运记录分清旧去处和当前柜位。",
+  };
+  if (!has(source, "lan")) return {
+    ok: false,
+    failedZone: "source",
+    title: "正确卷宗已经确认，却只能停在简短摘录",
+    numbered: "q-07-417 已锁定，当前柜位也已确认是东库 e-7。",
+    renamed: "旧称问题与同一卷宗汇合。",
+    stop: "需要澜的薄目录提供第 32 页入口，才能回到原件。",
+  };
+  return {
+    ok: true,
+    title: "两种问法穿过同一套机关，回到了同一张原页",
+    numbered: "q-07-417 → 北岸潮汐闸 → 当前卷",
+    renamed: "旧河门 + 低区水位越线 → 北岸潮汐闸 → 当前卷",
+    stop: "候选已排除，来路与当前柜位完整，可以取出第 32 页核对。",
+  };
+}
+
+function retrievalResultHTML() {
+  if (!archivePuzzle.result) return `<section class="builder-idle"><span>试运行窗口</span><b>等待启动</b><p>你不必先猜出完整答案。随时启动，观察自己搭建的找页柜会在哪里停下。</p></section>`;
+  const result = archivePuzzle.result;
+  return `<section class="builder-run ${result.ok ? "success" : "failed"}" id="builder-test-result" ${result.ok ? "" : 'role="alert" aria-live="assertive"'}>
+    ${result.ok ? `<header><span>运行通过</span><h3>${result.title}</h3></header>` : `<div class="builder-error-banner"><strong>!</strong><div><span>试运行失败</span><b>${result.title}</b><small>问题位于“${retrievalZones[result.failedZone].title}”区域</small></div></div>`}
+    <div class="builder-queries">
+      <article><span>测试一 · 准确编号</span><b>“调出 q-07-417。”</b><p>${result.numbered}</p></article>
+      <article><span>测试二 · 换过的叫法</span><b>“旧河门遇到低区水位越线怎么办？”</b><p>${result.renamed}</p></article>
+    </div>
+    <div class="builder-stop"><b>${result.ok ? "机关输出" : "为什么会失败"}</b><p>${result.stop}</p></div>
+    ${result.ok ? `<div class="builder-route-output"><span>两种找法汇合</span><i>→</i><span>身份与新旧记录核对</span><i>→</i><span>东库 e-7 · 第 32 页</span></div>
+      <article class="original-page"><span>第七码 · q-07-417 · 第 32 页</span><h3>北岸潮汐闸夜班处置</h3><p>低区水位越线时，北岸潮汐闸开启三成。最终闸位与现场水位未确认前，不得登记完成。</p><small>修订：6 月 14 日｜东库 e-7｜转运双方签章</small></article>
+      <div class="action-row"><button class="action-btn primary" id="finish-retrieval-build">封存这套找页柜并结案</button></div>` : `<div class="builder-repair-note"><b>下一步：</b>配置没有被清空。只需返回标红区域，取回错误部件或补上缺失材料。<button class="action-btn" data-jump-to-zone="${result.failedZone}">前往返修区域 ↑</button></div>`}
+  </section>`;
+}
+
+function renderRetrievalWorkbench(message, preserveScroll = false, focusResult = false) {
+  const card = modal.querySelector(".modal__card");
+  const previousScroll = preserveScroll && card ? card.scrollTop : 0;
+  openModal(`<div class="modal-body retrieval-workbench-wrap">
+    <div class="modal-kicker">FINAL BUILD · 双路找页柜</div>
+    <h2>不要替柜子找答案，决定它以后怎样找</h2>
+    <p class="modal-intro">五件调查材料与三条真实出现过的错误捷径已经混在一起。选择材料，再把它装进三个区域；你可以随时运行并根据结果返修。</p>
+    <div class="retrieval-workbench">
+      <div class="retrieval-workbench__status ${archivePuzzle.result && !archivePuzzle.result.ok ? "danger" : archivePuzzle.result?.ok ? "success" : ""}">${message}</div>
+      <div class="builder-layout">${retrievalZoneHTML("find")}<i>→</i>${retrievalZoneHTML("check")}<i>→</i>${retrievalZoneHTML("source")}</div>
+      <div class="builder-selection">${archivePuzzle.selected ? `已拿起：<b>${retrievalParts[archivePuzzle.selected][0]} · ${retrievalParts[archivePuzzle.selected][1]}</b>` : "先从材料带选择一件，再点击上方空插槽。"}</div>
+      ${retrievalTrayHTML()}
+      <div class="action-row builder-actions"><button class="action-btn primary" id="run-retrieval-build">启动两组找页测试</button><button class="action-btn" id="reset-retrieval-build">拆下全部材料</button></div>
+      ${retrievalResultHTML()}
+    </div>
+  </div>`);
+
+  if (focusResult) {
+    requestAnimationFrame(() => requestAnimationFrame(() => $("#builder-test-result")?.scrollIntoView({ behavior: "smooth", block: "start" })));
+  } else if (preserveScroll) {
+    requestAnimationFrame(() => requestAnimationFrame(() => { modal.querySelector(".modal__card").scrollTop = previousScroll; }));
+  }
+
+  $$('[data-build-part]').forEach((button) => button.addEventListener("click", () => {
+    archivePuzzle.selected = archivePuzzle.selected === button.dataset.buildPart ? "" : button.dataset.buildPart;
+    renderRetrievalWorkbench(archivePuzzle.selected ? "材料已经拿起。现在选择上方任意一个空插槽。" : "材料已经放回材料带。", true);
+  }));
+  $$('[data-build-slot]').forEach((button) => button.addEventListener("click", () => {
+    const [zone, rawIndex] = button.dataset.buildSlot.split(":");
+    const index = Number(rawIndex);
+    if (archivePuzzle.slots[zone][index]) {
+      const removed = archivePuzzle.slots[zone][index];
+      archivePuzzle.slots[zone][index] = null;
+      archivePuzzle.result = null;
+      renderRetrievalWorkbench(`${retrievalParts[removed][0]}已经退回材料带，其余配置保持不动。`, true);
+      return;
+    }
+    if (!archivePuzzle.selected) {
+      renderRetrievalWorkbench("这个插槽还是空的。先从材料带拿起一件材料。", true);
+      return;
+    }
+    archivePuzzle.slots[zone][index] = archivePuzzle.selected;
+    archivePuzzle.selected = "";
+    archivePuzzle.result = null;
+    renderRetrievalWorkbench("材料已经装入。可以继续搭建，也可以现在启动看看会发生什么。", true);
+  }));
+  $("#run-retrieval-build").addEventListener("click", () => {
+    archivePuzzle.result = retrievalTestResult();
+    if (!archivePuzzle.result.ok) toast(`试运行失败：${archivePuzzle.result.title}`, 4600, true);
+    renderRetrievalWorkbench(archivePuzzle.result.ok ? "找页柜通过了两种问法，已经取出原页，可以封存结案。" : `试运行失败：${archivePuzzle.result.title}。标红区域需要返修。`, false, true);
   });
-  $("#path-instruction").textContent = "从“提出问题”开始";
-  $("#path-board").classList.remove("wrong");
-}
-
-function submitPath() {
-  if (pathSelection.length < pathPieces.length) {
-    toast("路线还没有铺完。六个步骤缺一不可。", 6500, true);
-    return;
-  }
-  if (!isValidPathOrder(pathSelection)) {
-    const board = $("#path-board");
-    board.classList.remove("wrong");
-    void board.offsetWidth;
-    board.classList.add("wrong");
-    toast("封存门没有打开：问清问题后，两台装置都要去找；把找到的纸叠在一起、重新排好，最后才能拿原页作证。", 7800, true);
-    return;
-  }
-  state.finalSolved = true;
-  saveState();
-  showReveal();
+  $("#reset-retrieval-build").addEventListener("click", () => showRetrievalWorkbench(true));
+  $("[data-jump-to-zone]")?.addEventListener("click", (event) => {
+    const zone = event.currentTarget.dataset.jumpToZone;
+    $(`[data-zone="${zone}"]`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  $("#finish-retrieval-build")?.addEventListener("click", () => {
+    if (!archivePuzzle.result?.ok) return;
+    state.finalSolved = true;
+    saveState();
+    showReveal();
+  });
 }
 
 function showReveal() {
@@ -584,17 +705,17 @@ function showReveal() {
     <div class="reveal-hero">
       <div class="modal-kicker">CASE CLOSED · 真相已解锁</div>
       <h2>第七码从未失踪，失踪的是它与问题之间的路</h2>
-      <p>你没有从七个相似答案中猜一个，而是修复了问题通往原始证据的整条路线。现在让两台找页装置、残页和转运记录重新作证。</p>
+      <p>你没有替柜子从七个相似答案中猜一个，而是利用调查材料搭建了它以后寻找、排错并返回原页的办法。两种不同问法已经通过同一套机关回到同一张证据。</p>
     </div>
     ${window.EchoFeedback.renderCompletion("03")}
     <div class="case-reconstruction">
       <section class="reconstruction-block">
         <div class="reconstruction-heading"><span>1</span><h3>关键证物重新作证</h3></div>
         <div class="evidence-replay">
-          <article class="replay-card"><span>证物 01 + 02</span><b>编号台认准原字，回声池认得改名后的含义</b><p>前者能锁定 q-07-417，却会漏掉新名称；后者能找到同义说法，却把相似设施排在前面。</p></article>
-          <article class="replay-card"><span>证物 03 + 04 + 05</span><b>无名残页内容相似，只有来路能解决冲突</b><p>来源、章节、日期、转运记录和原页号码共同证明哪一页属于当前北岸预案。</p></article>
+          <article class="replay-card"><span>编号台结果 + 回声池清单</span><b>编号台认准原字，回声池认得改名后的含义</b><p>前者能锁定 q-07-417，却会漏掉新名称；后者能找到同义说法，却把相似设施排在前面。</p></article>
+          <article class="replay-card"><span>残页页眉 + 转运记录 + 澜的薄目录</span><b>无名残页内容相似，只有来路能解决冲突</b><p>来源、章节、日期、转运记录和原页号码共同证明哪一页属于当前北岸预案。</p></article>
         </div>
-        <p class="player-proof"><b>你作出的判断：</b>两种找法必须先互补召回，再重新排序；找到相似文字以后，还必须沿来源和时间回到原页验证。</p>
+        <p class="player-proof"><b>你实际完成的调查：</b>你先在五个调查点保存了编号结果、回声池顺序、带页眉的残页、两张转运纸和澜的薄目录；随后决定它们分别负责找全候选、排除错页和返回原件。你可以提前启动、观察具体停点并局部返修，最后让编号问法与旧称问法共同返回 q-07-417 原页。</p>
       </section>
       <section class="reconstruction-block">
         <div class="reconstruction-heading"><span>2</span><h3>错误答案为什么总排在前面</h3></div>
@@ -602,32 +723,22 @@ function showReveal() {
       </section>
       <section class="reconstruction-block">
         <div class="reconstruction-heading"><span>3</span><h3>你重建的找页路线</h3></div>
-        <div class="repair-chain"><div class="causal-node">问清目标</div><i class="causal-arrow">→</i><div class="causal-node">编号与含义两路召回</div><i class="causal-arrow">→</i><div class="causal-node">合并去重</div><i class="causal-arrow">→</i><div class="causal-node">按相关性、来源和时间重排</div><i class="causal-arrow">→</i><div class="causal-node">回取原页验证</div></div>
+        <div class="repair-chain"><div class="causal-node">从证物中提取五件机关部件</div><i class="causal-arrow">→</i><div class="causal-node">为两种问法安装两个找页入口</div><i class="causal-arrow">→</i><div class="causal-node">用残页身份和转运新旧排除错页</div><i class="causal-arrow">→</i><div class="causal-node">用薄目录接回完整原页</div><i class="causal-arrow">→</i><div class="causal-node">启动测试并按停点局部返修</div><i class="causal-arrow">→</i><div class="causal-node">两种问法汇合后核对原卷</div></div>
       </section>
     </div>
     <div class="term-map">
       <h3 class="term-map__title">现在，给你修复的找页步骤命名</h3>
-      <p class="term-map__intro">本案没有直接操作“把用户状态编译成代码”，因此不再把 User as Code 列作主线答案。</p>
-      <div class="term-row"><span class="plain">先从外部卷宗找证据，再回答</span><span class="arrow">→</span><div><b>RAG：检索 → 增强 → 生成</b><small>你先召回原始材料，把相关证据带回当前调查，再形成结论；找错页会直接限制后续回答的上限。</small></div></div>
-      <div class="term-row"><span class="plain">编号台 + 回声池 → 汇合重排</span><span class="arrow">→</span><div><b>混合检索、融合与 Rerank</b><small>编号台对应精确词项检索，回声池对应语义检索；你把两路候选合并去重后重新排序。</small></div></div>
-      <div class="term-row"><span class="plain">给残页补卷名、章节、设施和日期</span><span class="arrow">→</span><div><b>结构感知分块与上下文化分块</b><small>脱离原卷的片段需要补回文档背景，才能被正确检索、消歧并与其他记录比较。</small></div></div>
-      <div class="term-row"><span class="plain">概览指路，转运记录辨新旧，原页作证</span><span class="arrow">→</span><div><b>双层记忆与知识治理</b><small>结构化概览负责导航，原始细节按需回取；来源、时间、版本和冲突记录决定证据是否可信。</small></div></div>
-      <div class="formula"><b>本案完整映射：</b>两路召回 → 合并去重 → 相关性 / 来源 / 时间重排 → 回取原页验证<br><small>“找到内容”只是候选；“知道来自哪里、何时有效并能回到原页”才形成证据。</small></div>
-      <section class="transfer-check" data-transfer-check data-success="找页成立：精确编号防止漏掉目标，语义召回找到改名后的内容，来源与日期再决定哪份原页可信。" data-failure="单独相信一种找法或第一条相似结果，会重现本案的盲区。还需要来源、时间和原页完成验证。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一份卷宗</span>
-        <h3>旧编号、改名标题和冲突副本同时出现时怎么办？</h3>
-        <p>一份防洪预案保留编号 flood-19，却改名为“北岸潮汐响应”；库中另有一份标题相似但日期更旧的副本。</p>
-        <div class="transfer-options">
-          <button class="transfer-option" data-transfer-option>只搜索新标题，并直接采用排在第一位的相似结果。</button>
-          <button class="transfer-option" data-transfer-option data-correct="true">同时按 flood-19 和标题含义召回，合并后核对来源、日期并回取原页。</button>
-          <button class="transfer-option" data-transfer-option>只相信编号，忽略标题和适用日期是否已经变化。</button>
-        </div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你是否能把“找全、排准、验真”用于新档案。</p>
-      </section>
+      <p class="term-map__intro">下面每个正式名字，都对应你刚才亲手完成的一段调查，不增加没有操作依据的新答案。</p>
+      <div class="term-row"><span class="plain">把问题送入自己搭好的找页柜，取回原页以后再形成答案</span><span class="arrow">→</span><div><b>RAG：检索 → 增强 → 生成</b><small>对应你安装部件、启动两组测试并以取回的第 32 页支持结论；找错或取不回原件时，后续答案就没有可靠上限。</small></div></div>
+      <div class="term-row"><span class="plain">在“找全候选”区域同时安装编号台结果与回声池清单</span><span class="arrow">→</span><div><b>混合检索（Hybrid Search）</b><small>编号找页对应精确词项检索，回声池对应语义检索；测试中的编号问法和旧称问法分别证明两路缺一不可。</small></div></div>
+      <div class="term-row"><span class="plain">让两路候选汇合，再用身份与新旧记录排除南岸错页</span><span class="arrow">→</span><div><b>融合去重与 Rerank</b><small>对应你在第二个区域安装残页页眉与转运记录；第一张或正文最像的页面不再自动胜出。</small></div></div>
+      <div class="term-row"><span class="plain">把卷名、设施、日期和页码随残句一起装入核对区域</span><span class="arrow">→</span><div><b>结构感知分块与上下文化分块</b><small>对应残页页眉这一证物和“无身份时南岸错页仍会冒充答案”的试运行后果。</small></div></div>
+      <div class="term-row"><span class="plain">在“返回完整原页”区域安装澜的薄目录</span><span class="arrow">→</span><div><b>记忆分层（Memory Layers）</b><small>薄目录负责日常导航，完整原页按需回取；对应系统从简短条目走到第 32 页的输出路线。</small></div></div>
+      <div class="term-row"><span class="plain">安装两张转运记录，让北库旧位不能覆盖东库 e-7 当前柜位</span><span class="arrow">→</span><div><b>来源追踪与知识治理</b><small>来源、时间、版本和冲突记录共同决定当前有效信息；对应缺少它时找页柜停在三天前北库的失败结果。</small></div></div>
+      <div class="formula"><b>本案完整映射：</b>证物提出设计条件 → 玩家分配五件部件 → 两种问法进入同一套找页柜 → 试运行暴露停点 → 局部返修 → 返回并核对原页<br><small>你产出的不只是本案答案，而是一套以后仍知道怎样找全、排错和回到证据的系统。</small></div>
       <div class="action-row"><a class="action-btn primary" href="case04.html?from=case03">继续案件 04：午夜回电 →</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回卷宗库</button></div>
     </div>`);
   $("#open-final-archive").addEventListener("click", openArchive);
-  window.EchoFeedback.bindTransfer(modalContent);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 
@@ -654,7 +765,7 @@ function showHint() {
   else if (!hasEvidence("conflict")) hint = "记录柜里的两条话发生在不同日期，来源可靠程度也不同。";
   else if (!hasEvidence("lan")) hint = "呼叫澜，问他如何既避免满桌原页，又能随时回去作证。";
   else if (!hasDeduction("govern")) hint = "打开证物台，把无名残页、两张转运纸和澜的薄目录放在一起。";
-  else if (!state.finalSolved) hint = "封存门路线：问清问题 → 两台都找 → 叠去重复 → 按来路重排 → 拿原页核对。两台谁先找都可以。";
+  else if (!state.finalSolved) hint = "双路找页柜有三个区域：找全候选需要两种找法；排除错页需要残页身份和转运新旧；返回原件需要澜的薄目录。可以提前启动查看停点。";
   else hint = "本案已结，回声档案已收录三案全部已解锁知识卡。";
   toast(hint, 4200);
 }

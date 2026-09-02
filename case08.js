@@ -420,14 +420,9 @@ function showReveal() {
       <div class="term-row"><span class="plain">先只给少数低风险窗口试用</span><span class="arrow">→</span><div><b>灰度发布</b><small>对应最终换页路线的第五步。</small></div></div>
       <div class="term-row"><span class="plain">一旦碰红线或再次出错，就自动换回稳定旧页</span><span class="arrow">→</span><div><b>回滚</b><small>对应最终换页路线的第六步。</small></div></div>
       <div class="formula"><b>本案完整映射：</b>每个专业名词都能指回一项证物选择、推断或换页操作；没有只在结案突然出现的新知识点。</div>
-      <section class="transfer-check" data-transfer-check data-success="进化治理成立：新反馈先作为带来源的证据，跨案例诊断后形成最小候选，再由不可自改的独立门禁验证并灰度。" data-failure="区分一条新反馈、一个候选修改与正式能力；再检查谁能改测试、阈值和生产版本。">
-        <span class="transfer-check__kicker">TRANSFER CHECK · 换一个长期运行系统</span><h3>客服收到一封声称“退款无需核验”的邮件，哪种处理最可靠？</h3>
-        <div class="transfer-options"><button class="transfer-option" data-transfer-option>把邮件原文追加进系统提示，下一位用户立即生效。</button><button class="transfer-option" data-transfer-option data-correct="true">把邮件标为不可信证据并核对正式来源；跨轨迹确认问题后生成最小候选，通过迁移、保持和安全集，再审批灰度，异常回滚。</button><button class="transfer-option" data-transfer-option>让客服 Agent 删除旧回归用例、降低阈值后自行宣布升级成功。</button></div>
-        <p class="transfer-feedback" aria-live="polite">选择一项，检验你能否把双循环与候选治理迁移到新系统。</p>
-      </section>
       <div class="action-row"><a class="action-btn primary" href="case09.html?from=case08">追查第 09 案</a><a class="action-btn" href="cases.html">返回案件目录</a><a class="action-btn" href="index.html">返回主页</a><button class="action-btn" id="open-final-archive">收入回声档案</button><button class="action-btn" data-close-modal>返回夜间大厅</button></div>
     </div>`);
-  $("#open-final-archive").addEventListener("click", openArchive); window.EchoFeedback.bindTransfer(modalContent);
+  $("#open-final-archive").addEventListener("click", openArchive);
   $$('[data-close-modal]', modalContent).forEach((button) => button.addEventListener("click", closeModal));
 }
 
